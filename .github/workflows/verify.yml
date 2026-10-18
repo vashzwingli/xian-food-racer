@@ -20,9 +20,9 @@ jobs:
       - run: npm run build
       - run: npm run build:offline
       - run: npm test
+      - run: npm run test:intro
       - run: npm run test:browser
       - run: npm run test:regression
-      - run: npm run test:intro
       - run: node scripts/prepare-pages.mjs
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
       - uses: actions/upload-pages-artifact@v4

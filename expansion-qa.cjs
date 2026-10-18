@@ -94,9 +94,24 @@ const server = http
     await page.keyboard.press("f");
     await page.waitForTimeout(300);
     assert.equal((await page.evaluate(() => raceTest.snapshot())).jumps, 2);
-    await page.waitForFunction(() => raceTest.snapshot().jumps === 0, null, {
-      timeout: 10000,
+    // Verify bounded landing time using the same fixed-step physics. Software
+    // rendering can spend many wall-clock seconds drawing one simulated second.
+    const landing = await page.evaluate(() => {
+      let frames = 0;
+      while (raceTest.snapshot().jumps > 0 && frames < 360) {
+        raceTest.step(1 / 60);
+        frames++;
+      }
+      const landed = raceTest.snapshot();
+      return {
+        frames,
+        seconds: frames / 60,
+        jumps: landed.jumps,
+        jetVisible: landed.jetVisible,
+      };
     });
+    assert.equal(landing.jumps, 0, JSON.stringify(landing));
+    console.log("Landing", landing);
     assert.equal(
       (await page.evaluate(() => raceTest.snapshot())).jetVisible,
       false,
@@ -109,6 +124,7 @@ const server = http
       audio,
       musicControls: "B and M passed",
       flight: flying,
+      landing,
       routes,
     };
     if (!process.env.FOOD_RACER_VISUAL_ONLY)
