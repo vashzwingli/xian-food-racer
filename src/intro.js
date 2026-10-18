@@ -17,6 +17,7 @@
     hooks = {},
     resolveFinished,
     gestureSeen = false;
+  let titlePainted = false;
   let finished = new Promise((resolve) => {
     resolveFinished = resolve;
   });
@@ -67,6 +68,22 @@
       endTimer = setTimeout(tryFinish, remaining);
       return;
     }
+    if (!skipped && !reduced.matches && !titlePainted) {
+      const title = document.querySelector("#introTitle span:last-child"),
+        stamp = document.querySelector(".intro-foods > span:last-child");
+      if (
+        +getComputedStyle(title).opacity < 0.98 ||
+        +getComputedStyle(stamp).opacity < 0.84
+      ) {
+        endTimer = setTimeout(tryFinish, 100);
+        return;
+      }
+      // Paint the completed title before fading, even after a long main-thread
+      // stall. Wall-clock time alone does not guarantee a visible loading frame.
+      titlePainted = true;
+      requestAnimationFrame(() => requestAnimationFrame(tryFinish));
+      return;
+    }
     phase(100, "灯亮了，这就进城");
     screen.dataset.phase = "opening";
     document.body.dataset.intro = "opening";
@@ -115,10 +132,11 @@
     if (active || !ready) return finished;
     active = true;
     skipped = false;
-    began = performance.now();
+    titlePainted = false;
     finished = new Promise((resolve) => {
       resolveFinished = resolve;
     });
+    screen.classList.add("is-restarting");
     screen.hidden = false;
     screen.removeAttribute("aria-hidden");
     screen.classList.remove("is-opening");
@@ -130,11 +148,13 @@
     skip.disabled = false;
     skip.focus({ preventScroll: true });
     phase(100, "灯火未央，再看一眼长安");
-    for (const animation of screen.getAnimations({ subtree: true }))
-      if (animation instanceof CSSAnimation) {
-        animation.currentTime = 0;
-        animation.play();
-      }
+    // Discard cancelled/partly played animations after an early skip. Reusing
+    // their playback objects can leave delayed glyphs invisible on replay.
+    void screen.offsetWidth;
+    screen.classList.remove("is-restarting");
+    void getComputedStyle(document.querySelector("#introTitle span"))
+      .animationName;
+    began = performance.now();
     tryFinish();
     return finished;
   }

@@ -3903,7 +3903,16 @@ let firstFrame = true;
 function frame(now) {
   const frameMs = now - last;
   last = now;
-  if (worldReady && !document.hidden && !contextLost) {
+  const coveredByPoster =
+    window.changanIntro.active &&
+    !entrance.playing &&
+    $("loading").dataset.phase !== "opening";
+  if (
+    worldReady &&
+    !document.hidden &&
+    !contextLost &&
+    (!coveredByPoster || firstFrame)
+  ) {
     if (entrance.playing) {
       // The menu shot needs one ambience update, without simulation catch-up.
       fixedClock.reset();

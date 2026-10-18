@@ -1,3 +1,4 @@
+const enterMenu = require("./tests/enter-menu.cjs");
 const { chromium } = require("playwright");
 const fs = require("fs"),
   http = require("http"),
@@ -28,7 +29,7 @@ const server = http
       if (m.type() === "error") errors.push(m.text());
     });
     await page.goto("http://127.0.0.1:8760");
-    await page.waitForFunction(() => window.raceTest, null, { timeout: 60000 });
+    await enterMenu(page);
     if (process.env.FOOD_RACER_SMOOTH) await page.keyboard.press("q");
     await page.locator("#menu [data-radio]").click();
     await page.locator("#radioPreview").click();

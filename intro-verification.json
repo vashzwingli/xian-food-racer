@@ -51,10 +51,15 @@
         }
       ],
       "overflow": false,
+      "visualProbe": {
+        "titleSeen": true,
+        "fadeSeen": true,
+        "frames": 54
+      },
       "cinematic": {
         "playing": false,
         "progress": 1,
-        "insideFrames": 4,
+        "insideFrames": 5,
         "crossed": true,
         "exited": true,
         "camera": [
@@ -127,6 +132,11 @@
         }
       ],
       "overflow": false,
+      "visualProbe": {
+        "titleSeen": false,
+        "fadeSeen": false,
+        "frames": 2
+      },
       "resources": {
         "geometries": 2237,
         "materials": 255,
@@ -177,6 +187,11 @@
         }
       ],
       "overflow": false,
+      "visualProbe": {
+        "titleSeen": false,
+        "fadeSeen": true,
+        "frames": 11
+      },
       "resources": {
         "geometries": 2237,
         "materials": 255,
@@ -227,6 +242,11 @@
         }
       ],
       "overflow": false,
+      "visualProbe": {
+        "titleSeen": false,
+        "fadeSeen": false,
+        "frames": 2
+      },
       "resources": {
         "geometries": 2237,
         "materials": 255,

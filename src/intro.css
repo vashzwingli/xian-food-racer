@@ -31,6 +31,9 @@
 .intro-screen[hidden] {
   display: none !important;
 }
+.intro-screen.is-restarting * {
+  animation: none !important;
+}
 .intro-corner {
   position: absolute;
   left: 32px;

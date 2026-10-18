@@ -1,3 +1,4 @@
+const enterMenu = require("./tests/enter-menu.cjs");
 const { chromium } = require("playwright");
 const fs = require("fs"),
   http = require("http"),
@@ -28,7 +29,7 @@ const server = http
       if (m.type() === "error") errors.push(m.text());
     });
     await page.goto("http://127.0.0.1:8761");
-    await page.waitForFunction(() => window.raceTest, { timeout: 60000 });
+    await enterMenu(page);
     await page.locator("#start").click();
     await page.waitForFunction(() => raceTest.snapshot().state === "race", {
       timeout: 30000,

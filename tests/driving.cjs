@@ -1,3 +1,4 @@
+const enterMenu = require("./enter-menu.cjs");
 const { chromium } = require("playwright");
 const fs = require("node:fs"),
   http = require("node:http"),
@@ -24,7 +25,7 @@ const server = http
     await page.goto("http://127.0.0.1:" + server.address().port, {
       timeout: 60000,
     });
-    await page.waitForFunction(() => window.raceTest);
+    await enterMenu(page);
     await page.locator("#start").click();
     await page.waitForFunction(() => raceTest.snapshot().state === "race");
     await page.keyboard.press("q");
@@ -188,7 +189,7 @@ const server = http
     await reduced.goto("http://127.0.0.1:" + server.address().port, {
       timeout: 60000,
     });
-    await reduced.waitForFunction(() => window.raceTest);
+    await enterMenu(reduced);
     assert.equal(
       (await reduced.evaluate(() => raceTest.snapshot())).motionBlur.selected,
       false,

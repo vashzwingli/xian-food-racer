@@ -100,6 +100,39 @@ const server = http
           assets: raceTest.resourceInventory(),
         };
       });
+      // Record visibility from before the click. A screenshot can occupy several
+      // software-GPU frames; querying only after it returns misses short states.
+      await page.evaluate(() => {
+        const probe = (window.__introVisualProbe = {
+          titleSeen: false,
+          fadeSeen: false,
+          frames: 0,
+        });
+        let started = false;
+        const deadline = performance.now() + 120000;
+        function observe() {
+          const root = document.getElementById("loading");
+          if (changanIntro.active) {
+            started = true;
+            probe.frames++;
+            if (root.dataset.phase === "ready") {
+              probe.titleSeen ||=
+                +getComputedStyle(
+                  document.querySelector("#introTitle span:last-child"),
+                ).opacity > 0.95 &&
+                +getComputedStyle(
+                  document.querySelector(".intro-foods > span:last-child"),
+                ).opacity > 0.8;
+            }
+            if (root.classList.contains("is-opening"))
+              probe.fadeSeen ||=
+                +getComputedStyle(root, "::before").opacity < 1;
+          }
+          if ((!started || changanIntro.active) && performance.now() < deadline)
+            requestAnimationFrame(observe);
+        }
+        requestAnimationFrame(observe);
+      });
       await page.locator("#introReplay").click();
       await page.waitForTimeout(1700);
       const layout = await page.evaluate(() => {
@@ -139,72 +172,17 @@ const server = http
         await page.screenshot({ path: path.join(root, "intro-mobile.png") });
       // Let one normal replay open automatically; use keyboard skipping elsewhere.
       if (size.width !== 1024) await page.keyboard.press("Space");
-      if (size.width === 1024) {
-        await page.waitForFunction(() =>
-          document.getElementById("loading").classList.contains("is-opening"),
-        );
-        try {
-          await page.waitForFunction(
-            () => {
-              const element = document.getElementById("loading");
-              const opacity = +getComputedStyle(element, "::before").opacity;
-              (window.__fadeSamples ??= []).push({
-                active: changanIntro.active,
-                opacity,
-                progress: changanIntro.cinematic.progress,
-              });
-              return changanIntro.active && opacity < 1;
-            },
-            null,
-            { timeout: 10000 },
-          );
-        } catch (error) {
-          console.error(
-            "Fade diagnostics",
-            await page.evaluate(() => {
-              const element = document.getElementById("loading");
-              return {
-                active: changanIntro.active,
-                reduced: changanIntro.reduced,
-                phase: element.dataset.phase,
-                classes: element.className,
-                hidden: element.hidden,
-                before: getComputedStyle(element, "::before").opacity,
-                cinematic: changanIntro.cinematic,
-                firstSamples: window.__fadeSamples?.slice(0, 12),
-                lastSamples: window.__fadeSamples?.slice(-8),
-                animations: element
-                  .getAnimations({ subtree: true })
-                  .map((a) => ({
-                    name: a.animationName,
-                    property: a.transitionProperty,
-                    time: a.currentTime,
-                    state: a.playState,
-                  })),
-              };
-            }),
-          );
-          await page.screenshot({
-            path: path.join(output, "fade-failure.png"),
-          });
-          throw error;
-        }
-        const opacity = await page
-          .locator("#loading")
-          .evaluate(
-            (element) => +getComputedStyle(element, "::before").opacity,
-          );
-        assert(
-          opacity < 1,
-          "the gate must fade into the real city before it closes",
-        );
-        // In-flight screenshot encoding can outlast the tunnel on software GPUs.
-        // Verify the actual rendered traversal below, without blocking its clock.
-      }
       await page.waitForFunction(() => !changanIntro.active, null, {
         timeout: 90000,
       });
+      const probe = await page.evaluate(() => window.__introVisualProbe);
+      layout.visualProbe = probe;
       if (size.width === 1024) {
+        assert(probe.titleSeen, JSON.stringify({ size, probe }));
+        assert(
+          probe.fadeSeen,
+          "the background must fade while the entrance is active",
+        );
         const shot = await page.evaluate(() => raceTest.entranceSnapshot());
         assert(shot.insideFrames > 0 && shot.crossed && shot.exited);
         assert.deepEqual(shot.camera, [28, 5.8, -47]);

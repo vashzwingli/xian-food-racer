@@ -1,3 +1,4 @@
+const enterMenu = require("./tests/enter-menu.cjs");
 const { chromium } = require("playwright");
 const fs = require("fs"),
   http = require("http"),
@@ -34,7 +35,7 @@ const server = http
       }
     });
     await page.goto("http://127.0.0.1:8763");
-    await page.waitForFunction(() => window.raceTest, { timeout: 60000 });
+    await enterMenu(page);
     await page.screenshot({ path: path.join(__dirname, "menu.png") });
     await page.locator("#start").click();
     await page.waitForFunction(() => raceTest.snapshot().state === "race", {

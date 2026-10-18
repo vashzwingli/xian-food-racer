@@ -1,3 +1,4 @@
+const enterMenu = require("./enter-menu.cjs");
 const { chromium } = require("playwright");
 const fs = require("node:fs"),
   http = require("node:http"),
@@ -67,7 +68,7 @@ const server = http
     });
     await page.goto(base, { timeout: 60000 });
     await page.bringToFront();
-    await page.waitForFunction(() => window.raceTest, null, { timeout: 60000 });
+    await enterMenu(page);
     console.log(
       "Browser suite: loaded offline build",
       await page.evaluate(() => raceTest.performanceProfile()),
@@ -119,11 +120,16 @@ const server = http
     assert.equal(homeSong.source, "home");
     assert(homeSong.duration > 188 && homeSong.duration < 190);
     assert(homeSong.loop);
+    await page.waitForFunction(() => raceTest.audioStats()?.rms > 0.001);
+    await page.waitForFunction(
+      () =>
+        document.querySelector("#menu [data-music] span").textContent ===
+        "B 音乐开",
+    );
     assert.equal(
       await page.locator("#menu [data-music] span").textContent(),
       "B 音乐开",
     );
-    await page.waitForFunction(() => raceTest.audioStats()?.rms > 0.001);
     assert((await page.evaluate(() => raceTest.localAudio())).currentTime > 0);
     console.log("Browser suite: embedded live recording decoded and audible");
     await page.screenshot({ path: path.join(root, "radio-home.png") });
@@ -149,6 +155,7 @@ const server = http
     );
     assert((await page.evaluate(() => raceTest.localAudio())).hasFile);
     await page.reload();
+    await enterMenu(page);
     await page.waitForFunction(
       () =>
         window.raceTest &&
@@ -184,6 +191,7 @@ const server = http
     await page.waitForFunction(() => raceTest.localAudio().paused);
     await page.keyboard.press("m");
     await page.reload();
+    await enterMenu(page);
     await page.waitForFunction(
       () => window.raceTest && raceTest.localAudio().hasFile,
     );
@@ -294,7 +302,7 @@ const server = http
     monitor(mobile);
     await mobile.goto(base, { timeout: 60000 });
     await mobile.bringToFront();
-    await mobile.waitForFunction(() => window.raceTest);
+    await enterMenu(mobile);
     await mobile.locator("#start").click();
     await mobile.waitForFunction(() => raceTest.snapshot().state === "race");
     assert(await mobile.locator("#touchControls").isVisible());
@@ -349,7 +357,7 @@ const server = http
       },
     );
     await cdn.goto(base + "/cdn", { timeout: 60000 });
-    await cdn.waitForFunction(() => window.raceTest);
+    await enterMenu(cdn);
     assert.equal(
       (await cdn.evaluate(() => raceTest.snapshot())).trafficCount,
       24,
