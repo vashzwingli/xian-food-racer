@@ -63,6 +63,7 @@ const server = http
         external.push(r.url());
     });
     await page.goto(base);
+    await page.bringToFront();
     await page.waitForFunction(() => window.raceTest);
     console.log(
       "Browser suite: loaded offline build",
@@ -160,10 +161,7 @@ const server = http
       "paused",
     );
     await page.locator("#radioClose").click();
-    assert.equal(
-      (await page.evaluate(() => raceTest.snapshot())).state,
-      "race",
-    );
+    await page.waitForFunction(() => raceTest.snapshot().state === "race");
     await page.keyboard.press("q");
     assert.equal(
       (await page.evaluate(() => raceTest.performanceProfile())).mode,
@@ -236,6 +234,7 @@ const server = http
     console.log("Browser suite: resource recycling passed");
     const mobile = await touch.newPage();
     await mobile.goto(base);
+    await mobile.bringToFront();
     await mobile.waitForFunction(() => window.raceTest);
     await mobile.locator("#start").click();
     await mobile.waitForFunction(() => raceTest.snapshot().state === "race");
