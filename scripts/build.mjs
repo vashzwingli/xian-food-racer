@@ -28,8 +28,14 @@ html = html
   );
 if (offline) {
   html = html.replace(/<script type="importmap">[\s\S]*?<\/script>/, "");
-  const license = await readFile(path.join(root, "node_modules/three/LICENSE"), "utf8");
-  html = html.replace("<head>", () => "<!-- Three.js 0.170.0\n" + license + "\n-->\n<head>");
+  const license = await readFile(
+    path.join(root, "node_modules/three/LICENSE"),
+    "utf8",
+  );
+  html = html.replace(
+    "<head>",
+    () => "<!-- Three.js 0.170.0\n" + license + "\n-->\n<head>",
+  );
 }
 const name = offline ? "index.offline.html" : "index.html";
 await writeFile(path.join(root, name), html);

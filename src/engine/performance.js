@@ -1,8 +1,16 @@
+export function initialQualityLevel(rendererName = "") {
+  return /swiftshader|llvmpipe|softpipe|software|basic render driver/i.test(
+    rendererName,
+  )
+    ? 0
+    : 2;
+}
+
 export class AdaptiveQuality {
-  constructor(apply) {
+  constructor(apply, initialLevel = 2) {
     this.apply = apply;
     this.mode = "auto";
-    this.level = 2;
+    this.level = initialLevel;
     this.emaMs = 16.7;
     this.elapsed = 0;
     this.samples = 0;
@@ -37,12 +45,12 @@ export class AdaptiveQuality {
     return this.profile();
   }
   sample(ms) {
-    // Ignore tab switches, debugger pauses, initial shader compilation and very long stalls.
-    if (this.mode !== "auto" || ms <= 0 || ms > 180) return;
-    this.emaMs += (ms - this.emaMs) * 0.045;
+    // Very low frame rates must still trigger adaptation. Only discard long interruptions.
+    if (this.mode !== "auto" || ms <= 0 || ms > 1500) return;
+    this.emaMs += (Math.min(ms, 200) - this.emaMs) * 0.045;
     this.elapsed += ms;
     this.samples++;
-    if (this.elapsed < 1500 || this.samples < 30) return;
+    if (this.elapsed < 1500 || this.samples < 4) return;
     this.slow = this.emaMs > 24 ? this.slow + 1 : 0;
     this.fast = this.emaMs < 17.8 ? this.fast + 1 : 0;
     this.elapsed = this.samples = 0;

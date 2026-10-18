@@ -1,7 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { RoadIndex } from "../src/engine/road-index.js";
-import { AdaptiveQuality, FixedStepClock } from "../src/engine/performance.js";
+import {
+  AdaptiveQuality,
+  FixedStepClock,
+  initialQualityLevel,
+} from "../src/engine/performance.js";
 
 test("spatial road queries match an exhaustive projection inside and outside the grid", () => {
   const points = Array.from({ length: 320 }, (_, i) => {
@@ -77,4 +81,14 @@ test("automatic quality reduces sustained load and recovers with hysteresis", ()
   assert.equal(quality.level, level);
   assert.equal(quality.cycle().mode, "cinema");
   assert.equal(quality.cycle().mode, "auto");
+});
+
+test("software rendering and very low FPS choose or reach the lowest automatic profile", () => {
+  assert.equal(initialQualityLevel("ANGLE SwiftShader"), 0);
+  assert.equal(initialQualityLevel("Mesa llvmpipe"), 0);
+  assert.equal(initialQualityLevel("NVIDIA RTX"), 2);
+  assert.equal(initialQualityLevel(""), 2);
+  const quality = new AdaptiveQuality(() => {});
+  for (let i = 0; i < 20; i++) quality.sample(500);
+  assert.equal(quality.level, 0);
 });

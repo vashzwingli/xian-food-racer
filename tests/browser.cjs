@@ -66,6 +66,7 @@ const server = http
     });
     await page.goto(base);
     await page.waitForFunction(() => window.raceTest);
+    console.log("Browser suite: loaded offline build");
     assert.deepEqual(external, [], "offline build must not request a CDN");
     const layouts = [];
     for (const size of [
@@ -99,6 +100,7 @@ const server = http
       layouts.push(size);
     }
     await page.setViewportSize({ width: 1024, height: 640 });
+    console.log("Browser suite: four layouts passed");
     await page.screenshot({ path: path.join(root, "menu.png") });
     await page.locator("#menu [data-radio]").click();
     assert(await page.locator("#radioDialog").isVisible());
@@ -138,6 +140,7 @@ const server = http
     await page.waitForFunction(
       () => window.raceTest && raceTest.localAudio().hasFile,
     );
+    console.log("Browser suite: radio import and persistence passed");
     assert.equal(
       (await page.evaluate(() => raceTest.localAudio())).name,
       "西安人的歌-测试音频",
@@ -203,6 +206,7 @@ const server = http
       JSON.stringify(performanceAfter, null, 2),
     );
     const memoryCounts = [];
+    console.log("Browser suite: controls and memories passed");
     for (let i = 0; i < 4; i++) {
       await page.evaluate(() => {
         raceTest.choose(0);
@@ -226,6 +230,7 @@ const server = http
       hasTouch: true,
       isMobile: true,
     });
+    console.log("Browser suite: resource recycling passed");
     const mobile = await touch.newPage();
     await mobile.goto(base);
     await mobile.waitForFunction(() => window.raceTest);
@@ -263,6 +268,7 @@ const server = http
     assert(touchSpeed > 3);
     await mobile.screenshot({ path: path.join(root, "touch-driving.png") });
     await touch.close();
+    console.log("Browser suite: touch driving passed");
     // CDN output also loads with the exact same pinned Three.js sources, without relying on public network during CI.
     const cdn = await browser.newPage();
     await cdn.route(

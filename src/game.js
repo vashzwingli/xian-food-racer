@@ -3,7 +3,11 @@ import { createGeometryKit } from "./models/procedural.js";
 import { createPlayerVehicle } from "./models/player-car.js";
 import { WheelInstances } from "./engine/wheel-instances.js";
 import { RoadIndex } from "./engine/road-index.js";
-import { AdaptiveQuality, FixedStepClock } from "./engine/performance.js";
+import {
+  AdaptiveQuality,
+  FixedStepClock,
+  initialQualityLevel,
+} from "./engine/performance.js";
 import { batchRig } from "./engine/batching.js";
 import { composeMusic } from "./audio/synth-score.js";
 import { LocalTrack } from "./audio/local-track.js";
@@ -2585,7 +2589,14 @@ function applyQuality(profile) {
   steam.visible = profile.effects;
   if ($("qualityStatus")) $("qualityStatus").textContent = profile.label;
 }
-const qualityManager = new AdaptiveQuality(applyQuality);
+const gl = renderer.getContext();
+const rendererInfo = gl.getExtension("WEBGL_debug_renderer_info");
+const qualityManager = new AdaptiveQuality(
+  applyQuality,
+  initialQualityLevel(
+    rendererInfo ? gl.getParameter(rendererInfo.UNMASKED_RENDERER_WEBGL) : "",
+  ),
+);
 applyQuality(qualityManager.profile());
 const localTrack = new LocalTrack(() => {
   updateMusicUI();
@@ -3615,7 +3626,7 @@ showBest();
 $("loading").style.display = "none";
 let last = performance.now();
 const fixedClock = new FixedStepClock();
-let warmingFrames = 90;
+const warmUntil = performance.now() + 1500;
 function frame(now) {
   const frameMs = now - last;
   last = now;
@@ -3625,7 +3636,7 @@ function frame(now) {
     renderer.info.reset();
     if (bloom.enabled) composer.render();
     else renderer.render(scene, camera);
-    if (warmingFrames-- <= 0) qualityManager.sample(frameMs);
+    if (now >= warmUntil) qualityManager.sample(frameMs);
   } else fixedClock.reset();
   requestAnimationFrame(frame);
 }
