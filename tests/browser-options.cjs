@@ -4,7 +4,7 @@ module.exports = {
   headless: true,
   channel:
     process.env.FOOD_RACER_BROWSER ||
-    (process.platform === "win32" ? "msedge" : undefined),
+    (process.platform === "win32" ? "msedge" : "chromium"),
   args:
     process.platform === "win32"
       ? []

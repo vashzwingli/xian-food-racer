@@ -103,6 +103,7 @@ const server = http
     await page.setViewportSize({ width: 1024, height: 640 });
     console.log("Browser suite: four layouts passed");
     await page.screenshot({ path: path.join(root, "menu.png") });
+    console.log("Browser suite: menu captured");
     await page.locator("#menu [data-radio]").click();
     assert(await page.locator("#radioDialog").isVisible());
     await page.locator("#trackImport").setInputFiles({
@@ -110,9 +111,10 @@ const server = http
       mimeType: "audio/wav",
       buffer: waveFixture(),
     });
-    await page.waitForFunction(
-      () => raceTest.localAudio().hasFile && !raceTest.localAudio().paused,
-    );
+    await page.waitForFunction(() => raceTest.localAudio().hasFile);
+    console.log("Browser suite: audio imported");
+    await page.locator("#radioPreview").click();
+    await page.waitForFunction(() => !raceTest.localAudio().paused);
     const imported = await page.evaluate(() => raceTest.localAudio());
     assert(imported.selected);
     assert(imported.loop);
@@ -317,6 +319,9 @@ const server = http
         radio: "passed",
       }),
     );
+  } catch (error) {
+    console.error("Browser suite failed:", error);
+    throw error;
   } finally {
     await browser.close();
     server.close();
