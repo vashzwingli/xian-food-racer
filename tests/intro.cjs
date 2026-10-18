@@ -201,7 +201,9 @@ const server = http
         // In-flight screenshot encoding can outlast the tunnel on software GPUs.
         // Verify the actual rendered traversal below, without blocking its clock.
       }
-      await page.waitForFunction(() => !changanIntro.active);
+      await page.waitForFunction(() => !changanIntro.active, null, {
+        timeout: 90000,
+      });
       if (size.width === 1024) {
         const shot = await page.evaluate(() => raceTest.entranceSnapshot());
         assert(shot.insideFrames > 0 && shot.crossed && shot.exited);

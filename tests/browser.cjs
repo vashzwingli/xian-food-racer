@@ -67,7 +67,7 @@ const server = http
     });
     await page.goto(base, { timeout: 60000 });
     await page.bringToFront();
-    await page.waitForFunction(() => window.raceTest);
+    await page.waitForFunction(() => window.raceTest, null, { timeout: 60000 });
     console.log(
       "Browser suite: loaded offline build",
       await page.evaluate(() => raceTest.performanceProfile()),

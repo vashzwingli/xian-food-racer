@@ -24,7 +24,8 @@ export function createEntrance(camera, getTower, onFinish) {
   );
   const target = new THREE.Vector3(),
     p = new THREE.Vector3();
-  let started = 0,
+  let previousTime = 0,
+    elapsed = 0,
     playing = false,
     progress = 0,
     insideFrames = 0,
@@ -64,8 +65,9 @@ export function createEntrance(camera, getTower, onFinish) {
     onFinish();
   }
   return {
-    start() {
-      started = performance.now();
+    start(now = performance.now()) {
+      previousTime = now;
+      elapsed = 0;
       progress = 0;
       insideFrames = 0;
       crossed = exited = false;
@@ -75,7 +77,11 @@ export function createEntrance(camera, getTower, onFinish) {
     },
     update(now) {
       if (!playing) return;
-      progress = clamp((now - started) / 6100);
+      // Shader compilation or a slow software GPU must not teleport through
+      // the entire gate between two displayed frames. Slow the shot instead.
+      elapsed += Math.min(250, Math.max(0, now - previousTime));
+      previousTime = now;
+      progress = clamp(elapsed / 6100);
       pose(progress);
       getTower()?.open(smooth(clamp(progress / 0.27)));
       if (p.z < 14 && p.z > -14 && Math.abs(p.x) < 3) {

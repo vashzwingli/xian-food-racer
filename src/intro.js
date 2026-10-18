@@ -44,6 +44,19 @@
     gestureSeen = true;
     hooks.gesture?.();
   }
+  function watchEntrance(previous = 0) {
+    clearTimeout(closeTimer);
+    closeTimer = setTimeout(() => {
+      if (!active || screen.dataset.phase !== "opening") return;
+      const shot = hooks.snapshot?.();
+      if (shot?.playing && shot.progress > previous)
+        watchEntrance(shot.progress);
+      else {
+        hooks.skip?.();
+        settle();
+      }
+    }, 16000);
+  }
   function tryFinish() {
     if (!active || !ready || screen.dataset.phase === "opening") return;
     const remaining =
@@ -69,11 +82,8 @@
       );
     } else {
       hooks.enter?.();
-      // A recoverable renderer interruption must not leave the menu locked forever.
-      closeTimer = setTimeout(() => {
-        hooks.skip?.();
-        settle();
-      }, 16000);
+      // Allow a slow GPU to keep making visible progress; recover from a stall.
+      watchEntrance();
     }
   }
   function markReady() {

@@ -3904,7 +3904,11 @@ function frame(now) {
   const frameMs = now - last;
   last = now;
   if (worldReady && !document.hidden && !contextLost) {
-    fixedClock.advance(frameMs / 1000, update);
+    if (entrance.playing) {
+      // The menu shot needs one ambience update, without simulation catch-up.
+      fixedClock.reset();
+      update(Math.min(frameMs / 1000, 1 / 30));
+    } else fixedClock.advance(frameMs / 1000, update);
     wheelInstances?.update();
     if (entrance.playing) {
       entrance.update(now);
