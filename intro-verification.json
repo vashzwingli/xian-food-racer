@@ -54,7 +54,7 @@
       "cinematic": {
         "playing": false,
         "progress": 1,
-        "insideFrames": 5,
+        "insideFrames": 1,
         "crossed": true,
         "exited": true,
         "camera": [

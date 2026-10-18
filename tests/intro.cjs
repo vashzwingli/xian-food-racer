@@ -143,7 +143,17 @@ const server = http
         await page.waitForFunction(() =>
           document.getElementById("loading").classList.contains("is-opening"),
         );
-        await page.waitForTimeout(350);
+        await page.waitForFunction(
+          () => {
+            const element = document.getElementById("loading");
+            return (
+              changanIntro.active &&
+              +getComputedStyle(element, "::before").opacity < 1
+            );
+          },
+          null,
+          { timeout: 10000 },
+        );
         const opacity = await page
           .locator("#loading")
           .evaluate(
