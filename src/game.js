@@ -812,7 +812,7 @@ function trafficModel(type, index) {
   );
   const shadow = new THREE.Mesh(
     new THREE.PlaneGeometry(w + 1.4, l + 1.4),
-    contactShadow.material.clone(),
+    contactShadow.material,
   );
   shadow.rotation.x = -Math.PI / 2;
   shadow.position.y = 0.012;
@@ -3648,6 +3648,7 @@ showBest();
 $("loading").style.display = "none";
 let last = performance.now();
 const fixedClock = new FixedStepClock();
+let renderFrame = 0;
 const warmUntil = performance.now() + 1500;
 function frame(now) {
   const frameMs = now - last;
@@ -3658,6 +3659,7 @@ function frame(now) {
     renderer.info.reset();
     if (bloom.enabled) composer.render();
     else renderer.render(scene, camera);
+    renderFrame++;
     if (now >= warmUntil) qualityManager.sample(frameMs);
   } else fixedClock.reset();
   requestAnimationFrame(frame);
@@ -4002,6 +4004,7 @@ window.raceTest = {
       },
       localTrack: localTrack.snapshot(),
       drawCalls: renderer.info.render.calls,
+      renderFrame,
       vertices: renderer.info.render.triangles,
     };
   },

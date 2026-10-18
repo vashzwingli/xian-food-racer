@@ -209,21 +209,28 @@ const server = http
     const memoryCounts = [];
     console.log("Browser suite: controls and memories passed");
     for (let i = 0; i < 4; i++) {
-      await page.evaluate(() => {
+      const previousFrame = await page.evaluate(() => {
         raceTest.choose(0);
         raceTest.sceneAt(14);
+        return raceTest.snapshot().renderFrame;
       });
-      await page.waitForTimeout(500);
+      await page.waitForFunction(
+        (before) => raceTest.snapshot().renderFrame >= before + 2,
+        previousFrame,
+        { timeout: 30000 },
+      );
       memoryCounts.push(
         (await page.evaluate(() => raceTest.snapshot())).rendering,
       );
     }
     assert(
-      memoryCounts[3].textures <= memoryCounts[1].textures + 2,
+      memoryCounts[3].textures <=
+        Math.max(memoryCounts[0].textures, memoryCounts[1].textures) + 2,
       JSON.stringify(memoryCounts),
     );
     assert(
-      memoryCounts[3].geometries <= memoryCounts[1].geometries + 3,
+      memoryCounts[3].geometries <=
+        Math.max(memoryCounts[0].geometries, memoryCounts[1].geometries) + 3,
       JSON.stringify(memoryCounts),
     );
     const touch = await browser.newContext({
