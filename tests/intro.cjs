@@ -143,17 +143,52 @@ const server = http
         await page.waitForFunction(() =>
           document.getElementById("loading").classList.contains("is-opening"),
         );
-        await page.waitForFunction(
-          () => {
-            const element = document.getElementById("loading");
-            return (
-              changanIntro.active &&
-              +getComputedStyle(element, "::before").opacity < 1
-            );
-          },
-          null,
-          { timeout: 10000 },
-        );
+        try {
+          await page.waitForFunction(
+            () => {
+              const element = document.getElementById("loading");
+              const opacity = +getComputedStyle(element, "::before").opacity;
+              (window.__fadeSamples ??= []).push({
+                active: changanIntro.active,
+                opacity,
+                progress: changanIntro.cinematic.progress,
+              });
+              return changanIntro.active && opacity < 1;
+            },
+            null,
+            { timeout: 10000 },
+          );
+        } catch (error) {
+          console.error(
+            "Fade diagnostics",
+            await page.evaluate(() => {
+              const element = document.getElementById("loading");
+              return {
+                active: changanIntro.active,
+                reduced: changanIntro.reduced,
+                phase: element.dataset.phase,
+                classes: element.className,
+                hidden: element.hidden,
+                before: getComputedStyle(element, "::before").opacity,
+                cinematic: changanIntro.cinematic,
+                firstSamples: window.__fadeSamples?.slice(0, 12),
+                lastSamples: window.__fadeSamples?.slice(-8),
+                animations: element
+                  .getAnimations({ subtree: true })
+                  .map((a) => ({
+                    name: a.animationName,
+                    property: a.transitionProperty,
+                    time: a.currentTime,
+                    state: a.playState,
+                  })),
+              };
+            }),
+          );
+          await page.screenshot({
+            path: path.join(output, "fade-failure.png"),
+          });
+          throw error;
+        }
         const opacity = await page
           .locator("#loading")
           .evaluate(
