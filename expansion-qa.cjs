@@ -28,10 +28,12 @@ const server = http
       if (m.type() === "error") errors.push(m.text());
     });
     await page.goto("http://127.0.0.1:8760");
-    await page.waitForFunction(() => window.raceTest, { timeout: 60000 });
+    await page.waitForFunction(() => window.raceTest, null, { timeout: 60000 });
+    if (process.env.FOOD_RACER_SMOOTH) await page.keyboard.press("q");
     await page.locator("#menu [data-music]").click();
     await page.waitForFunction(
       () => raceTest.snapshot().musicReady === "ready",
+      null,
       { timeout: 60000 },
     );
     await page.waitForTimeout(700);
@@ -65,11 +67,24 @@ const server = http
     });
     await page.waitForTimeout(500);
     await page.keyboard.down("f");
+    // Smooth quality emits fewer particles per simulation second. Wait for the
+    // complete effect, rather than sampling the first frame above two metres.
     await page.waitForFunction(
-      () => raceTest.snapshot().jetVisible && raceTest.snapshot().airHeight > 2,
+      () => {
+        const flight = raceTest.snapshot();
+        return (
+          flight.jetVisible && flight.airHeight > 2 && flight.jetParticles > 20
+        );
+      },
+      null,
       { timeout: 20000 },
     );
     const flying = await page.evaluate(() => raceTest.snapshot());
+    console.log("Flight effect", {
+      height: flying.airHeight,
+      particles: flying.jetParticles,
+      qualityLevel: flying.rendering.level,
+    });
     assert(flying.jetVisible);
     assert(flying.airHeight > 2);
     assert(flying.jetParticles > 20);
@@ -79,7 +94,7 @@ const server = http
     await page.keyboard.press("f");
     await page.waitForTimeout(300);
     assert.equal((await page.evaluate(() => raceTest.snapshot())).jumps, 2);
-    await page.waitForFunction(() => raceTest.snapshot().jumps === 0, {
+    await page.waitForFunction(() => raceTest.snapshot().jumps === 0, null, {
       timeout: 10000,
     });
     assert.equal(
