@@ -51,18 +51,21 @@ const server = http
       }),
       errors = [],
       external = [];
-    page.on("pageerror", (e) => {
-      errors.push(e.message);
-      console.error(e.message);
-    });
-    page.on("console", (m) => {
-      if (m.type() === "error") errors.push(m.text());
-    });
+    const monitor = (surface) => {
+      surface.on("pageerror", (e) => {
+        errors.push(e.message);
+        console.error(e.message);
+      });
+      surface.on("console", (m) => {
+        if (m.type() === "error") errors.push(m.text());
+      });
+    };
+    monitor(page);
     page.on("request", (r) => {
       if (/^https?:/.test(r.url()) && !r.url().startsWith(base))
         external.push(r.url());
     });
-    await page.goto(base);
+    await page.goto(base, { timeout: 60000 });
     await page.bringToFront();
     await page.waitForFunction(() => window.raceTest);
     console.log(
@@ -233,6 +236,8 @@ const server = http
         Math.max(memoryCounts[0].geometries, memoryCounts[1].geometries) + 3,
       JSON.stringify(memoryCounts),
     );
+    // Run one game context at a time; GPU-less CI shares its software renderer.
+    await page.close();
     const touch = await browser.newContext({
       viewport: { width: 844, height: 390 },
       hasTouch: true,
@@ -240,7 +245,8 @@ const server = http
     });
     console.log("Browser suite: resource recycling passed");
     const mobile = await touch.newPage();
-    await mobile.goto(base);
+    monitor(mobile);
+    await mobile.goto(base, { timeout: 60000 });
     await mobile.bringToFront();
     await mobile.waitForFunction(() => window.raceTest);
     await mobile.locator("#start").click();
@@ -282,6 +288,7 @@ const server = http
     console.log("Browser suite: touch driving passed");
     // CDN output also loads with the exact same pinned Three.js sources, without relying on public network during CI.
     const cdn = await browser.newPage();
+    monitor(cdn);
     await cdn.route(
       "https://cdn.jsdelivr.net/npm/three@0.170.0/**",
       async (route) => {
@@ -295,7 +302,7 @@ const server = http
         });
       },
     );
-    await cdn.goto(base + "/cdn");
+    await cdn.goto(base + "/cdn", { timeout: 60000 });
     await cdn.waitForFunction(() => window.raceTest);
     assert.equal(
       (await cdn.evaluate(() => raceTest.snapshot())).trafficCount,
