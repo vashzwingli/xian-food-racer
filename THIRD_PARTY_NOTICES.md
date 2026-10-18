@@ -2,6 +2,8 @@
 
 The offline HTML bundles Three.js 0.170.0 and the Three.js add-on modules used by the game. Their license follows. The CDN build loads the same version from jsDelivr.
 
+Both HTML builds also embed the live recording of 《西安人的歌》 performed by 程渤智, from 《十三亿分贝 第一期》. This recording is not covered by the Three.js MIT license or a license granted by this repository. Source and rights context: [assets/audio/SOURCE.md](assets/audio/SOURCE.md).
+
 ## Three.js
 
 The MIT License

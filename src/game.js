@@ -2613,6 +2613,12 @@ function renderRadio() {
   $("radioMessage").textContent = track.message;
   $("radioLocal").disabled = !track.hasFile;
   $("radioRemove").disabled = !track.hasFile;
+  for (const [button, source] of [
+    ["radioHome", "home"],
+    ["radioLocal", "local"],
+    ["radioOriginal", "original"],
+  ])
+    $(button).setAttribute("aria-pressed", String(track.source === source));
   $("radioVolume").value = Math.round(track.volume * 100);
   $("radioVolumeValue").textContent = Math.round(track.volume * 100) + "%";
 }
@@ -2649,6 +2655,13 @@ $("radioOriginal").onclick = () => {
   localTrack.selectOriginal();
   sound();
   musicEnabled = true;
+  updateMusicUI();
+};
+$("radioHome").onclick = () => {
+  localTrack.selectHome();
+  sound();
+  musicEnabled = true;
+  localTrack.sync(!muted, state);
   updateMusicUI();
 };
 $("radioLocal").onclick = () => {

@@ -14,6 +14,7 @@ const result = await build({
   minify: true,
   charset: "utf8",
   legalComments: "inline",
+  loader: { ".mp3": "dataurl" },
   external: offline ? [] : ["three", "three/*"],
 });
 const css = await transform(

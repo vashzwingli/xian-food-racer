@@ -928,6 +928,11 @@ body > canvas {
   gap: 8px;
   margin: 17px 0;
 }
+.radio-actions button[aria-pressed="true"] {
+  background: #713c31;
+  border-color: #d1ac72;
+  color: #ffe2ad;
+}
 .radio-import {
   display: inline-flex;
   align-items: center;

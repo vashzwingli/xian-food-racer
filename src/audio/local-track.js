@@ -1,3 +1,6 @@
+import homeSongUrl from "../../assets/audio/xian-ren-de-ge.mp3";
+
+const HOME_SONG = "西安人的歌 · 程渤智（现场版）";
 const DB_NAME = "changan-night-radio";
 const STORE = "tracks";
 const KEY = "home-song";
@@ -50,17 +53,22 @@ export class LocalTrack {
     this.element = new Audio();
     this.element.loop = true;
     this.element.preload = "metadata";
-    this.name = "";
-    this.selected = false;
+    this.name = HOME_SONG;
+    this.home = true;
+    this.selected = true;
+    this.element.src = homeSongUrl;
     this.volume = 0.62;
-    this.message = "导入你的《西安人的歌》，让熟悉的声音陪你回家。";
+    this.message =
+      "已内置《西安人的歌》现场版。点击发车或试听，让乡音陪你回家。";
     this.url = null;
     this.starting = false;
     this.intent = false;
     this.serial = 0;
     this.element.addEventListener("error", () => {
       this.selected = false;
-      this.message = "这份音频未能播放，请换成 MP3、M4A、OGG 或 WAV。";
+      this.message = this.home
+        ? "内置歌曲暂时无法解码，已切换原创配乐。也可导入自己的音频。"
+        : "这份音频未能播放，已切换原创配乐。请换成 MP3、M4A、OGG 或 WAV。";
       this.onChange();
     });
     this.ready = this.restore();
@@ -70,9 +78,14 @@ export class LocalTrack {
       const saved = await storedTrack("get");
       if (saved?.blob) {
         this.useBlob(saved.blob, saved.name);
-        this.selected = saved.selected !== false;
-        this.volume = saved.volume ?? this.volume;
         this.message = "已记住这首歌。点击发车或试听开始播放。";
+      }
+      if (saved) {
+        this.volume = saved.volume ?? this.volume;
+        if (saved.mode === "home") this.useHome();
+        this.selected = saved.mode
+          ? saved.mode !== "original"
+          : saved.selected !== false;
       }
     } catch {
       /* Local file origins and private mode may disable persistent storage. */
@@ -80,13 +93,35 @@ export class LocalTrack {
     this.onChange();
   }
   useBlob(blob, name) {
+    this.serial++;
+    this.blocked = false;
     this.element.pause();
     if (this.url) URL.revokeObjectURL(this.url);
     this.url = URL.createObjectURL(blob);
     this.element.src = this.url;
     this.blob = blob;
+    this.localName = name;
+    this.home = false;
     this.name = name;
     this.element.load();
+  }
+  useHome() {
+    this.serial++;
+    this.blocked = false;
+    this.element.pause();
+    if (this.url) URL.revokeObjectURL(this.url);
+    this.url = null;
+    this.home = true;
+    this.name = HOME_SONG;
+    this.element.src = homeSongUrl;
+    this.element.load();
+  }
+  selectHome() {
+    this.useHome();
+    this.selected = true;
+    this.message = "正在收听《西安人的歌》现场版，循环播放。";
+    this.persist();
+    this.onChange();
   }
   attach(context, analyser) {
     if (this.context) return;
@@ -139,26 +174,30 @@ export class LocalTrack {
     this.onChange();
   }
   async persist() {
-    if (!this.blob) return;
     try {
       await storedTrack("put", {
         blob: this.blob,
-        name: this.name,
+        name: this.localName,
+        mode: !this.selected ? "original" : this.home ? "home" : "local",
         selected: this.selected,
         volume: this.volume,
       });
     } catch {
-      this.message = "本次可播放；浏览器未允许保存，下次打开需重新导入。";
+      this.message = this.blob
+        ? "本次可播放；浏览器未允许保存，下次打开需重新导入。"
+        : "本次设置已生效；浏览器未允许保存，下次打开会恢复默认。";
     }
   }
   selectLocal() {
     if (this.blob) {
+      if (this.home) this.useBlob(this.blob, this.localName);
       this.selected = true;
       this.persist();
       this.onChange();
     }
   }
   selectOriginal() {
+    this.serial++;
     this.selected = false;
     this.element.pause();
     this.persist();
@@ -168,15 +207,15 @@ export class LocalTrack {
     this.serial++;
     this.selected = false;
     this.element.pause();
-    this.element.removeAttribute("src");
-    this.element.load();
-    if (this.url) URL.revokeObjectURL(this.url);
-    this.url = this.blob = null;
-    this.name = "";
+    this.blob = null;
+    this.localName = "";
+    this.useHome();
+    this.selected = true;
+    this.blocked = false;
     try {
       await storedTrack("delete");
     } catch {}
-    this.message = "本地音乐已移除。继续听原创《长安夜行》。";
+    this.message = "本地音乐已移除，继续听内置《西安人的歌》。";
     this.onChange();
   }
   setVolume(value) {
@@ -184,7 +223,12 @@ export class LocalTrack {
     this.persist();
   }
   sync(enabled, state, hidden = false) {
-    const active = !!(this.selected && this.blob && enabled && !hidden);
+    const active = !!(
+      this.selected &&
+      (this.home || this.blob) &&
+      enabled &&
+      !hidden
+    );
     this.intent = active;
     if (this.gain)
       this.gain.gain.setTargetAtTime(
@@ -210,9 +254,10 @@ export class LocalTrack {
       this.element
         .play()
         .then(() => {
-          if (!this.intent || serial !== this.serial) this.element.pause();
+          if (serial === this.serial && !this.intent) this.element.pause();
         })
         .catch(() => {
+          if (serial !== this.serial || !this.intent) return;
           this.blocked = true;
           this.message = "点击“试听 / 继续播放”即可开始。";
           this.onChange();
@@ -227,6 +272,11 @@ export class LocalTrack {
       name: this.name,
       selected: this.selected,
       hasFile: !!this.blob,
+      source: !this.selected ? "original" : this.home ? "home" : "local",
+      duration: Number.isFinite(this.element.duration)
+        ? this.element.duration
+        : 0,
+      readyState: this.element.readyState,
       paused: this.element.paused,
       loop: this.element.loop,
       currentTime: this.element.currentTime,

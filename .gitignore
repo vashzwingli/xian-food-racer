@@ -13,3 +13,4 @@ playwright-report/
 *.wav
 *.flac
 *.aac
+!assets/audio/xian-ren-de-ge.mp3

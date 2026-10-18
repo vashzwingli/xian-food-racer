@@ -110,6 +110,19 @@ const server = http
     console.log("Browser suite: menu captured");
     await page.locator("#menu [data-radio]").click();
     assert(await page.locator("#radioDialog").isVisible());
+    await page.locator("#radioPreview").click();
+    await page.waitForFunction(
+      () =>
+        !raceTest.localAudio().paused && raceTest.localAudio().duration > 180,
+    );
+    const homeSong = await page.evaluate(() => raceTest.localAudio());
+    assert.equal(homeSong.source, "home");
+    assert(homeSong.duration > 188 && homeSong.duration < 190);
+    assert(homeSong.loop);
+    await page.waitForFunction(() => raceTest.audioStats()?.rms > 0.001);
+    assert((await page.evaluate(() => raceTest.localAudio())).currentTime > 0);
+    console.log("Browser suite: embedded live recording decoded and audible");
+    await page.screenshot({ path: path.join(root, "radio-home.png") });
     await page.locator("#trackImport").setInputFiles({
       name: "西安人的歌-测试音频.wav",
       mimeType: "audio/wav",
@@ -122,6 +135,27 @@ const server = http
     const imported = await page.evaluate(() => raceTest.localAudio());
     assert(imported.selected);
     assert(imported.loop);
+    await page.locator("#radioHome").click();
+    await page.waitForFunction(
+      () =>
+        raceTest.localAudio().source === "home" &&
+        !raceTest.localAudio().paused,
+    );
+    assert((await page.evaluate(() => raceTest.localAudio())).hasFile);
+    await page.reload();
+    await page.waitForFunction(
+      () =>
+        window.raceTest &&
+        raceTest.localAudio().source === "home" &&
+        raceTest.localAudio().hasFile,
+    );
+    await page.locator("#menu [data-radio]").click();
+    await page.locator("#radioLocal").click();
+    await page.waitForFunction(() => !raceTest.localAudio().paused);
+    assert.equal(
+      (await page.evaluate(() => raceTest.localAudio())).name,
+      "西安人的歌-测试音频",
+    );
     await page.locator("#radioVolume").fill("37");
     await page.locator("#radioVolume").dispatchEvent("input");
     assert.equal(
@@ -155,6 +189,10 @@ const server = http
     await page.locator("#menu [data-radio]").click();
     await page.locator("#radioRemove").click();
     await page.waitForFunction(() => !raceTest.localAudio().hasFile);
+    assert.equal(
+      (await page.evaluate(() => raceTest.localAudio())).source,
+      "home",
+    );
     await page.locator("#radioClose").click();
     await page.locator("#start").click();
     await page.waitForFunction(() => raceTest.snapshot().state === "race");
@@ -315,7 +353,8 @@ const server = http
       layouts,
       offlineNetworkRequests: external,
       radio:
-        "import / loop / volume / B / M / original / persistence / delete / pause passed (synthetic test audio only)",
+        "embedded live song decode / audible signal / home-local-original switching / loop / volume / B / M / persistence / delete / pause passed; imports use a synthetic test fixture",
+      homeSong,
       touchSpeed,
       memoryCounts,
       performanceAfter,
