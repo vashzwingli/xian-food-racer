@@ -6,7 +6,7 @@
     "nextGate": 1,
     "checkpoint": 0,
     "laps": [],
-    "elapsed": 0.016666666666666666,
+    "elapsed": 0,
     "length": 1834.5985992526314,
     "speed": 0,
     "fuel": 100,
@@ -78,7 +78,7 @@
       "rain": 700,
       "detailDistance": 95,
       "effects": true,
-      "frameMs": 8.334430971980396,
+      "frameMs": 8.329777953921143,
       "geometries": 595,
       "textures": 54
     },
@@ -92,14 +92,14 @@
       "readyState": 4,
       "paused": false,
       "loop": true,
-      "currentTime": 3.422041,
+      "currentTime": 3.452093,
       "volume": 0.62,
       "gain": 0.40296781063079834,
       "message": "已内置《西安人的歌》现场版。点击发车或试听，让乡音陪你回家。"
     },
-    "drawCalls": 688,
-    "renderFrame": 436,
-    "vertices": 424530
+    "drawCalls": 736,
+    "renderFrame": 517,
+    "vertices": 429474
   },
   "audit": {
     "siteOverlaps": 0,
@@ -272,7 +272,7 @@
       "rain": 430,
       "detailDistance": 80,
       "effects": true,
-      "frameMs": 8.939564081199569,
+      "frameMs": 8.375027950777628,
       "geometries": 518,
       "textures": 63
     },
@@ -286,13 +286,13 @@
       "readyState": 4,
       "paused": false,
       "loop": true,
-      "currentTime": 12.712925,
+      "currentTime": 14.216462,
       "volume": 0.62,
       "gain": 0.4959678053855896,
       "message": "已内置《西安人的歌》现场版。点击发车或试听，让乡音陪你回家。"
     },
-    "drawCalls": 574,
-    "renderFrame": 717,
-    "vertices": 250082
+    "drawCalls": 562,
+    "renderFrame": 795,
+    "vertices": 249506
   }
 }

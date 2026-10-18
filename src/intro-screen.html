@@ -1,0 +1,280 @@
+<section
+  id="loading"
+  class="intro-screen"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="introTitle"
+  data-phase="loading"
+>
+  <div class="intro-corner">
+    <span class="intro-seal">秦</span
+    ><span>三秦烟火<br /><small>今夜，回长安</small></span>
+  </div>
+  <button id="introSkip" class="intro-skip">跳过入场 <kbd>空格</kbd></button>
+  <div class="intro-copy">
+    <p>一城灯火，等你开咥</p>
+    <h1 id="introTitle">
+      <span>长</span><span>安</span><span>夜</span><span>食</span>
+    </h1>
+    <div class="intro-subtitle">雨落南门 · 馍热着，额等你进城</div>
+  </div>
+  <svg class="intro-art" viewBox="0 0 1200 600" fill="none" aria-hidden="true">
+    <defs>
+      <pattern
+        id="introBrick"
+        width="72"
+        height="34"
+        patternUnits="userSpaceOnUse"
+      >
+        <path
+          d="M0 0H72M0 17H72M0 0V17M36 17V34M72 0V17"
+          stroke="#887f68"
+          stroke-opacity=".18"
+        />
+      </pattern>
+      <linearGradient id="introStone" x2="0" y2="1">
+        <stop stop-color="#39434a" />
+        <stop offset="1" stop-color="#192630" />
+      </linearGradient>
+      <radialGradient id="introLanternGlow">
+        <stop stop-color="#e49b4c" stop-opacity=".22" />
+        <stop offset="1" stop-color="#e49b4c" stop-opacity="0" />
+      </radialGradient>
+      <clipPath id="introGateArch">
+        <path d="M484 600V474a116 116 0 0 1 232 0V600Z" />
+      </clipPath>
+    </defs>
+    <circle cx="600" cy="250" r="211" stroke="#c5aa78" stroke-opacity=".11" />
+    <circle cx="600" cy="250" r="202" stroke="#c5aa78" stroke-opacity=".06" />
+    <path
+      class="intro-rain"
+      d="M100 102v14m54 89v22m93-178v17m85 236v18m77-230v17m96-70v19m211 96v14m121-26v24m66 142v20m74-232v20m112 107v23m-204 140v13m-700-20v15m815-63v18"
+      stroke="#9fb8c2"
+      stroke-opacity=".26"
+    />
+    <path
+      d="M0 444 100 423 184 438 270 408 340 424M860 424 940 400 1016 430 1100 417 1200 438"
+      stroke="#d6b67f"
+      stroke-opacity=".22"
+    />
+    <path d="M0 454H1200V600H0Z" fill="url(#introStone)" />
+    <path d="M0 454H1200V600H0Z" fill="url(#introBrick)" />
+    <path d="M0 450H1200M0 462H1200" stroke="#9c8a6c" stroke-opacity=".55" />
+    <path
+      d="M0 451v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19M765 451v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19"
+      fill="#354047"
+      stroke="#9c8a6c"
+      stroke-opacity=".4"
+    />
+    <g
+      class="intro-tower"
+      stroke="#d3b482"
+      stroke-width="1.8"
+      stroke-linejoin="round"
+    >
+      <path d="M442 449V350H758V449" fill="#29363e" />
+      <path d="M457 351H743V284H457Z" fill="#6d342d" />
+      <path d="M478 282H722V219H478Z" fill="#70382d" />
+      <path d="M517 217H683V166H517Z" fill="#753d30" />
+      <g stroke-opacity=".65">
+        <path
+          d="M469 292v47m25-47v47m31-47v47m31-47v47m31-47v47m31-47v47m31-47v47m31-47v47m31-47v47m21-47v47M491 227v42m32-42v42m32-42v42m32-42v42m32-42v42m32-42v42m32-42v42m26-42v42M530 174v32m28-32v32m28-32v32m28-32v32m28-32v32m28-32v32"
+        />
+      </g>
+      <g fill="#202d35">
+        <path
+          class="intro-roof roof-one"
+          d="M426 343Q470 341 488 316H712Q730 341 774 343L745 356H455Z"
+        />
+        <path
+          class="intro-roof roof-two"
+          d="M451 278Q487 276 505 251H695Q713 276 749 278L719 290H481Z"
+        />
+        <path
+          class="intro-roof roof-three"
+          d="M491 216Q526 211 544 185H656Q674 211 709 216L681 228H519Z"
+        />
+        <path
+          class="intro-roof roof-four"
+          d="M516 160Q557 156 600 119Q643 156 684 160L657 173H543Z"
+        />
+      </g>
+      <path
+        d="M600 119v-14m-7 0h14M465 363H735M453 375H747M453 390H747M453 405H747M453 420H747"
+        stroke-opacity=".55"
+      />
+      <rect x="560" y="292" width="80" height="30" rx="1" fill="#16252e" />
+      <text
+        x="600"
+        y="313"
+        text-anchor="middle"
+        fill="#e1c18b"
+        stroke="none"
+        font-size="18"
+        font-family="KaiTi,STKaiti,serif"
+        letter-spacing="7"
+      >
+        钟楼
+      </text>
+    </g>
+    <g clip-path="url(#introGateArch)">
+      <path d="M480 600V470a120 120 0 0 1 240 0V600Z" fill="#0b151e" />
+      <g class="intro-door intro-door-left">
+        <path d="M483 355H600V604H483Z" fill="#713a31" />
+        <path
+          d="M498 357v247m23-247v247m24-247v247m24-247v247m24-247v247"
+          stroke="#432b29"
+          stroke-width="3"
+        />
+        <g fill="#d1ad70">
+          <circle cx="509" cy="423" r="4" />
+          <circle cx="539" cy="423" r="4" />
+          <circle cx="570" cy="423" r="4" />
+          <circle cx="509" cy="463" r="4" />
+          <circle cx="539" cy="463" r="4" />
+          <circle cx="570" cy="463" r="4" />
+          <circle cx="509" cy="503" r="4" />
+          <circle cx="539" cy="503" r="4" />
+          <circle cx="570" cy="503" r="4" />
+          <circle cx="509" cy="543" r="4" />
+          <circle cx="539" cy="543" r="4" />
+          <circle cx="570" cy="543" r="4" />
+        </g>
+        <circle cx="577" cy="494" r="10" stroke="#d1ad70" stroke-width="3" />
+      </g>
+      <g class="intro-door intro-door-right">
+        <path d="M600 355H717V604H600Z" fill="#713a31" />
+        <path
+          d="M608 357v247m24-247v247m24-247v247m24-247v247m23-247v247"
+          stroke="#432b29"
+          stroke-width="3"
+        />
+        <g fill="#d1ad70">
+          <circle cx="629" cy="423" r="4" />
+          <circle cx="660" cy="423" r="4" />
+          <circle cx="690" cy="423" r="4" />
+          <circle cx="629" cy="463" r="4" />
+          <circle cx="660" cy="463" r="4" />
+          <circle cx="690" cy="463" r="4" />
+          <circle cx="629" cy="503" r="4" />
+          <circle cx="660" cy="503" r="4" />
+          <circle cx="690" cy="503" r="4" />
+          <circle cx="629" cy="543" r="4" />
+          <circle cx="660" cy="543" r="4" />
+          <circle cx="690" cy="543" r="4" />
+        </g>
+        <circle cx="623" cy="494" r="10" stroke="#d1ad70" stroke-width="3" />
+      </g>
+    </g>
+    <path
+      d="M476 600V474a124 124 0 0 1 248 0V600M484 600V474a116 116 0 0 1 232 0V600"
+      stroke="#aa9470"
+      stroke-width="2"
+    />
+    <g transform="translate(367 340)">
+      <g class="intro-lantern">
+        <path d="M0-101v41M-29-61H29" stroke="#bf9e70" />
+        <ellipse cx="0" cy="0" rx="96" ry="100" fill="url(#introLanternGlow)" />
+        <path d="M-27-54H27L31-47H-31Z" fill="#ba9a62" />
+        <ellipse rx="37" ry="48" fill="#a33f2b" stroke="#ddaf6e" />
+        <path
+          d="M-18-42Q-36 0-18 42M0-47V47M18-42Q36 0 18 42"
+          stroke="#d59a58"
+          stroke-opacity=".7"
+        />
+        <path d="M-26 48H26V54H-26Z" fill="#b59762" />
+        <path d="M-9 55v26M0 55v32M9 55v26" stroke="#b54c32" stroke-width="3" />
+        <text
+          y="8"
+          text-anchor="middle"
+          fill="#f1ca87"
+          font-size="24"
+          font-family="KaiTi,STKaiti,serif"
+        >
+          安
+        </text>
+      </g>
+    </g>
+    <g transform="translate(833 340)">
+      <g class="intro-lantern lantern-right">
+        <path d="M0-101v41M-29-61H29" stroke="#bf9e70" />
+        <ellipse cx="0" cy="0" rx="96" ry="100" fill="url(#introLanternGlow)" />
+        <path d="M-27-54H27L31-47H-31Z" fill="#ba9a62" />
+        <ellipse rx="37" ry="48" fill="#a33f2b" stroke="#ddaf6e" />
+        <path
+          d="M-18-42Q-36 0-18 42M0-47V47M18-42Q36 0 18 42"
+          stroke="#d59a58"
+          stroke-opacity=".7"
+        />
+        <path d="M-26 48H26V54H-26Z" fill="#b59762" />
+        <path d="M-9 55v26M0 55v32M9 55v26" stroke="#b54c32" stroke-width="3" />
+        <text
+          y="8"
+          text-anchor="middle"
+          fill="#f1ca87"
+          font-size="24"
+          font-family="KaiTi,STKaiti,serif"
+        >
+          秦
+        </text>
+      </g>
+    </g>
+  </svg>
+  <div class="intro-foods" aria-hidden="true">
+    <span
+      ><svg viewBox="0 0 48 34">
+        <path
+          d="M5 16C6 2 42 2 43 16ZM5 24C8 32 40 32 43 24ZM5 20Q10 16 14 20T23 20T32 20T43 20M15 9l2-1m7 0h2m7 1l2 1"
+        /></svg
+      ><b>肉夹馍</b></span
+    >
+    <span
+      ><svg viewBox="0 0 48 34">
+        <path
+          d="M4 18Q24 28 44 18L37 30H11ZM8 13Q14 5 21 12T40 11M10 17Q16 9 24 16T39 14M30 2L21 17M36 3L28 18"
+        /></svg
+      ><b>油泼面</b></span
+    >
+    <span
+      ><svg viewBox="0 0 48 34">
+        <path
+          d="M19 2h10v7l4 5v17H15V14l4-5ZM15 18h18M20 4h8M23 21v7m-4-3h10"
+        /></svg
+      ><b>冰峰</b></span
+    >
+  </div>
+  <div class="intro-couplet" aria-hidden="true">城门开<br />好味来</div>
+  <div class="intro-footer">
+    <div class="intro-status">
+      <span id="introStatus" role="status" aria-live="polite">正等长安灯亮</span
+      ><output id="introPercent">1%</output>
+    </div>
+    <div
+      id="introProgress"
+      class="intro-progress"
+      role="progressbar"
+      aria-label="长安街头准备进度"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="1"
+    >
+      <i></i
+      ><svg class="intro-car" viewBox="0 0 48 22" aria-hidden="true">
+        <path
+          d="M5 12 9 7h11l6-4h8l5 8 6 2v5H4Z"
+          fill="#ac4430"
+          stroke="#dbbb81"
+        />
+        <path d="M22 8h12l3 4H17Z" fill="#58727c" />
+        <circle cx="12" cy="18" r="3" fill="#c8a873" />
+        <circle cx="37" cy="18" r="3" fill="#c8a873" />
+        <path d="M3 14H-5M3 17H-9" stroke="#e6bc70" />
+      </svg>
+    </div>
+    <div class="intro-route">
+      <span>钟楼</span><span>永宁门</span><span>小寨</span>
+    </div>
+    <button id="introRetry" class="intro-retry" hidden>重新点亮长安</button>
+  </div>
+  <noscript>请启用 JavaScript 后进入长安夜食。</noscript>
+</section>

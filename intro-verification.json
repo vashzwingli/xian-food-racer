@@ -1,0 +1,168 @@
+{
+  "errors": [],
+  "blockedDependency": {
+    "active": true,
+    "progress": 1,
+    "inert": true,
+    "hasGame": false
+  },
+  "layouts": [
+    {
+      "size": {
+        "width": 1024,
+        "height": 640
+      },
+      "active": true,
+      "rects": [
+        {
+          "q": ".intro-copy",
+          "x": 0,
+          "y": 70.390625,
+          "right": 1024,
+          "bottom": 215.8125
+        },
+        {
+          "q": "#introSkip",
+          "x": 889,
+          "y": 30,
+          "right": 994,
+          "bottom": 64
+        },
+        {
+          "q": ".intro-foods",
+          "x": 71.671875,
+          "y": 438,
+          "right": 272.671875,
+          "bottom": 506
+        },
+        {
+          "q": ".intro-footer",
+          "x": 302,
+          "y": 539,
+          "right": 722,
+          "bottom": 600
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 1440,
+        "height": 900
+      },
+      "active": true,
+      "rects": [
+        {
+          "q": ".intro-copy",
+          "x": 0,
+          "y": 99,
+          "right": 1440,
+          "bottom": 258.828125
+        },
+        {
+          "q": "#introSkip",
+          "x": 1305,
+          "y": 30,
+          "right": 1410,
+          "bottom": 64
+        },
+        {
+          "q": ".intro-foods",
+          "x": 100.796875,
+          "y": 698,
+          "right": 301.796875,
+          "bottom": 766
+        },
+        {
+          "q": ".intro-footer",
+          "x": 510,
+          "y": 799,
+          "right": 930,
+          "bottom": 860
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 844
+      },
+      "active": true,
+      "rects": [
+        {
+          "q": ".intro-copy",
+          "x": 0,
+          "y": 143.46875,
+          "right": 390,
+          "bottom": 260.546875
+        },
+        {
+          "q": "#introSkip",
+          "x": 314,
+          "y": 26,
+          "right": 372,
+          "bottom": 55
+        },
+        {
+          "q": ".intro-foods",
+          "x": 92.5,
+          "y": 612,
+          "right": 297.5,
+          "bottom": 680
+        },
+        {
+          "q": ".intro-footer",
+          "x": 42.90625,
+          "y": 733,
+          "right": 347.09375,
+          "bottom": 794
+        }
+      ],
+      "overflow": false
+    },
+    {
+      "size": {
+        "width": 667,
+        "height": 375
+      },
+      "active": true,
+      "rects": [
+        {
+          "q": ".intro-copy",
+          "x": 0,
+          "y": 22,
+          "right": 667,
+          "bottom": 89.734375
+        },
+        {
+          "q": "#introSkip",
+          "x": 593,
+          "y": 17,
+          "right": 649,
+          "bottom": 44
+        },
+        {
+          "q": ".intro-foods",
+          "x": 26,
+          "y": 249,
+          "right": 165,
+          "bottom": 298
+        },
+        {
+          "q": ".intro-footer",
+          "x": 158.5,
+          "y": 304,
+          "right": 508.5,
+          "bottom": 356
+        }
+      ],
+      "overflow": false
+    }
+  ],
+  "reducedMotion": true,
+  "offlineExternalRequests": [],
+  "failureRecovery": "retry shown; unfinished city remains locked",
+  "replay": "no world rebuild; returns focus to start",
+  "raceStart": "countdown then race"
+}

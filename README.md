@@ -2,6 +2,12 @@
 
 雨落南门，咥碗热的。开过钟楼、小寨与城墙，把惦记了一天的好味送到家。
 
+**[在线游玩](https://vashzwingli.github.io/xian-food-racer/)** · [GitHub 仓库](https://github.com/vashzwingli/xian-food-racer)
+
+入场以描金城楼、红灯笼、城门和三秦美食印章迎你回长安。进度对应引擎、街巷和首帧准备；准备好后开门进入菜单。点击“跳过入场”或按空格可跳过演出，场景仍会完成加载；菜单右上可重看，不重建城市。系统偏好减少动态效果时缩短入场并停用装饰动画，加载失败提供重试。
+
+![陕西风格入场](intro-loading.png)
+
 西安雨夜美食赛车：26 米宽街道、215 / 616 公交、夜市摊位、撑伞街坊、城墙驾驶、四点喷气、二段翻滚与食物拾取。三种辣度，每条赛道三圈。场景为游戏化创作，不对应真实可驾车的城墙或精确公交线路。
 
 新增渐进转向、速度相关转向幅度、湿地侧滑与手刹回抓；S 先刹车，停稳后短暂缓冲再倒车。火箭结束自然减速，前轮转向与车身俯仰跟随驾驶。**C** 循环低位追车 / 高位巡游 / 车内驾驶；车内有实体仪表、方向盘与雨刷，翻滚时保留稳定视野。
@@ -76,6 +82,7 @@ npm run build:offline
 npm test
 npm run test:browser
 npm run test:regression
+npm run test:intro
 ```
 
 Windows 测试默认使用 Edge；其他系统使用 Playwright Chromium，首次执行 `npx playwright install --with-deps chromium`。可用 `FOOD_RACER_BROWSER` 指定浏览器通道。
@@ -91,6 +98,8 @@ Windows 测试默认使用 Edge；其他系统使用 Playwright Chromium，首�
 - 刹车/倒车缓冲、高速转向、回正、手刹侧滑与火箭结束后的速度连续性；三种视角、减弱动态偏好及模糊开关。同一帧分别渲染模糊开/关，像素对比验证路边发生变化而中央与仪表保持清晰，结果见 `driving-verification.json`。
 
 GitHub Actions 执行同样的构建与回归，并输出报告和截图。根目录 `*verification.json` 为回归结果，新电台和适配报告在本机 `test-results/` 或 CI 附件。
+
+推送 `main` 后，所有验证通过才将完整离线构建发布到 GitHub Pages。网页初次下载约 4.5 MiB，进入游戏不再请求 Three.js CDN 或音乐平台。仓库 Pages 使用 GitHub Actions 作为发布来源；本地 `npm run build:pages` 生成同样的 `.pages/index.html`。
 
 ![城墙驾驶](driveable-wall.png)
 

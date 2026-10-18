@@ -21,6 +21,8 @@ import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+window.changanIntro.phase(18, "描金城楼，点亮车灯");
+let worldReady = false;
 const uiCache = new Map();
 const $ = (id) => {
   if (!uiCache.has(id)) uiCache.set(id, document.getElementById(id));
@@ -49,6 +51,7 @@ scene.environment = pmrem.fromScene(room, 0.05).texture;
 room.dispose();
 pmrem.dispose();
 scene.environmentIntensity = 0.3;
+window.changanIntro.phase(35, "夜色调好，铺开雨夜街头");
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 const bloom = new UnrealBloomPass(
@@ -3783,6 +3786,7 @@ function drawMap() {
   ctx.restore();
 }
 addEventListener("keydown", (e) => {
+  if (!worldReady || window.changanIntro.active) return;
   if (
     ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(
       e.code,
@@ -3868,6 +3872,7 @@ document
   .querySelectorAll("[data-music]")
   .forEach((b) => (b.onclick = toggleMusic));
 $("start").onclick = start;
+$("introReplay").onclick = () => window.changanIntro.replay();
 $("again").onclick = start;
 $("back").onclick = () => {
   state = "menu";
@@ -3882,18 +3887,15 @@ addEventListener("resize", () => {
   composer.setSize(innerWidth, innerHeight);
   applyQuality(qualityManager.profile());
 });
-build();
-reset();
-showBest();
-$("loading").style.display = "none";
 let last = performance.now();
 const fixedClock = new FixedStepClock();
 let renderFrame = 0;
-const warmUntil = performance.now() + 1500;
+let warmUntil = Infinity;
+let firstFrame = true;
 function frame(now) {
   const frameMs = now - last;
   last = now;
-  if (!document.hidden && !contextLost) {
+  if (worldReady && !document.hidden && !contextLost) {
     fixedClock.advance(frameMs / 1000, update);
     wheelInstances?.update();
     renderer.info.reset();
@@ -3914,6 +3916,10 @@ function frame(now) {
     if (bloom.enabled || speedBlur.enabled) composer.render();
     else renderer.render(scene, camera);
     renderFrame++;
+    if (firstFrame) {
+      firstFrame = false;
+      requestAnimationFrame(() => window.changanIntro.ready());
+    }
     if (now >= warmUntil) qualityManager.sample(frameMs);
   } else fixedClock.reset();
   requestAnimationFrame(frame);
@@ -3942,7 +3948,7 @@ renderer.domElement.addEventListener("webglcontextrestored", () => {
   $("count").textContent = state === "paused" ? "已恢复 · Esc 继续" : "";
 });
 // 可重复的路线验收入口：沿道路中心逐帧推进，使用与驾驶相同的检查点/计圈逻辑。
-window.raceTest = {
+const raceTestApi = {
   motionComparison() {
     if (state !== "race" || Math.abs(speed) < 12 || activeProfile.level < 1)
       throw new Error("Drive above 12 m/s with effects enabled first");
@@ -4338,3 +4344,22 @@ window.raceTest = {
       : null;
   },
 };
+async function boot() {
+  window.changanIntro.phase(55, "支起夜市摊，等215路进站");
+  // Yield before the synchronous procedural build so its loading stage can paint.
+  await new Promise(requestAnimationFrame);
+  await new Promise(requestAnimationFrame);
+  build();
+  reset();
+  showBest();
+  window.changanIntro.phase(92, "街巷已备好，正在点亮长安");
+  worldReady = true;
+  last = performance.now();
+  warmUntil = last + 1500;
+  await window.changanIntro.finished;
+  window.raceTest = raceTestApi;
+}
+boot().catch((error) => {
+  window.changanIntro.fail();
+  console.error(error);
+});

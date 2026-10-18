@@ -1,7 +1,7 @@
 {
   "errors": [],
   "audio": {
-    "rms": 0.021405434416838984,
+    "rms": 0.012923665192737811,
     "context": "running",
     "duration": 34.285714285714285,
     "peak": 0.76
@@ -13,7 +13,7 @@
     "nextGate": 3,
     "checkpoint": 80,
     "laps": [],
-    "elapsed": 4.473333333333333,
+    "elapsed": 4.489999999999999,
     "length": 1834.5918489471203,
     "speed": 0,
     "fuel": 89.80000000000001,
@@ -85,8 +85,8 @@
       "rain": 700,
       "detailDistance": 95,
       "effects": true,
-      "frameMs": 9.29629483334807,
-      "geometries": 323,
+      "frameMs": 9.329945306795807,
+      "geometries": 310,
       "textures": 64
     },
     "localTrack": {
@@ -99,14 +99,14 @@
       "readyState": 4,
       "paused": false,
       "loop": true,
-      "currentTime": 19.820161,
+      "currentTime": 17.499138,
       "volume": 0.62,
-      "gain": 0.49419552087783813,
+      "gain": 0.49439534544944763,
       "message": "已内置《西安人的歌》现场版。点击发车或试听，让乡音陪你回家。"
     },
-    "drawCalls": 402,
-    "renderFrame": 1157,
-    "vertices": 154318
+    "drawCalls": 418,
+    "renderFrame": 1099,
+    "vertices": 155086
   },
   "routes": [
     {

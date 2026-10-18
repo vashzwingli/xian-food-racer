@@ -17,13 +17,32 @@ const result = await build({
   loader: { ".mp3": "dataurl" },
   external: offline ? [] : ["three", "three/*"],
 });
+const intro = await build({
+  entryPoints: [path.join(root, "src/intro.js")],
+  bundle: true,
+  write: false,
+  format: "iife",
+  target: "es2022",
+  minify: true,
+  charset: "utf8",
+});
+const introScreen = await readFile(
+  path.join(root, "src/intro-screen.html"),
+  "utf8",
+);
 const css = await transform(
-  await readFile(path.join(root, "src/styles.css"), "utf8"),
+  (await readFile(path.join(root, "src/styles.css"), "utf8")) +
+    "\n" +
+    (await readFile(path.join(root, "src/intro.css"), "utf8")),
   { loader: "css", minify: true },
 );
 let html = await readFile(path.join(root, "src/template.html"), "utf8");
 html = html
   .replace("/* INLINE_STYLES */", () => css.code)
+  .replace("<!-- INTRO_SCREEN -->", () => introScreen)
+  .replace("/* INLINE_INTRO */", () =>
+    intro.outputFiles[0].text.replace(/<\/script/gi, "<\\/script"),
+  )
   .replace("/* INLINE_GAME */", () =>
     result.outputFiles[0].text.replace(/<\/script/gi, "<\\/script"),
   );

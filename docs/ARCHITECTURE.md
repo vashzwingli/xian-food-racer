@@ -18,8 +18,13 @@
 | `src/audio/synth-score.js` | 原创离线合成配乐 |
 | `src/audio/local-track.js` | 音频导入、验证、IndexedDB、HTMLAudio 和 WebAudio 混音 |
 | `src/template.html` / `src/styles.css` | 菜单、HUD、电台、触屏和适配 |
+| `src/intro.js` / `src/intro-screen.html` / `src/intro.css` | 独立于 Three.js 加载的入场界面、真实准备阶段、跳过、重看与减少动态适配 |
 
 未引入 UI 框架、远程音频下载或完整物理引擎；当前为街机驾驶和有向包围盒碰撞。城墙段和街区位置是游戏化设计。
+
+入场控制器以普通内联脚本先执行，SVG/CSS 不依赖游戏模块或 CDN。引擎、灯光、程序化城市依次报告准备阶段；首帧真实渲染后才允许进度到100%和开门。跳过仅缩短演出，不绕过准备。菜单在入场期间 inert，完成后把焦点交给发车按钮；重看只重播装饰，不重新加载世界或音乐。减少动态偏好停用装饰动画；模块加载或初始化失败显示重试，菜单保持锁定。`raceTest` 在首次入场完成后开放，旧赛程验收仍从可操作菜单开始。
+
+GitHub Pages 发布 `.pages/index.html`，内容与 `index.offline.html` 逐字节相同。构建与全部回归成功后才上传 Pages 产物，独立部署任务使用 Pages 写权限与 OIDC；没有发布密钥写入代码。
 
 ## 时间与质量
 
