@@ -1,6 +1,6 @@
 {
   "name": "xian-food-racer",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "private": true,
   "description": "长安夜食：西安雨夜美食赛车，单文件运行、模块化维护、自动适配画质。",
   "scripts": {
@@ -12,6 +12,7 @@
     "test:browser": "node tests/browser.cjs",
     "test:driving": "node tests/driving.cjs",
     "test:intro": "node tests/intro.cjs",
+    "test:autoplay": "node tests/autoplay.cjs",
     "test:regression": "node tests/regression.mjs",
     "format": "prettier --write src scripts tests"
   },

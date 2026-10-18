@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { createGeometryKit } from "./models/procedural.js";
 import { createPlayerVehicle } from "./models/player-car.js";
 import { createCockpit } from "./models/cockpit.js";
+import { createBellTower } from "./models/bell-tower.js";
+import { createEntrance, MENU_SHOT } from "./engine/entrance.js";
 import { ArcadeHandling } from "./engine/handling.js";
 import { createSpeedBlur } from "./engine/speed-blur.js";
 import { WheelInstances } from "./engine/wheel-instances.js";
@@ -23,6 +25,7 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 window.changanIntro.phase(18, "描金城楼，点亮车灯");
 let worldReady = false;
+let bellTower;
 const uiCache = new Map();
 const $ = (id) => {
   if (!uiCache.has(id)) uiCache.set(id, document.getElementById(id));
@@ -45,6 +48,11 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.08;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 document.body.prepend(renderer.domElement);
+const entrance = createEntrance(
+  camera,
+  () => bellTower,
+  () => window.changanIntro.complete(),
+);
 const pmrem = new THREE.PMREMGenerator(renderer),
   room = new RoomEnvironment();
 scene.environment = pmrem.fromScene(room, 0.05).texture;
@@ -273,88 +281,18 @@ function lantern(x, y, z, scale = 1, parent = world) {
   return g;
 }
 function clockTower() {
-  const g = new THREE.Group();
-  world.add(g);
-  box(34, 7.7, 29, 0, 3.35, 0, stone, g);
-  box(35.2, 0.45, 30.2, 0, 7.3, 0, gold, g);
-  for (let side of [-1, 1]) {
-    box(12, 0.2, 8, side * 12, 0.1, 18, stone, g);
-    box(10, 5.6, 0.08, 0, 2.25, side * 14.55, mat("#152029"), g);
-    const arch = new THREE.Mesh(
-      new THREE.TorusGeometry(5, 1.0, 6, 20, Math.PI),
-      stone,
-    );
-    arch.position.set(0, 4.0, side * 14.58);
-    g.add(arch);
-  }
-  for (let i = 0; i < 5; i++)
-    box(34 - i * 0.6, 0.18, 29 - i * 0.5, 0, 7.65 + i * 0.15, 0, stone, g);
-  for (let level = 0; level < 2; level++) {
-    let yy = 8.7 + level * 8,
-      w = 24 - level * 5,
-      d = 20 - level * 4;
-    box(w, 5.4, d, 0, yy + 2.7, 0, red, g);
-    for (let side of [-1, 1]) {
-      for (let x = -w / 2 + 1; x < w / 2; x += 3.7) {
-        cylinder(0.28, 0.32, 5.8, x, yy + 2.9, side * (d / 2 + 0.35), red, g);
-        box(
-          2.3,
-          3,
-          0.12,
-          x + 1.4,
-          yy + 3,
-          side * (d / 2 + 0.07),
-          mat("#4d2720"),
-          g,
-        );
-        for (let j = 0; j < 4; j++)
-          box(
-            0.08,
-            2.8,
-            0.08,
-            x + 0.55 + j * 0.45,
-            yy + 3,
-            side * (d / 2 + 0.19),
-            gold,
-            g,
-          );
-      }
-      box(w + 2, 0.25, d + 2, 0, yy - 0.15, 0, gold, g);
-      for (let side of [-1, 1])
-        box(
-          w + 2,
-          0.055,
-          0.09,
-          0,
-          yy - 0.32,
-          side * (d / 2 + 1),
-          mat("#dc9e4c", 0.2, 0.4, 1.4),
-          g,
-        );
-      box(w + 1, 0.3, 0.15, 0, yy + 1, side * (d / 2 + 0.8), red, g);
-      for (let x = -w / 2; x <= w / 2; x += 1.8)
-        box(0.11, 1, 0.11, x, yy + 0.5, side * (d / 2 + 0.8), gold, g);
-    }
-    roof(w + 9, d + 9, yy + 5.8, 3.3, g);
-  }
-  roof(19, 17, 29.7, 3.7, g);
-  cylinder(0.1, 0.3, 2, 0, 34, 0, gold, g);
-  sphere(0.4, 0.4, 0.4, 0, 35, 0, gold, g);
-  for (let side of [-1, 1]) {
-    sign("钟 楼", 0, 20.2, side * 8.2, "#f1c477", 6, g).rotation.y =
-      side < 0 ? Math.PI : 0;
-    for (let x of [-10.5, -3.5, 3.5, 10.5])
-      lantern(x, 12.3, side * 11.2, 0.8, g);
-  }
-  for (let i = 0; i < 10; i++) {
-    box(10, 0.25, 1.1, 22, 7.3 - i * 0.73, -8 + i * 1.1, stone, g);
-  }
-  for (let x of [-18, 18]) {
-    const light = new THREE.PointLight(0xffb257, 420, 52, 2);
-    light.position.set(x, 7, 8);
-    g.add(light);
-  }
+  bellTower = createBellTower({
+    box,
+    cylinder,
+    sphere,
+    mat,
+    sign,
+    stone,
+    gold,
+  });
+  world.add(bellTower.root);
 }
+
 let difficulty = 0,
   points = [],
   N = 320,
@@ -2719,6 +2657,7 @@ let audio,
   musicReady = "idle",
   musicEnabled = true,
   musicPeak = 0;
+let musicMayPlay = false;
 let motionEnabled = !matchMedia("(prefers-reduced-motion: reduce)").matches;
 try {
   const saved = localStorage.getItem("changan-motion-blur");
@@ -2869,10 +2808,11 @@ $("trackImport").onchange = async (e) => {
   }
   e.target.value = "";
 };
-function sound() {
+function sound(prepareOriginal = true) {
   if (audio) {
     localTrack.blocked = false;
-    audio.resume();
+    audio.resume().catch(() => {});
+    if (prepareOriginal) prepareOriginalMusic();
     return;
   }
   audio = new (window.AudioContext || window.webkitAudioContext)();
@@ -2923,8 +2863,15 @@ function sound() {
   musicAnalyser = audio.createAnalyser();
   musicAnalyser.fftSize = 1024;
   musicGain.connect(musicAnalyser).connect(master);
-  musicReady = "rendering";
   localTrack.attach(audio, musicAnalyser);
+  audio.addEventListener("statechange", updateMusicUI);
+  if (prepareOriginal) prepareOriginalMusic();
+  audio.resume().catch(() => {});
+  updateMusicUI();
+}
+function prepareOriginalMusic() {
+  if (musicReady !== "idle") return;
+  musicReady = "rendering";
   composeMusic()
     .then((buffer) => {
       musicBuffer = buffer;
@@ -2941,42 +2888,93 @@ function sound() {
       musicReady = "unavailable";
       updateMusicUI();
     });
-  audio.resume();
+}
+function needsMusicGesture() {
+  return (
+    musicMayPlay &&
+    musicEnabled &&
+    !muted &&
+    (!audio ||
+      audio.state !== "running" ||
+      (localTrack.selected && localTrack.blocked))
+  );
+}
+function beginEntranceMusic() {
+  musicMayPlay = true;
+  if (musicEnabled && !muted) sound(false);
+  localTrack.ready.then(() => {
+    if (!localTrack.selected && musicEnabled && !muted) prepareOriginalMusic();
+    updateMusicUI();
+  });
   updateMusicUI();
 }
 function updateMusicUI() {
   if (audio) {
     master.gain.setTargetAtTime(muted ? 0 : 0.65, audio.currentTime, 0.04);
     musicGain.gain.setTargetAtTime(
-      musicEnabled && !localTrack.selected
+      musicMayPlay && musicEnabled && !localTrack.selected
         ? (state === "race" ? 0.48 : state === "paused" ? 0.12 : 0.32) *
             (localTrack.volume / 0.62)
         : 0,
       audio.currentTime,
       0.12,
     );
-    localTrack.sync(musicEnabled && !muted, state, document.hidden);
+    localTrack.sync(
+      musicMayPlay && musicEnabled && !muted,
+      state,
+      document.hidden,
+    );
   }
   document.querySelectorAll("[data-music]").forEach((b) => {
     b.textContent = "♫ " + (localTrack.selected ? localTrack.name : "长安夜行");
     const label = document.createElement("span");
     label.textContent = muted
       ? "M 已静音"
-      : !localTrack.selected && musicReady === "rendering"
-        ? "正在起奏"
-        : musicEnabled
-          ? "B 音乐开"
-          : "B 音乐关";
+      : needsMusicGesture()
+        ? "点击开启音乐"
+        : !localTrack.selected && musicReady === "rendering"
+          ? "正在起奏"
+          : musicEnabled
+            ? "B 音乐开"
+            : "B 音乐关";
     b.append(label);
-    b.setAttribute("aria-pressed", String(musicEnabled && !muted));
+    b.setAttribute(
+      "aria-pressed",
+      String(musicEnabled && !muted && !needsMusicGesture()),
+    );
+    b.classList.toggle("needs-gesture", needsMusicGesture());
   });
+  $("introSoundLabel").textContent =
+    muted || !musicEnabled
+      ? "音乐已关闭 · 点击开启"
+      : !musicMayPlay
+        ? audio?.state === "running"
+          ? "声音已就绪，入城起奏"
+          : "入城时播放音乐"
+        : needsMusicGesture()
+          ? "点击开启《西安人的歌》"
+          : "正在播放 · 家乡电台";
+  $("introSound").setAttribute(
+    "aria-pressed",
+    String(
+      !!audio &&
+        audio.state === "running" &&
+        musicEnabled &&
+        !muted &&
+        !needsMusicGesture(),
+    ),
+  );
 }
 function toggleMusic() {
+  const retry = needsMusicGesture();
   localTrack.blocked = false;
-  if (!audio) {
+  if (!audio || retry) {
     musicEnabled = true;
     sound();
-  } else musicEnabled = !musicEnabled;
+  } else {
+    musicEnabled = !musicEnabled;
+    prepareOriginalMusic();
+  }
   updateMusicUI();
   localTrack.sync(musicEnabled && !muted, state);
 }
@@ -3659,7 +3657,7 @@ function update(dt) {
       0.05,
     );
     musicGain.gain.setTargetAtTime(
-      musicEnabled && !localTrack.selected
+      musicMayPlay && musicEnabled && !localTrack.selected
         ? (state === "race" ? 0.48 : state === "paused" ? 0.12 : 0.32) *
             (localTrack.volume / 0.62)
         : 0,
@@ -3667,14 +3665,18 @@ function update(dt) {
       0.12,
     );
   }
-  localTrack.sync(musicEnabled && !muted, state, document.hidden);
+  localTrack.sync(
+    musicMayPlay && musicEnabled && !muted,
+    state,
+    document.hidden,
+  );
   updateCamera(dt);
   if (state === "menu") {
-    car.position.set(37, 0.03, 23);
-    car.rotation.set(0, -0.65, 0);
+    car.position.set(...MENU_SHOT.car);
+    car.rotation.set(0, MENU_SHOT.yaw, 0);
     car.scale.setScalar(2.8);
-    camera.position.set(40, 6.4, 47);
-    camera.lookAt(5, 10, 0);
+    camera.position.set(...MENU_SHOT.position);
+    camera.lookAt(...MENU_SHOT.target);
   } else car.scale.setScalar(1);
   contactShadow.position.set(
     car.position.x,
@@ -3872,7 +3874,13 @@ document
   .querySelectorAll("[data-music]")
   .forEach((b) => (b.onclick = toggleMusic));
 $("start").onclick = start;
-$("introReplay").onclick = () => window.changanIntro.replay();
+$("introReplay").onclick = () => {
+  if (needsMusicGesture()) {
+    sound(false);
+    updateMusicUI();
+  }
+  window.changanIntro.replay();
+};
 $("again").onclick = start;
 $("back").onclick = () => {
   state = "menu";
@@ -3898,6 +3906,16 @@ function frame(now) {
   if (worldReady && !document.hidden && !contextLost) {
     fixedClock.advance(frameMs / 1000, update);
     wheelInstances?.update();
+    if (entrance.playing) {
+      entrance.update(now);
+      const shot = entrance.snapshot();
+      $("loading").dataset.cinematic =
+        shot.progress > 0.9
+          ? "arrival"
+          : shot.progress > 0.37 && shot.progress < 0.66
+            ? "tunnel"
+            : "approach";
+    }
     renderer.info.reset();
     const blurAmount =
       THREE.MathUtils.smoothstep(Math.abs(speed), 12, 61) * 0.035;
@@ -3964,6 +3982,26 @@ const raceTestApi = {
   },
   roadQuery(p) {
     return nearest(p);
+  },
+  entranceSnapshot() {
+    return {
+      ...entrance.snapshot(),
+      landmark: bellTower.root.userData.landmark,
+      musicBlocked: needsMusicGesture(),
+    };
+  },
+  auditEntrancePassage() {
+    world.updateMatrixWorld(true);
+    const ray = new THREE.Raycaster(
+      new THREE.Vector3(0, 3.15, 20),
+      new THREE.Vector3(0, 0, -1),
+      0,
+      41,
+    );
+    return ray.intersectObjects(world.children, true).map((hit) => ({
+      distance: hit.distance,
+      point: hit.point.toArray(),
+    }));
   },
   resourceInventory() {
     const geometries = new Set(),
@@ -4382,6 +4420,37 @@ async function boot() {
   await window.changanIntro.finished;
   window.raceTest = raceTestApi;
 }
+window.changanIntro.attach({
+  enter: () => entrance.start(),
+  skip: () => entrance.skip(),
+  ready: beginEntranceMusic,
+  gesture: () => {
+    if (musicEnabled && !muted) {
+      sound(false);
+      updateMusicUI();
+    }
+  },
+  sound: () => {
+    if (
+      audio?.state === "running" &&
+      musicEnabled &&
+      !muted &&
+      !localTrack.blocked
+    )
+      muted = true;
+    else {
+      muted = false;
+      musicEnabled = true;
+      sound(false);
+    }
+    updateMusicUI();
+  },
+  snapshot: () => entrance.snapshot(),
+  mute: () => {
+    muted = !muted;
+    updateMusicUI();
+  },
+});
 boot().catch((error) => {
   window.changanIntro.fail();
   console.error(error);

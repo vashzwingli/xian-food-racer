@@ -59,13 +59,25 @@ export class LocalTrack {
     this.selected = true;
     this.element.src = homeSongUrl;
     this.volume = 0.62;
-    this.message =
-      "已内置《西安人的歌》现场版。点击发车或试听，让乡音陪你回家。";
+    this.message = "已内置《西安人的歌》现场版。街巷备好，乡音就会响起。";
     this.url = null;
     this.starting = false;
     this.intent = false;
     this.serial = 0;
     this.pendingWrites = 0;
+    this.element.addEventListener("playing", () => {
+      if (
+        this.blocked ||
+        this.message.startsWith("浏览器需要一次点击") ||
+        this.message.startsWith("已内置") ||
+        this.message.startsWith("已记住这首歌")
+      )
+        this.message = this.home
+          ? "正在收听《西安人的歌》现场版，循环播放。"
+          : "正在收听本地音乐，循环播放。";
+      this.blocked = false;
+      this.onChange();
+    });
     this.element.addEventListener("error", () => {
       this.selected = false;
       this.message = this.home
@@ -86,7 +98,7 @@ export class LocalTrack {
     if (serial !== this.serial) return;
     if (saved?.blob) {
       this.useBlob(saved.blob, saved.name);
-      this.message = "已记住这首歌。点击发车或试听开始播放。";
+      this.message = "已记住这首歌。街巷备好后继续播放。";
     }
     let preferences;
     try {
@@ -289,7 +301,7 @@ export class LocalTrack {
         .catch(() => {
           if (serial !== this.serial || !this.intent) return;
           this.blocked = true;
-          this.message = "点击“试听 / 继续播放”即可开始。";
+          this.message = "浏览器需要一次点击。点音乐按钮或发车，即可开始播放。";
           this.onChange();
         })
         .finally(() => {

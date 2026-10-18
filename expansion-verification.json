@@ -1,7 +1,7 @@
 {
   "errors": [],
   "audio": {
-    "rms": 0.012923665192737811,
+    "rms": 0.011316558678376701,
     "context": "running",
     "duration": 34.285714285714285,
     "peak": 0.76
@@ -13,10 +13,10 @@
     "nextGate": 3,
     "checkpoint": 80,
     "laps": [],
-    "elapsed": 4.489999999999999,
+    "elapsed": 4.506666666666666,
     "length": 1834.5918489471203,
     "speed": 0,
-    "fuel": 89.80000000000001,
+    "fuel": 89.53333333333335,
     "jumps": 1,
     "view": 0,
     "viewName": "低位追车",
@@ -34,12 +34,12 @@
     "muted": false,
     "position": [
       336.19185954787605,
-      2.3901211735988888,
+      2.5565100624877775,
       -46.51595400874123
     ],
-    "airHeight": 2.1483333333333325,
+    "airHeight": 2.3147222222222212,
     "jetVisible": true,
-    "jetParticles": 36,
+    "jetParticles": 39,
     "musicEnabled": true,
     "musicReady": "ready",
     "musicPeak": 0.76,
@@ -72,10 +72,10 @@
     "roadGround": 0.21678784026555634,
     "camera": [
       335.8999030150257,
-      4.961856863370461,
+      5.102232314603968,
       -36.02001377534975
     ],
-    "worldMeshes": 1692,
+    "worldMeshes": 1695,
     "rendering": {
       "mode": "auto",
       "level": 2,
@@ -85,9 +85,9 @@
       "rain": 700,
       "detailDistance": 95,
       "effects": true,
-      "frameMs": 9.329945306795807,
-      "geometries": 310,
-      "textures": 64
+      "frameMs": 10.179482460929314,
+      "geometries": 318,
+      "textures": 69
     },
     "localTrack": {
       "name": "西安人的歌 · 程渤智（现场版）",
@@ -99,14 +99,20 @@
       "readyState": 4,
       "paused": false,
       "loop": true,
-      "currentTime": 17.499138,
+      "currentTime": 23.06322,
       "volume": 0.62,
-      "gain": 0.49439534544944763,
-      "message": "已内置《西安人的歌》现场版。点击发车或试听，让乡音陪你回家。"
+      "gain": 0.49419277906417847,
+      "message": "正在收听《西安人的歌》现场版，循环播放。"
     },
-    "drawCalls": 418,
-    "renderFrame": 1099,
-    "vertices": 155086
+    "drawCalls": 412,
+    "renderFrame": 1794,
+    "vertices": 153198
+  },
+  "landing": {
+    "frames": 80,
+    "seconds": 1.3333333333333333,
+    "jumps": 0,
+    "jetVisible": false
   },
   "routes": [
     {
@@ -130,21 +136,21 @@
     },
     {
       "difficulty": 1,
-      "frames": 9035,
+      "frames": 8818,
       "state": "result",
       "lap": 3,
       "nextGate": 8,
-      "elapsed": 150.600000000012,
+      "elapsed": 147.00000000000912,
       "laps": [
-        51.899999999998336,
-        48.749999999997236,
-        49.950000000016416
+        49.43333333333181,
+        49.799999999997176,
+        47.76666666668014
       ],
       "resets": 0,
       "position": [
-        0.3514355817904304,
-        0.1450129856043319,
-        248.22775242105948
+        0.25027444831807544,
+        0.1450083107714443,
+        247.95540386609272
       ]
     },
     {

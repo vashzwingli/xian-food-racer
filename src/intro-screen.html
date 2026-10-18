@@ -18,202 +18,587 @@
     </h1>
     <div class="intro-subtitle">雨落南门 · 馍热着，额等你进城</div>
   </div>
-  <svg class="intro-art" viewBox="0 0 1200 600" fill="none" aria-hidden="true">
+  <svg class="intro-art" viewBox="0 0 1200 650" fill="none" aria-hidden="true">
     <defs>
+      <linearGradient id="introSky" x2="0" y2="1">
+        <stop stop-color="#253d49" />
+        <stop offset="1" stop-color="#11232e" />
+      </linearGradient>
+      <linearGradient id="introStone" x2="0" y2="1">
+        <stop stop-color="#5c6260" />
+        <stop offset="1" stop-color="#2b3c44" />
+      </linearGradient>
+      <linearGradient id="introTile" x2="0" y2="1">
+        <stop stop-color="#3d695c" />
+        <stop offset="1" stop-color="#1c3937" />
+      </linearGradient>
+      <linearGradient id="introReflection" x2="0" y2="1">
+        <stop stop-color="#c59a59" stop-opacity=".18" />
+        <stop offset="1" stop-color="#c59a59" stop-opacity="0" />
+      </linearGradient>
+      <radialGradient id="introLanternGlow">
+        <stop stop-color="#dc9f60" stop-opacity=".2" />
+        <stop offset="1" stop-color="#dc9f60" stop-opacity="0" />
+      </radialGradient>
       <pattern
         id="introBrick"
-        width="72"
-        height="34"
+        width="34"
+        height="16"
         patternUnits="userSpaceOnUse"
       >
         <path
-          d="M0 0H72M0 17H72M0 0V17M36 17V34M72 0V17"
-          stroke="#887f68"
-          stroke-opacity=".18"
+          d="M0 0H34M0 8H34M0 0v8m17 0v8m17-16v8"
+          stroke="#bdbaa6"
+          stroke-opacity=".22"
+          stroke-width=".6"
         />
       </pattern>
-      <linearGradient id="introStone" x2="0" y2="1">
-        <stop stop-color="#39434a" />
-        <stop offset="1" stop-color="#192630" />
-      </linearGradient>
-      <radialGradient id="introLanternGlow">
-        <stop stop-color="#e49b4c" stop-opacity=".22" />
-        <stop offset="1" stop-color="#e49b4c" stop-opacity="0" />
-      </radialGradient>
+      <pattern
+        id="introWindow"
+        width="18"
+        height="18"
+        patternUnits="userSpaceOnUse"
+      >
+        <path d="m9 0 9 9-9 9-9-9Z" stroke="#d2b47c" stroke-opacity=".45" />
+      </pattern>
       <clipPath id="introGateArch">
-        <path d="M484 600V474a116 116 0 0 1 232 0V600Z" />
+        <path d="M562 560v-34a38 38 0 0 1 76 0v34Z" />
       </clipPath>
     </defs>
-    <circle cx="600" cy="250" r="211" stroke="#c5aa78" stroke-opacity=".11" />
-    <circle cx="600" cy="250" r="202" stroke="#c5aa78" stroke-opacity=".06" />
+    <ellipse
+      cx="600"
+      cy="407"
+      rx="340"
+      ry="224"
+      fill="url(#introSky)"
+      opacity=".55"
+    />
+    <circle cx="600" cy="328" r="244" stroke="#bd9f6d" stroke-opacity=".08" />
     <path
       class="intro-rain"
-      d="M100 102v14m54 89v22m93-178v17m85 236v18m77-230v17m96-70v19m211 96v14m121-26v24m66 142v20m74-232v20m112 107v23m-204 140v13m-700-20v15m815-63v18"
-      stroke="#9fb8c2"
-      stroke-opacity=".26"
+      d="M172 222v21m94-94v16m58 189v19m96-194v16m137-101v15m164 98v22m108-24v18m74 114v23m-45 99v17m103-204v18m53 163v26m-739 36v16"
+      stroke="#acbfbe"
+      stroke-opacity=".24"
     />
-    <path
-      d="M0 444 100 423 184 438 270 408 340 424M860 424 940 400 1016 430 1100 417 1200 438"
-      stroke="#d6b67f"
-      stroke-opacity=".22"
-    />
-    <path d="M0 454H1200V600H0Z" fill="url(#introStone)" />
-    <path d="M0 454H1200V600H0Z" fill="url(#introBrick)" />
-    <path d="M0 450H1200M0 462H1200" stroke="#9c8a6c" stroke-opacity=".55" />
-    <path
-      d="M0 451v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19M765 451v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19h38v-19h35v19"
-      fill="#354047"
-      stroke="#9c8a6c"
-      stroke-opacity=".4"
-    />
-    <g
-      class="intro-tower"
-      stroke="#d3b482"
-      stroke-width="1.8"
-      stroke-linejoin="round"
-    >
-      <path d="M442 449V350H758V449" fill="#29363e" />
-      <path d="M457 351H743V284H457Z" fill="#6d342d" />
-      <path d="M478 282H722V219H478Z" fill="#70382d" />
-      <path d="M517 217H683V166H517Z" fill="#753d30" />
-      <g stroke-opacity=".65">
-        <path
-          d="M469 292v47m25-47v47m31-47v47m31-47v47m31-47v47m31-47v47m31-47v47m31-47v47m31-47v47m21-47v47M491 227v42m32-42v42m32-42v42m32-42v42m32-42v42m32-42v42m32-42v42m26-42v42M530 174v32m28-32v32m28-32v32m28-32v32m28-32v32m28-32v32"
-        />
+    <g opacity=".23" stroke="#b99d6d">
+      <path
+        d="M0 518H390m420 0h390M0 528H390m420 0h390M40 516v-11h33v11h34v-11h33v11h34v-11h33v11h34v-11h33v11h34v-11h33v11M856 516v-11h33v11h34v-11h33v11h34v-11h33v11h34v-11h33v11h34v-11h33v11"
+      />
+    </g>
+    <path d="M0 562h1200v88H0Z" fill="#192d37" />
+    <path d="m562 560-76 90h228l-76-90Z" fill="url(#introReflection)" />
+    <g stroke="#b0b8ab" stroke-opacity=".12">
+      <path
+        d="M600 550 80 650m520-100 520 100M600 550 350 650m250-100 250 100M0 602H1200M0 632H1200"
+      />
+      <ellipse cx="489" cy="603" rx="39" ry="3" />
+      <ellipse cx="768" cy="618" rx="52" ry="3" />
+    </g>
+    <g class="intro-tower">
+      <path d="M401 456H799V560H401Z" fill="url(#introStone)" />
+      <path d="M401 456H799V560H401Z" fill="url(#introBrick)" />
+      <path d="M799 456 839 437V542L799 560Z" fill="#26383e" />
+      <path d="M401 456 436 437H839L799 456Z" fill="#74766a" />
+      <path d="M394 451H806V460H394ZM399 545H801V560H399Z" fill="#8f8974" />
+      <path
+        d="M408 462H792m-384 5h384M407 544H793"
+        stroke="#d3bf98"
+        stroke-opacity=".4"
+      />
+      <path
+        d="M445 392H755V450H445ZM485 311H715V344H485ZM508 244H692V280H508Z"
+        fill="#6d372d"
+      />
+      <path
+        d="M449 397H751V448H449ZM489 315H711V341H489ZM512 247H688V277H512Z"
+        fill="url(#introWindow)"
+      />
+      <g stroke="#d4ad74" stroke-width=".7" opacity=".6">
+        <path d="M454 398v51" />
+        <path d="M464 398v51" />
+        <path d="M474 398v51" />
+        <path d="M484 398v51" />
+        <path d="M494 398v51" />
+        <path d="M504 398v51" />
+        <path d="M514 398v51" />
+        <path d="M524 398v51" />
+        <path d="M534 398v51" />
+        <path d="M544 398v51" />
+        <path d="M554 398v51" />
+        <path d="M564 398v51" />
+        <path d="M574 398v51" />
+        <path d="M584 398v51" />
+        <path d="M594 398v51" />
+        <path d="M604 398v51" />
+        <path d="M614 398v51" />
+        <path d="M624 398v51" />
+        <path d="M634 398v51" />
+        <path d="M644 398v51" />
+        <path d="M654 398v51" />
+        <path d="M664 398v51" />
+        <path d="M674 398v51" />
+        <path d="M684 398v51" />
+        <path d="M694 398v51" />
+        <path d="M704 398v51" />
+        <path d="M714 398v51" />
+        <path d="M724 398v51" />
+        <path d="M734 398v51" />
+        <path d="M744 398v51" />
+        <path d="M449 408.5H751" />
+        <path d="M449 424H751" />
+        <path d="M449 439.5H751" />
+        <path d="M494 316v21" />
+        <path d="M504 316v21" />
+        <path d="M514 316v21" />
+        <path d="M524 316v21" />
+        <path d="M534 316v21" />
+        <path d="M544 316v21" />
+        <path d="M554 316v21" />
+        <path d="M564 316v21" />
+        <path d="M574 316v21" />
+        <path d="M584 316v21" />
+        <path d="M594 316v21" />
+        <path d="M604 316v21" />
+        <path d="M614 316v21" />
+        <path d="M624 316v21" />
+        <path d="M634 316v21" />
+        <path d="M644 316v21" />
+        <path d="M654 316v21" />
+        <path d="M664 316v21" />
+        <path d="M674 316v21" />
+        <path d="M684 316v21" />
+        <path d="M694 316v21" />
+        <path d="M704 316v21" />
+        <path d="M489 319H711" />
+        <path d="M489 327H711" />
+        <path d="M489 335H711" />
+        <path d="M517 249v24" />
+        <path d="M527 249v24" />
+        <path d="M537 249v24" />
+        <path d="M547 249v24" />
+        <path d="M557 249v24" />
+        <path d="M567 249v24" />
+        <path d="M577 249v24" />
+        <path d="M587 249v24" />
+        <path d="M597 249v24" />
+        <path d="M607 249v24" />
+        <path d="M617 249v24" />
+        <path d="M627 249v24" />
+        <path d="M637 249v24" />
+        <path d="M647 249v24" />
+        <path d="M657 249v24" />
+        <path d="M667 249v24" />
+        <path d="M677 249v24" />
+        <path d="M512 252.75H688" />
+        <path d="M512 261.5H688" />
+        <path d="M512 270.25H688" />
       </g>
-      <g fill="#202d35">
+      <path d="M445 393v62" stroke="#b36d49" stroke-width="5" />
+      <path d="M439 390h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M483.75 393v62" stroke="#b36d49" stroke-width="5" />
+      <path d="M477.75 390h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M522.5 393v62" stroke="#b36d49" stroke-width="5" />
+      <path d="M516.5 390h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M561.25 393v62" stroke="#b36d49" stroke-width="5" />
+      <path d="M555.25 390h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M600 393v62" stroke="#b36d49" stroke-width="5" />
+      <path d="M594 390h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M638.75 393v62" stroke="#b36d49" stroke-width="5" />
+      <path d="M632.75 390h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M677.5 393v62" stroke="#b36d49" stroke-width="5" />
+      <path d="M671.5 390h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M716.25 393v62" stroke="#b36d49" stroke-width="5" />
+      <path d="M710.25 390h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M755 393v62" stroke="#b36d49" stroke-width="5" />
+      <path d="M749 390h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M485 311v32" stroke="#b36d49" stroke-width="5" />
+      <path d="M479 308h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M513.75 311v32" stroke="#b36d49" stroke-width="5" />
+      <path d="M507.75 308h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M542.5 311v32" stroke="#b36d49" stroke-width="5" />
+      <path d="M536.5 308h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M571.25 311v32" stroke="#b36d49" stroke-width="5" />
+      <path d="M565.25 308h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M600 311v32" stroke="#b36d49" stroke-width="5" />
+      <path d="M594 308h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M628.75 311v32" stroke="#b36d49" stroke-width="5" />
+      <path d="M622.75 308h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M657.5 311v32" stroke="#b36d49" stroke-width="5" />
+      <path d="M651.5 308h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M686.25 311v32" stroke="#b36d49" stroke-width="5" />
+      <path d="M680.25 308h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M715 311v32" stroke="#b36d49" stroke-width="5" />
+      <path d="M709 308h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M508 244v35" stroke="#b36d49" stroke-width="5" />
+      <path d="M502 241h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M531 244v35" stroke="#b36d49" stroke-width="5" />
+      <path d="M525 241h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M554 244v35" stroke="#b36d49" stroke-width="5" />
+      <path d="M548 241h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M577 244v35" stroke="#b36d49" stroke-width="5" />
+      <path d="M571 241h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M600 244v35" stroke="#b36d49" stroke-width="5" />
+      <path d="M594 241h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M623 244v35" stroke="#b36d49" stroke-width="5" />
+      <path d="M617 241h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M646 244v35" stroke="#b36d49" stroke-width="5" />
+      <path d="M640 241h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M669 244v35" stroke="#b36d49" stroke-width="5" />
+      <path d="M663 241h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <path d="M692 244v35" stroke="#b36d49" stroke-width="5" />
+      <path d="M686 241h12m-9-4h6" stroke="#bca46d" stroke-width="2" />
+      <g
+        fill="url(#introTile)"
+        stroke="#d4b87e"
+        stroke-width="1.5"
+        stroke-linejoin="round"
+      >
         <path
           class="intro-roof roof-one"
-          d="M426 343Q470 341 488 316H712Q730 341 774 343L745 356H455Z"
+          d="M386 388Q425 383 451 342H749Q775 383 814 388L787 402H413Z"
         />
         <path
           class="intro-roof roof-two"
-          d="M451 278Q487 276 505 251H695Q713 276 749 278L719 290H481Z"
+          d="M430 304Q467 299 491 266H709Q733 299 770 304L742 317H458Z"
         />
         <path
           class="intro-roof roof-three"
-          d="M491 216Q526 211 544 185H656Q674 211 709 216L681 228H519Z"
-        />
-        <path
-          class="intro-roof roof-four"
-          d="M516 160Q557 156 600 119Q643 156 684 160L657 173H543Z"
+          d="M475 224Q542 220 600 114Q658 220 725 224L701 237H499Z"
         />
       </g>
+      <g stroke="#b8b285" stroke-width=".8" opacity=".62">
+        <path d="M386 380Q403.12 376 454.48 342" />
+        <path
+          d="M403.83333333333337 383.253662444273Q419.52666666666664 376 466.6066666666667 342"
+        />
+        <path
+          d="M421.66666666666663 385.32081618655695Q435.93333333333334 376 478.73333333333335 342"
+        />
+        <path d="M439.5 386.576171875Q452.34000000000003 376 490.86 342" />
+        <path
+          d="M457.33333333333337 387.2976680384088Q468.74666666666667 376 502.9866666666667 342"
+        />
+        <path
+          d="M475.1666666666667 387.68479670353224Q485.1533333333333 376 515.1133333333333 342"
+        />
+        <path d="M493 387.875Q501.56 376 527.24 342" />
+        <path
+          d="M510.8333333333333 387.958137752915Q517.9666666666667 376 539.3666666666667 342"
+        />
+        <path
+          d="M528.6666666666666 387.98902606310014Q534.3733333333333 376 551.4933333333333 342"
+        />
+        <path d="M546.5 387.998046875Q550.78 376 563.62 342" />
+        <path
+          d="M564.3333333333334 387.99982853223594Q567.1866666666667 376 575.7466666666667 342"
+        />
+        <path
+          d="M582.1666666666666 387.9999973208162Q583.5933333333334 376 587.8733333333333 342"
+        />
+        <path d="M600 388Q600 376 600 342" />
+        <path
+          d="M617.8333333333334 387.9999973208162Q616.4066666666666 376 612.1266666666667 342"
+        />
+        <path
+          d="M635.6666666666666 387.99982853223594Q632.8133333333333 376 624.2533333333333 342"
+        />
+        <path d="M653.5 387.998046875Q649.22 376 636.38 342" />
+        <path
+          d="M671.3333333333334 387.98902606310014Q665.6266666666667 376 648.5066666666667 342"
+        />
+        <path
+          d="M689.1666666666666 387.958137752915Q682.0333333333333 376 660.6333333333333 342"
+        />
+        <path d="M707 387.875Q698.44 376 672.76 342" />
+        <path
+          d="M724.8333333333334 387.68479670353224Q714.8466666666667 376 684.8866666666667 342"
+        />
+        <path
+          d="M742.6666666666666 387.2976680384088Q731.2533333333333 376 697.0133333333333 342"
+        />
+        <path d="M760.5 386.576171875Q747.66 376 709.14 342" />
+        <path
+          d="M778.3333333333334 385.32081618655695Q764.0666666666666 376 721.2666666666667 342"
+        />
+        <path
+          d="M796.1666666666666 383.253662444273Q780.4733333333334 376 733.3933333333333 342"
+        />
+        <path d="M814 380Q796.88 376 745.52 342" />
+        <path d="M430 296Q444.875 292 489.5 266" />
+        <path
+          d="M444.16666666666663 299.253662444273Q457.8020833333333 292 498.7083333333333 266"
+        />
+        <path
+          d="M458.33333333333337 301.32081618655695Q470.7291666666667 292 507.9166666666667 266"
+        />
+        <path d="M472.5 302.576171875Q483.65625 292 517.125 266" />
+        <path
+          d="M486.6666666666667 303.2976680384088Q496.58333333333337 292 526.3333333333334 266"
+        />
+        <path
+          d="M500.8333333333333 303.68479670353224Q509.51041666666663 292 535.5416666666666 266"
+        />
+        <path d="M515 303.875Q522.4375 292 544.75 266" />
+        <path
+          d="M529.1666666666666 303.958137752915Q535.3645833333334 292 553.9583333333334 266"
+        />
+        <path
+          d="M543.3333333333334 303.98902606310014Q548.2916666666666 292 563.1666666666666 266"
+        />
+        <path d="M557.5 303.998046875Q561.21875 292 572.375 266" />
+        <path
+          d="M571.6666666666666 303.99982853223594Q574.1458333333334 292 581.5833333333334 266"
+        />
+        <path
+          d="M585.8333333333334 303.9999973208162Q587.0729166666666 292 590.7916666666666 266"
+        />
+        <path d="M600 304Q600 292 600 266" />
+        <path
+          d="M614.1666666666666 303.9999973208162Q612.9270833333334 292 609.2083333333334 266"
+        />
+        <path
+          d="M628.3333333333334 303.99982853223594Q625.8541666666666 292 618.4166666666666 266"
+        />
+        <path d="M642.5 303.998046875Q638.78125 292 627.625 266" />
+        <path
+          d="M656.6666666666666 303.98902606310014Q651.7083333333334 292 636.8333333333334 266"
+        />
+        <path
+          d="M670.8333333333334 303.958137752915Q664.6354166666666 292 646.0416666666666 266"
+        />
+        <path d="M685 303.875Q677.5625 292 655.25 266" />
+        <path
+          d="M699.1666666666666 303.68479670353224Q690.4895833333334 292 664.4583333333334 266"
+        />
+        <path
+          d="M713.3333333333334 303.2976680384088Q703.4166666666666 292 673.6666666666666 266"
+        />
+        <path d="M727.5 302.576171875Q716.34375 292 682.875 266" />
+        <path
+          d="M741.6666666666666 301.32081618655695Q729.2708333333334 292 692.0833333333334 266"
+        />
+        <path
+          d="M755.8333333333334 299.253662444273Q742.1979166666666 292 701.2916666666666 266"
+        />
+        <path d="M770 296Q755.125 292 710.5 266" />
+        <path d="M475 216Q505.3125 212 596.25 114" />
+        <path
+          d="M485.4166666666667 219.25366244427298Q513.203125 212 596.5625 114"
+        />
+        <path
+          d="M495.8333333333333 221.32081618655693Q521.09375 212 596.875 114"
+        />
+        <path d="M506.25 222.576171875Q528.984375 212 597.1875 114" />
+        <path d="M516.6666666666666 223.29766803840877Q536.875 212 597.5 114" />
+        <path
+          d="M527.0833333333334 223.68479670353224Q544.765625 212 597.8125 114"
+        />
+        <path d="M537.5 223.875Q552.65625 212 598.125 114" />
+        <path
+          d="M547.9166666666666 223.95813775291495Q560.546875 212 598.4375 114"
+        />
+        <path
+          d="M558.3333333333334 223.98902606310014Q568.4375 212 598.75 114"
+        />
+        <path d="M568.75 223.998046875Q576.328125 212 599.0625 114" />
+        <path
+          d="M579.1666666666666 223.99982853223594Q584.21875 212 599.375 114"
+        />
+        <path
+          d="M589.5833333333334 223.9999973208162Q592.109375 212 599.6875 114"
+        />
+        <path d="M600 224Q600 212 600 114" />
+        <path
+          d="M610.4166666666666 223.9999973208162Q607.890625 212 600.3125 114"
+        />
+        <path
+          d="M620.8333333333334 223.99982853223594Q615.78125 212 600.625 114"
+        />
+        <path d="M631.25 223.998046875Q623.671875 212 600.9375 114" />
+        <path
+          d="M641.6666666666666 223.98902606310014Q631.5625 212 601.25 114"
+        />
+        <path
+          d="M652.0833333333334 223.95813775291495Q639.453125 212 601.5625 114"
+        />
+        <path d="M662.5 223.875Q647.34375 212 601.875 114" />
+        <path
+          d="M672.9166666666666 223.68479670353224Q655.234375 212 602.1875 114"
+        />
+        <path d="M683.3333333333334 223.29766803840877Q663.125 212 602.5 114" />
+        <path d="M693.75 222.576171875Q671.015625 212 602.8125 114" />
+        <path
+          d="M704.1666666666666 221.32081618655693Q678.90625 212 603.125 114"
+        />
+        <path
+          d="M714.5833333333334 219.25366244427298Q686.796875 212 603.4375 114"
+        />
+        <path d="M725 216Q694.6875 212 603.75 114" />
+      </g>
+      <g stroke="#d8aa67" stroke-width="1.3" opacity=".7">
+        <path d="M432.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M447.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M462.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M477.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M492.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M507.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M522.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M537.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M552.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M567.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M582.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M597.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M612.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M627.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M642.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M657.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M672.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M687.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M702.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M717.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M732.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M747.5 401h14m-11 4h8m-5 4h2" />
+        <path d="M465.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M480.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M495.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M510.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M525.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M540.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M555.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M570.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M585.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M600.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M615.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M630.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M645.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M660.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M675.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M690.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M705.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M720.5 317h14m-11 4h8m-5 4h2" />
+        <path d="M499.25 237h14m-11 4h8m-5 4h2" />
+        <path d="M514.25 237h14m-11 4h8m-5 4h2" />
+        <path d="M529.25 237h14m-11 4h8m-5 4h2" />
+        <path d="M544.25 237h14m-11 4h8m-5 4h2" />
+        <path d="M559.25 237h14m-11 4h8m-5 4h2" />
+        <path d="M574.25 237h14m-11 4h8m-5 4h2" />
+        <path d="M589.25 237h14m-11 4h8m-5 4h2" />
+        <path d="M604.25 237h14m-11 4h8m-5 4h2" />
+        <path d="M619.25 237h14m-11 4h8m-5 4h2" />
+        <path d="M634.25 237h14m-11 4h8m-5 4h2" />
+        <path d="M649.25 237h14m-11 4h8m-5 4h2" />
+        <path d="M664.25 237h14m-11 4h8m-5 4h2" />
+        <path d="M679.25 237h14m-11 4h8m-5 4h2" />
+      </g>
       <path
-        d="M600 119v-14m-7 0h14M465 363H735M453 375H747M453 390H747M453 405H747M453 420H747"
-        stroke-opacity=".55"
+        d="M415 408H785M415 448H785m-370-11h370M467 322H733m-266 21h266"
+        stroke="#b89960"
+        stroke-width="2"
       />
-      <rect x="560" y="292" width="80" height="30" rx="1" fill="#16252e" />
+      <path
+        d="M600 114v-21m-5 10h10m-4-11h-2"
+        stroke="#dfbb71"
+        stroke-width="3"
+      />
+      <circle cx="600" cy="102" r="5" fill="#d7b267" />
+      <g stroke="#bb9c70" stroke-width="1.5">
+        <path
+          d="M421 437v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11m17-11v11"
+        />
+      </g>
+      <rect
+        x="570"
+        y="316"
+        width="60"
+        height="24"
+        rx="1"
+        fill="#172b30"
+        stroke="#bd9a63"
+      />
       <text
         x="600"
-        y="313"
+        y="333"
+        fill="#ecd0a0"
         text-anchor="middle"
-        fill="#e1c18b"
-        stroke="none"
-        font-size="18"
         font-family="KaiTi,STKaiti,serif"
-        letter-spacing="7"
+        font-size="16"
+        letter-spacing="6"
       >
         钟楼
       </text>
-    </g>
-    <g clip-path="url(#introGateArch)">
-      <path d="M480 600V470a120 120 0 0 1 240 0V600Z" fill="#0b151e" />
-      <g class="intro-door intro-door-left">
-        <path d="M483 355H600V604H483Z" fill="#713a31" />
-        <path
-          d="M498 357v247m23-247v247m24-247v247m24-247v247m24-247v247"
-          stroke="#432b29"
-          stroke-width="3"
-        />
-        <g fill="#d1ad70">
-          <circle cx="509" cy="423" r="4" />
-          <circle cx="539" cy="423" r="4" />
-          <circle cx="570" cy="423" r="4" />
-          <circle cx="509" cy="463" r="4" />
-          <circle cx="539" cy="463" r="4" />
-          <circle cx="570" cy="463" r="4" />
-          <circle cx="509" cy="503" r="4" />
-          <circle cx="539" cy="503" r="4" />
-          <circle cx="570" cy="503" r="4" />
-          <circle cx="509" cy="543" r="4" />
-          <circle cx="539" cy="543" r="4" />
-          <circle cx="570" cy="543" r="4" />
+      <path d="M562 560v-34a38 38 0 0 1 76 0v34Z" fill="#0d1b23" />
+      <g clip-path="url(#introGateArch)">
+        <g class="intro-door intro-door-left">
+          <path d="M560 484h40v79h-40Z" fill="#69382e" />
+          <path
+            d="M569 487v76m10-76v76m10-76v76"
+            stroke="#ae8456"
+            stroke-opacity=".45"
+          />
+          <circle cx="591" cy="535" r="3" stroke="#d3b475" />
         </g>
-        <circle cx="577" cy="494" r="10" stroke="#d1ad70" stroke-width="3" />
+        <g class="intro-door intro-door-right">
+          <path d="M600 484h40v79h-40Z" fill="#69382e" />
+          <path
+            d="M609 487v76m10-76v76m10-76v76"
+            stroke="#ae8456"
+            stroke-opacity=".45"
+          />
+          <circle cx="609" cy="535" r="3" stroke="#d3b475" />
+        </g>
       </g>
-      <g class="intro-door intro-door-right">
-        <path d="M600 355H717V604H600Z" fill="#713a31" />
+      <path
+        d="M556 560v-34a44 44 0 0 1 88 0v34M562 560v-34a38 38 0 0 1 76 0v34"
+        stroke="#c0ab82"
+        stroke-width="2.5"
+      />
+      <g stroke="#a39374" stroke-width=".7">
         <path
-          d="M608 357v247m24-247v247m24-247v247m24-247v247m23-247v247"
-          stroke="#432b29"
-          stroke-width="3"
+          d="m559 526-8-1m11-15-7-4m16-9-6-6m18-3-3-8m20 5v-9m17 12 3-8m10 17 6-6m1 19 7-4m-4 21 8-1"
         />
-        <g fill="#d1ad70">
-          <circle cx="629" cy="423" r="4" />
-          <circle cx="660" cy="423" r="4" />
-          <circle cx="690" cy="423" r="4" />
-          <circle cx="629" cy="463" r="4" />
-          <circle cx="660" cy="463" r="4" />
-          <circle cx="690" cy="463" r="4" />
-          <circle cx="629" cy="503" r="4" />
-          <circle cx="660" cy="503" r="4" />
-          <circle cx="690" cy="503" r="4" />
-          <circle cx="629" cy="543" r="4" />
-          <circle cx="660" cy="543" r="4" />
-          <circle cx="690" cy="543" r="4" />
-        </g>
-        <circle cx="623" cy="494" r="10" stroke="#d1ad70" stroke-width="3" />
       </g>
     </g>
-    <path
-      d="M476 600V474a124 124 0 0 1 248 0V600M484 600V474a116 116 0 0 1 232 0V600"
-      stroke="#aa9470"
-      stroke-width="2"
-    />
-    <g transform="translate(367 340)">
+    <g transform="translate(330 405)">
       <g class="intro-lantern">
-        <path d="M0-101v41M-29-61H29" stroke="#bf9e70" />
-        <ellipse cx="0" cy="0" rx="96" ry="100" fill="url(#introLanternGlow)" />
-        <path d="M-27-54H27L31-47H-31Z" fill="#ba9a62" />
-        <ellipse rx="37" ry="48" fill="#a33f2b" stroke="#ddaf6e" />
+        <ellipse rx="80" ry="86" fill="url(#introLanternGlow)" />
+        <path d="M0-108v52" stroke="#b69967" />
+        <path d="M-24-42h48v7h-48Zm0 78h48v7h-48Z" fill="#c29c5e" />
+        <ellipse rx="31" ry="38" fill="#9f4933" stroke="#d4a567" />
         <path
-          d="M-18-42Q-36 0-18 42M0-47V47M18-42Q36 0 18 42"
-          stroke="#d59a58"
+          d="M-14-34q-22 34 0 68M0-38v76m14-72q22 34 0 68"
+          stroke="#d5a064"
           stroke-opacity=".7"
         />
-        <path d="M-26 48H26V54H-26Z" fill="#b59762" />
-        <path d="M-9 55v26M0 55v32M9 55v26" stroke="#b54c32" stroke-width="3" />
+        <path d="M-8 44v22m8-22v27m8-27v22" stroke="#b75c3d" stroke-width="2" />
         <text
-          y="8"
+          y="7"
           text-anchor="middle"
-          fill="#f1ca87"
-          font-size="24"
+          font-size="21"
           font-family="KaiTi,STKaiti,serif"
+          fill="#eed09b"
         >
           安
         </text>
       </g>
     </g>
-    <g transform="translate(833 340)">
+    <g transform="translate(870 405)">
       <g class="intro-lantern lantern-right">
-        <path d="M0-101v41M-29-61H29" stroke="#bf9e70" />
-        <ellipse cx="0" cy="0" rx="96" ry="100" fill="url(#introLanternGlow)" />
-        <path d="M-27-54H27L31-47H-31Z" fill="#ba9a62" />
-        <ellipse rx="37" ry="48" fill="#a33f2b" stroke="#ddaf6e" />
+        <ellipse rx="80" ry="86" fill="url(#introLanternGlow)" />
+        <path d="M0-108v52" stroke="#b69967" />
+        <path d="M-24-42h48v7h-48Zm0 78h48v7h-48Z" fill="#c29c5e" />
+        <ellipse rx="31" ry="38" fill="#9f4933" stroke="#d4a567" />
         <path
-          d="M-18-42Q-36 0-18 42M0-47V47M18-42Q36 0 18 42"
-          stroke="#d59a58"
+          d="M-14-34q-22 34 0 68M0-38v76m14-72q22 34 0 68"
+          stroke="#d5a064"
           stroke-opacity=".7"
         />
-        <path d="M-26 48H26V54H-26Z" fill="#b59762" />
-        <path d="M-9 55v26M0 55v32M9 55v26" stroke="#b54c32" stroke-width="3" />
+        <path d="M-8 44v22m8-22v27m8-27v22" stroke="#b75c3d" stroke-width="2" />
         <text
-          y="8"
+          y="7"
           text-anchor="middle"
-          fill="#f1ca87"
-          font-size="24"
+          font-size="21"
           font-family="KaiTi,STKaiti,serif"
+          fill="#eed09b"
         >
           秦
         </text>
@@ -275,6 +660,13 @@
       <span>钟楼</span><span>永宁门</span><span>小寨</span>
     </div>
     <button id="introRetry" class="intro-retry" hidden>重新点亮长安</button>
+  </div>
+  <button id="introSound" class="intro-sound" aria-pressed="false">
+    <span aria-hidden="true">♫</span
+    ><span id="introSoundLabel">入城时播放音乐</span>
+  </button>
+  <div id="entranceCaption" class="entrance-caption" aria-live="polite">
+    穿过钟楼券洞，今夜回长安
   </div>
   <noscript>请启用 JavaScript 后进入长安夜食。</noscript>
 </section>

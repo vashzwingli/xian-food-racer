@@ -8,7 +8,7 @@ concurrency:
 jobs:
   game:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -21,6 +21,7 @@ jobs:
       - run: npm run build:offline
       - run: npm test
       - run: npm run test:intro
+      - run: npm run test:autoplay
       - run: npm run test:browser
       - run: npm run test:regression
       - run: node scripts/prepare-pages.mjs
@@ -45,6 +46,8 @@ jobs:
             motion-blur-off.png
             intro-loading.png
             intro-mobile.png
+            bell-tower-entry.png
+            gate-passage.png
   deploy:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: game

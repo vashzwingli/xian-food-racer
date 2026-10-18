@@ -6,7 +6,7 @@
     "nextGate": 1,
     "checkpoint": 0,
     "laps": [],
-    "elapsed": 0,
+    "elapsed": 0.016666666666666666,
     "length": 1834.5985992526314,
     "speed": 0,
     "fuel": 100,
@@ -68,7 +68,7 @@
       3.745,
       246.6136184957907
     ],
-    "worldMeshes": 1692,
+    "worldMeshes": 1695,
     "rendering": {
       "mode": "auto",
       "level": 2,
@@ -78,9 +78,9 @@
       "rain": 700,
       "detailDistance": 95,
       "effects": true,
-      "frameMs": 8.329777953921143,
-      "geometries": 595,
-      "textures": 54
+      "frameMs": 9.437054194616719,
+      "geometries": 601,
+      "textures": 62
     },
     "localTrack": {
       "name": "西安人的歌 · 程渤智（现场版）",
@@ -92,14 +92,14 @@
       "readyState": 4,
       "paused": false,
       "loop": true,
-      "currentTime": 3.452093,
+      "currentTime": 3.613605,
       "volume": 0.62,
-      "gain": 0.40296781063079834,
-      "message": "已内置《西安人的歌》现场版。点击发车或试听，让乡音陪你回家。"
+      "gain": 0.4083106517791748,
+      "message": "正在收听《西安人的歌》现场版，循环播放。"
     },
-    "drawCalls": 736,
-    "renderFrame": 517,
-    "vertices": 429474
+    "drawCalls": 690,
+    "renderFrame": 1051,
+    "vertices": 419894
   },
   "audit": {
     "siteOverlaps": 0,
@@ -200,7 +200,7 @@
     "nextGate": 1,
     "checkpoint": 0,
     "laps": [],
-    "elapsed": 1.1333333333333342,
+    "elapsed": 1.1166666666666676,
     "length": 1834.595025862339,
     "speed": 0,
     "fuel": 100,
@@ -262,7 +262,7 @@
       15.344999999999999,
       -230.85270574184005
     ],
-    "worldMeshes": 1692,
+    "worldMeshes": 1695,
     "rendering": {
       "mode": "auto",
       "level": 1,
@@ -272,9 +272,9 @@
       "rain": 430,
       "detailDistance": 80,
       "effects": true,
-      "frameMs": 8.375027950777628,
-      "geometries": 518,
-      "textures": 63
+      "frameMs": 9.840709392598827,
+      "geometries": 526,
+      "textures": 70
     },
     "localTrack": {
       "name": "西安人的歌 · 程渤智（现场版）",
@@ -286,13 +286,13 @@
       "readyState": 4,
       "paused": false,
       "loop": true,
-      "currentTime": 14.216462,
+      "currentTime": 15.21007,
       "volume": 0.62,
       "gain": 0.4959678053855896,
-      "message": "已内置《西安人的歌》现场版。点击发车或试听，让乡音陪你回家。"
+      "message": "正在收听《西安人的歌》现场版，循环播放。"
     },
-    "drawCalls": 562,
-    "renderFrame": 795,
-    "vertices": 249506
+    "drawCalls": 558,
+    "renderFrame": 1308,
+    "vertices": 248534
   }
 }

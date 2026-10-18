@@ -17,16 +17,23 @@
         {
           "q": ".intro-copy",
           "x": 0,
-          "y": 70.390625,
+          "y": 64,
           "right": 1024,
-          "bottom": 215.8125
+          "bottom": 193.3125
         },
         {
           "q": "#introSkip",
-          "x": 889,
-          "y": 30,
+          "x": 887,
+          "y": 28,
           "right": 994,
-          "bottom": 64
+          "bottom": 66
+        },
+        {
+          "q": "#introSound",
+          "x": 851.5,
+          "y": 75,
+          "right": 994,
+          "bottom": 113
         },
         {
           "q": ".intro-foods",
@@ -38,15 +45,41 @@
         {
           "q": ".intro-footer",
           "x": 302,
-          "y": 539,
+          "y": 543,
           "right": 722,
-          "bottom": 600
+          "bottom": 604
         }
       ],
       "overflow": false,
+      "cinematic": {
+        "playing": false,
+        "progress": 1,
+        "insideFrames": 5,
+        "crossed": true,
+        "exited": true,
+        "camera": [
+          28,
+          5.8,
+          -47
+        ],
+        "target": [
+          0,
+          11.5,
+          0
+        ],
+        "landmark": {
+          "roofTiers": 3,
+          "baseHeight": 8.5,
+          "height": 36,
+          "passageRadius": 3.6,
+          "passageSpring": 2.7
+        },
+        "musicBlocked": false
+      },
+      "passageIntersections": 0,
       "resources": {
-        "geometries": 2230,
-        "materials": 254,
+        "geometries": 2237,
+        "materials": 255,
         "textures": 75
       }
     },
@@ -60,16 +93,23 @@
         {
           "q": ".intro-copy",
           "x": 0,
-          "y": 99,
+          "y": 90,
           "right": 1440,
-          "bottom": 258.828125
+          "bottom": 231.671875
         },
         {
           "q": "#introSkip",
-          "x": 1305,
-          "y": 30,
+          "x": 1303,
+          "y": 28,
           "right": 1410,
-          "bottom": 64
+          "bottom": 66
+        },
+        {
+          "q": "#introSound",
+          "x": 1267.5,
+          "y": 75,
+          "right": 1410,
+          "bottom": 113
         },
         {
           "q": ".intro-foods",
@@ -81,15 +121,15 @@
         {
           "q": ".intro-footer",
           "x": 510,
-          "y": 799,
+          "y": 803,
           "right": 930,
-          "bottom": 860
+          "bottom": 864
         }
       ],
       "overflow": false,
       "resources": {
-        "geometries": 2230,
-        "materials": 254,
+        "geometries": 2237,
+        "materials": 255,
         "textures": 75
       }
     },
@@ -105,14 +145,21 @@
           "x": 0,
           "y": 143.46875,
           "right": 390,
-          "bottom": 260.546875
+          "bottom": 258.546875
         },
         {
           "q": "#introSkip",
           "x": 314,
-          "y": 26,
+          "y": 23,
           "right": 372,
-          "bottom": 55
+          "bottom": 61
+        },
+        {
+          "q": "#introSound",
+          "x": 252.25,
+          "y": 67,
+          "right": 372,
+          "bottom": 99
         },
         {
           "q": ".intro-foods",
@@ -131,8 +178,8 @@
       ],
       "overflow": false,
       "resources": {
-        "geometries": 2230,
-        "materials": 254,
+        "geometries": 2237,
+        "materials": 255,
         "textures": 75
       }
     },
@@ -153,9 +200,16 @@
         {
           "q": "#introSkip",
           "x": 593,
-          "y": 17,
+          "y": 14,
           "right": 649,
-          "bottom": 44
+          "bottom": 46
+        },
+        {
+          "q": "#introSound",
+          "x": 531.25,
+          "y": 54,
+          "right": 649,
+          "bottom": 84
         },
         {
           "q": ".intro-foods",
@@ -174,8 +228,8 @@
       ],
       "overflow": false,
       "resources": {
-        "geometries": 2230,
-        "materials": 254,
+        "geometries": 2237,
+        "materials": 255,
         "textures": 75
       }
     }

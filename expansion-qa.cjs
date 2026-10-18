@@ -30,7 +30,9 @@ const server = http
     await page.goto("http://127.0.0.1:8760");
     await page.waitForFunction(() => window.raceTest, null, { timeout: 60000 });
     if (process.env.FOOD_RACER_SMOOTH) await page.keyboard.press("q");
-    await page.locator("#menu [data-music]").click();
+    await page.locator("#menu [data-radio]").click();
+    await page.locator("#radioPreview").click();
+    await page.locator("#radioClose").click();
     await page.waitForFunction(
       () => raceTest.snapshot().musicReady === "ready",
       null,

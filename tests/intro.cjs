@@ -112,6 +112,7 @@ const server = http
           rects: [
             ".intro-copy",
             "#introSkip",
+            "#introSound",
             ".intro-foods",
             ".intro-footer",
           ].map(rect),
@@ -145,13 +146,30 @@ const server = http
         await page.waitForTimeout(350);
         const opacity = await page
           .locator("#loading")
-          .evaluate((element) => +getComputedStyle(element).opacity);
+          .evaluate(
+            (element) => +getComputedStyle(element, "::before").opacity,
+          );
         assert(
           opacity < 1,
           "the gate must fade into the real city before it closes",
         );
+        // In-flight screenshot encoding can outlast the tunnel on software GPUs.
+        // Verify the actual rendered traversal below, without blocking its clock.
       }
       await page.waitForFunction(() => !changanIntro.active);
+      if (size.width === 1024) {
+        const shot = await page.evaluate(() => raceTest.entranceSnapshot());
+        assert(shot.insideFrames > 0 && shot.crossed && shot.exited);
+        assert.deepEqual(shot.camera, [28, 5.8, -47]);
+        assert.deepEqual(shot.target, [0, 11.5, 0]);
+        assert.equal(shot.landmark.roofTiers, 3);
+        assert.deepEqual(
+          await page.evaluate(() => raceTest.auditEntrancePassage()),
+          [],
+        );
+        layout.cinematic = shot;
+        layout.passageIntersections = 0;
+      }
       const after = await page.evaluate(() => {
         const s = raceTest.snapshot();
         return {

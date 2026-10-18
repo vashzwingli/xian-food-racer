@@ -1,19 +1,22 @@
 (() => {
-  const screen = document.getElementById("loading");
-  const status = document.getElementById("introStatus");
-  const percent = document.getElementById("introPercent");
-  const progress = document.getElementById("introProgress");
-  const skip = document.getElementById("introSkip");
-  const retry = document.getElementById("introRetry");
+  const screen = document.getElementById("loading"),
+    status = document.getElementById("introStatus"),
+    percent = document.getElementById("introPercent"),
+    progress = document.getElementById("introProgress"),
+    skip = document.getElementById("introSkip"),
+    retry = document.getElementById("introRetry"),
+    sound = document.getElementById("introSound");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   let active = true,
     ready = false,
     skipped = false,
-    value = 1;
-  let began = performance.now(),
+    value = 1,
+    began = performance.now(),
     endTimer,
     closeTimer,
-    resolveFinished;
+    hooks = {},
+    resolveFinished,
+    gestureSeen = false;
   let finished = new Promise((resolve) => {
     resolveFinished = resolve;
   });
@@ -37,40 +40,65 @@
     document.getElementById("start")?.focus({ preventScroll: true });
     resolveFinished();
   }
+  function gesture() {
+    gestureSeen = true;
+    hooks.gesture?.();
+  }
   function tryFinish() {
     if (!active || !ready || screen.dataset.phase === "opening") return;
     const remaining =
-      (skipped ? 0 : reduced.matches ? 250 : 2850) -
+      (skipped ? 0 : reduced.matches ? 180 : 2850) -
       (performance.now() - began);
     clearTimeout(endTimer);
     if (remaining > 0) {
       endTimer = setTimeout(tryFinish, remaining);
       return;
     }
-    phase(100, "城门开了，咥一圈！");
+    phase(100, "灯亮了，这就进城");
     screen.dataset.phase = "opening";
     document.body.dataset.intro = "opening";
     screen.classList.add("is-opening");
-    skip.disabled = true;
-    closeTimer = setTimeout(settle, reduced.matches ? 150 : 800);
+    skip.innerHTML = "跳过镜头 <kbd>空格</kbd>";
+    if (skipped || reduced.matches) {
+      closeTimer = setTimeout(
+        () => {
+          hooks.skip?.();
+          settle();
+        },
+        reduced.matches ? 100 : 220,
+      );
+    } else {
+      hooks.enter?.();
+      // A recoverable renderer interruption must not leave the menu locked forever.
+      closeTimer = setTimeout(() => {
+        hooks.skip?.();
+        settle();
+      }, 16000);
+    }
   }
   function markReady() {
     ready = true;
     retry.hidden = true;
     screen.dataset.phase = "ready";
-    phase(100, skipped ? "夜色已亮，这就进城" : "长安夜色已亮，准备进城");
+    phase(100, "钟楼灯亮了，准备入城");
+    hooks.ready?.();
     tryFinish();
   }
   function requestSkip() {
-    if (!active) return;
+    if (!active || screen.dataset.phase === "failed") return;
     skipped = true;
-    if (!ready) status.textContent = "收到，准备好就进城…";
+    if (screen.dataset.phase === "opening") {
+      hooks.skip?.();
+      settle();
+      return;
+    }
+    if (!ready) status.textContent = "收到，街巷准备好就进城…";
     tryFinish();
   }
   function fail() {
     if (!active || ready) return;
     screen.dataset.phase = "failed";
-    status.textContent = "夜色没能点亮，请重试一次";
+    status.textContent = "场景未能加载，请检查网络后重试";
     retry.hidden = false;
   }
   function replay() {
@@ -85,59 +113,85 @@
     screen.removeAttribute("aria-hidden");
     screen.classList.remove("is-opening");
     screen.dataset.phase = "ready";
+    screen.removeAttribute("data-cinematic");
     document.body.dataset.intro = "loading";
     document.getElementById("menu").inert = true;
+    skip.innerHTML = "跳过入场 <kbd>空格</kbd>";
     skip.disabled = false;
     skip.focus({ preventScroll: true });
-    phase(100, "街巷都备好了，再看一眼长安");
-    // Restart only the decoration; the already-loaded city and its progress stay intact.
-    for (const animation of screen.getAnimations({ subtree: true })) {
+    phase(100, "灯火未央，再看一眼长安");
+    for (const animation of screen.getAnimations({ subtree: true }))
       if (animation instanceof CSSAnimation) {
         animation.currentTime = 0;
         animation.play();
       }
-    }
     tryFinish();
     return finished;
   }
   skip.onclick = requestSkip;
+  sound.onclick = () => {
+    gestureSeen = true;
+    hooks.sound?.();
+  };
   retry.onclick = () => location.reload();
+  addEventListener(
+    "pointerdown",
+    (event) => {
+      if (active && !event.target.closest?.("#introSound")) gesture();
+    },
+    { capture: true, passive: true },
+  );
   addEventListener(
     "keydown",
     (e) => {
-      if (!active) return;
-      if (e.target === retry) return;
+      if (!active || e.code === "Tab" || e.target === retry) return;
+      if (e.code === "KeyM") {
+        hooks.mute?.();
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        return;
+      }
+      if (e.target === sound) return;
+      gesture();
       if (["Escape", "Space", "Enter"].includes(e.code)) {
         e.preventDefault();
         e.stopImmediatePropagation();
         requestSkip();
-      } else if (e.code !== "Tab") {
-        e.stopImmediatePropagation();
-      }
+      } else e.stopImmediatePropagation();
     },
     true,
   );
-  screen.addEventListener("transitionend", (e) => {
-    if (
-      e.target === screen &&
-      e.propertyName === "opacity" &&
-      screen.classList.contains("is-opening")
-    )
-      settle();
-  });
   addEventListener("error", fail, true);
   addEventListener("unhandledrejection", fail);
-  reduced.addEventListener("change", tryFinish);
+  reduced.addEventListener("change", () => {
+    if (reduced.matches && screen.dataset.phase === "opening") {
+      hooks.skip?.();
+      settle();
+    } else tryFinish();
+  });
   window.changanIntro = {
     phase,
     ready: markReady,
     fail,
     replay,
+    complete: settle,
+    attach(backend) {
+      hooks = backend;
+    },
     get active() {
       return active;
     },
     get finished() {
       return finished;
+    },
+    get hasGesture() {
+      return gestureSeen;
+    },
+    get reduced() {
+      return reduced.matches;
+    },
+    get cinematic() {
+      return hooks.snapshot?.() ?? null;
     },
   };
 })();

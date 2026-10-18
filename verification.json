@@ -18,5 +18,5 @@
     }
   ],
   "controls": "boost / double jump / camera / mute / quality / reset / pause / resume / restart / back passed",
-  "drawCalls": 702
+  "drawCalls": 694
 }
