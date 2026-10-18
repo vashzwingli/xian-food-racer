@@ -128,7 +128,9 @@ const server = http
       mimeType: "audio/wav",
       buffer: waveFixture(),
     });
-    await page.waitForFunction(() => raceTest.localAudio().hasFile);
+    await page.waitForFunction(
+      () => raceTest.localAudio().hasFile && !raceTest.localAudio().saving,
+    );
     console.log("Browser suite: audio imported");
     await page.locator("#radioPreview").click();
     await page.waitForFunction(() => !raceTest.localAudio().paused);
@@ -188,7 +190,9 @@ const server = http
     );
     await page.locator("#menu [data-radio]").click();
     await page.locator("#radioRemove").click();
-    await page.waitForFunction(() => !raceTest.localAudio().hasFile);
+    await page.waitForFunction(
+      () => !raceTest.localAudio().hasFile && !raceTest.localAudio().saving,
+    );
     assert.equal(
       (await page.evaluate(() => raceTest.localAudio())).source,
       "home",

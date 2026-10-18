@@ -4,6 +4,7 @@ const HOME_SONG = "西安人的歌 · 程渤智（现场版）";
 const DB_NAME = "changan-night-radio";
 const STORE = "tracks";
 const KEY = "home-song";
+const PREFERENCES = "changan-radio-preferences";
 
 function openStore() {
   return new Promise((resolve, reject) => {
@@ -64,6 +65,7 @@ export class LocalTrack {
     this.starting = false;
     this.intent = false;
     this.serial = 0;
+    this.pendingWrites = 0;
     this.element.addEventListener("error", () => {
       this.selected = false;
       this.message = this.home
@@ -74,23 +76,42 @@ export class LocalTrack {
     this.ready = this.restore();
   }
   async restore() {
+    const serial = this.serial;
+    let saved;
     try {
-      const saved = await storedTrack("get");
-      if (saved?.blob) {
-        this.useBlob(saved.blob, saved.name);
-        this.message = "已记住这首歌。点击发车或试听开始播放。";
-      }
-      if (saved) {
-        this.volume = saved.volume ?? this.volume;
-        if (saved.mode === "home") this.useHome();
-        this.selected = saved.mode
-          ? saved.mode !== "original"
-          : saved.selected !== false;
-      }
+      saved = await storedTrack("get");
     } catch {
       /* Local file origins and private mode may disable persistent storage. */
     }
+    if (serial !== this.serial) return;
+    if (saved?.blob) {
+      this.useBlob(saved.blob, saved.name);
+      this.message = "已记住这首歌。点击发车或试听开始播放。";
+    }
+    let preferences;
+    try {
+      preferences = JSON.parse(localStorage.getItem(PREFERENCES));
+    } catch {}
+    const mode =
+      preferences?.mode ??
+      saved?.mode ??
+      (saved?.selected === false ? "original" : saved?.blob ? "local" : "home");
+    const volume = preferences?.volume ?? saved?.volume;
+    if (Number.isFinite(volume)) this.volume = Math.max(0, Math.min(1, volume));
+    if (mode === "home" || (mode === "local" && !this.blob)) this.useHome();
+    this.selected = mode !== "original";
     this.onChange();
+  }
+  persistPreferences() {
+    try {
+      localStorage.setItem(
+        PREFERENCES,
+        JSON.stringify({
+          mode: !this.selected ? "original" : this.home ? "home" : "local",
+          volume: this.volume,
+        }),
+      );
+    } catch {}
   }
   useBlob(blob, name) {
     this.serial++;
@@ -174,6 +195,8 @@ export class LocalTrack {
     this.onChange();
   }
   async persist() {
+    this.persistPreferences();
+    this.pendingWrites++;
     try {
       await storedTrack("put", {
         blob: this.blob,
@@ -186,6 +209,8 @@ export class LocalTrack {
       this.message = this.blob
         ? "本次可播放；浏览器未允许保存，下次打开需重新导入。"
         : "本次设置已生效；浏览器未允许保存，下次打开会恢复默认。";
+    } finally {
+      this.pendingWrites--;
     }
   }
   selectLocal() {
@@ -212,9 +237,14 @@ export class LocalTrack {
     this.useHome();
     this.selected = true;
     this.blocked = false;
+    this.persistPreferences();
+    this.pendingWrites++;
     try {
       await storedTrack("delete");
-    } catch {}
+    } catch {
+    } finally {
+      this.pendingWrites--;
+    }
     this.message = "本地音乐已移除，继续听内置《西安人的歌》。";
     this.onChange();
   }
@@ -272,6 +302,7 @@ export class LocalTrack {
       name: this.name,
       selected: this.selected,
       hasFile: !!this.blob,
+      saving: this.pendingWrites > 0,
       source: !this.selected ? "original" : this.home ? "home" : "local",
       duration: Number.isFinite(this.element.duration)
         ? this.element.duration
