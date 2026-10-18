@@ -1,0 +1,154 @@
+{
+  "errors": [],
+  "audio": {
+    "rms": 0.011564230999090201,
+    "context": "running",
+    "duration": 34.285714285714285,
+    "peak": 0.76
+  },
+  "musicControls": "B and M passed",
+  "flight": {
+    "state": "race",
+    "lap": 1,
+    "nextGate": 3,
+    "checkpoint": 80,
+    "laps": [],
+    "elapsed": 5.006666666666664,
+    "length": 1834.5918489471203,
+    "speed": 0,
+    "fuel": 81.26666666666671,
+    "jumps": 1,
+    "view": 0,
+    "quality": true,
+    "muted": false,
+    "position": [
+      336.19185954787605,
+      6.750121173598883,
+      -46.51595400874123
+    ],
+    "airHeight": 6.508333333333326,
+    "jetVisible": true,
+    "jetParticles": 130,
+    "musicEnabled": true,
+    "musicReady": "ready",
+    "musicPeak": 0.76,
+    "musicGain": 0.47999998927116394,
+    "masterGain": 0.6499999761581421,
+    "rolls": 0,
+    "rollTime": 0,
+    "rollAngle": 0,
+    "trafficHits": 0,
+    "trafficCount": 24,
+    "trafficTypes": [
+      "taxi",
+      "bus",
+      "truck"
+    ],
+    "picked": 0,
+    "nightScore": 0,
+    "chiliTime": 0,
+    "wallVisits": 0,
+    "wallOn": false,
+    "physicsContacts": 0,
+    "solidCount": 631,
+    "buildingCount": 245,
+    "pedestrians": 64,
+    "busRoutes": [
+      "215",
+      "616"
+    ],
+    "roadWidth": 26,
+    "roadGround": 0.21678784026555634,
+    "camera": [
+      335.91380570706616,
+      9.975522028403626,
+      -36.5198204531303
+    ],
+    "worldMeshes": 1693,
+    "rendering": {
+      "mode": "auto",
+      "level": 2,
+      "label": "自动适配",
+      "dpr": 1,
+      "bloom": true,
+      "rain": 700,
+      "detailDistance": 95,
+      "effects": true,
+      "frameMs": 8.338421887720216,
+      "geometries": 324,
+      "textures": 67
+    },
+    "localTrack": {
+      "name": "",
+      "selected": false,
+      "hasFile": false,
+      "paused": true,
+      "loop": true,
+      "currentTime": 0,
+      "volume": 0.62,
+      "gain": 0,
+      "message": "导入你的《西安人的歌》，让熟悉的声音陪你回家。"
+    },
+    "drawCalls": 417,
+    "vertices": 156168
+  },
+  "routes": [
+    {
+      "difficulty": 0,
+      "frames": 8606,
+      "state": "result",
+      "lap": 3,
+      "nextGate": 8,
+      "elapsed": 143.4500000000063,
+      "laps": [
+        46.066666666665334,
+        45.399999999997426,
+        51.98333333334354
+      ],
+      "resets": 0,
+      "position": [
+        0.24889901464771125,
+        0.145,
+        247.56226896236112
+      ]
+    },
+    {
+      "difficulty": 1,
+      "frames": 8589,
+      "state": "result",
+      "lap": 3,
+      "nextGate": 8,
+      "elapsed": 143.15000000000606,
+      "laps": [
+        46.04999999999867,
+        46.98333333333067,
+        50.11666666667672
+      ],
+      "resets": 0,
+      "position": [
+        0.1724655741793788,
+        0.1450033879951209,
+        247.45301674996585
+      ]
+    },
+    {
+      "difficulty": 2,
+      "frames": 8603,
+      "state": "result",
+      "lap": 3,
+      "nextGate": 8,
+      "elapsed": 143.40000000000626,
+      "laps": [
+        46.066666666665334,
+        45.399999999997426,
+        51.9333333333435
+      ],
+      "resets": 0,
+      "position": [
+        0.5147012175599162,
+        0.1450313553179061,
+        247.59623250334246
+      ]
+    }
+  ]
+}

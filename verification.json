@@ -1,0 +1,22 @@
+{
+  "errors": [],
+  "layouts": [
+    {
+      "width": 1024,
+      "height": 640,
+      "overflow": []
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "overflow": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "overflow": []
+    }
+  ],
+  "controls": "boost / double jump / camera / mute / quality / reset / pause / resume / restart / back passed",
+  "drawCalls": 693
+}

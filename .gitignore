@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.development/
+test-results/
+playwright-report/
+*.log
+.env
+.env.*
+!.env.example
+*.mp3
+*.m4a
+*.ogg
+*.wav
+*.flac
+*.aac

@@ -1,0 +1,5 @@
+* text=auto eol=lf
+*.png binary
+*.html linguist-generated=true
+src/template.html linguist-generated=false
+index.offline.html -whitespace

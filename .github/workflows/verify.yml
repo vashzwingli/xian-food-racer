@@ -1,0 +1,32 @@
+name: Verify game
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  game:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run build:offline
+      - run: npm test
+      - run: npm run test:browser
+      - run: npm run test:regression
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: game-verification
+          path: |
+            test-results/
+            *verification.json
+            menu.png
+            rainstreet-market.png
+            driveable-wall.png
+            touch-driving.png

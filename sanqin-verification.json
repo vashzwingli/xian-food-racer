@@ -1,0 +1,30 @@
+{
+  "errors": [],
+  "trackLength": 1834.5985992526314,
+  "trafficCount": 24,
+  "types": [
+    "bus",
+    "taxi",
+    "truck"
+  ],
+  "bothDirections": true,
+  "collision": {
+    "before": 0,
+    "after": 1,
+    "speed": 17,
+    "height": 0.07999999999999999
+  },
+  "airborneClearance": {
+    "before": 0,
+    "after": 0,
+    "speed": 25,
+    "height": 3.55
+  },
+  "roll": {
+    "midAngle": -2.7249974750329344,
+    "midHeight": 5.934444444444442,
+    "completed": 1,
+    "landedUpright": true,
+    "resetUpright": true
+  }
+}

@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>长安夜食 · 西安美食赛车</title>
+    <style>
+      /* INLINE_STYLES */
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="hud">
+      <div class="street-memory">
+        <strong id="memoryTitle">钟楼亮灯了</strong>
+        <p id="memoryLine">雨把柏油打亮，熟悉的街口又热闹起来。</p>
+      </div>
+      <button class="radio-open" data-radio>家乡电台 <span>U</span></button>
+      <div class="top">
+        <div>
+          <div class="brand">长安夜食</div>
+          <div class="sub" id="routeTitle">西安雨夜 · 食速竞逐</div>
+        </div>
+        <div class="timing">
+          <div><small>圈数</small><strong id="lap">1 / 3</strong></div>
+          <div>
+            <small>本圈用时</small><strong id="lapTime">00:00.00</strong>
+          </div>
+          <div><small>总时间</small><strong id="total">00:00.00</strong></div>
+        </div>
+      </div>
+      <div id="lootHud" class="loot-hud">夜市好味 0 份　0 分</div>
+      <div class="nav" id="nav"></div>
+      <div id="pickupPopup" class="pickup-popup"></div>
+      <button class="music-btn" data-music>
+        ♫ 长安夜行<span>B 音乐开</span>
+      </button>
+      <div class="flight-meter" id="flightHud">
+        四点矢量喷气<b id="flightHeight">离地 0.0 m</b>
+      </div>
+      <div class="speed">
+        <b id="speed">0</b><span>km/h</span>
+        <div class="fuel"><i id="fuel"></i></div>
+        <div class="fuel-meta">
+          <span>油泼辣子 · 火箭燃料</span><span id="fuelValue">100%</span>
+        </div>
+      </div>
+      <div class="controls">
+        <kbd>W A S D</kbd> 驾驶　<kbd>Space</kbd> 手刹　<kbd>Shift</kbd>
+        火箭<br /><kbd>F</kbd> 喷气跳 / 二段翻滚　<kbd>R</kbd> 复位　<kbd
+          >C</kbd
+        >
+        视角　<kbd>M</kbd> 静音　<kbd>Q</kbd>
+        画质
+      </div>
+      <div class="map-frame">
+        <div class="map-head">长安舆图<span>北 N</span></div>
+        <canvas id="map" width="380" height="270"></canvas>
+        <div class="map-foot">钟楼 · 雁塔 · 曲江</div>
+      </div>
+      <div id="toast"></div>
+    </div>
+    <div id="count"></div>
+    <div id="menu">
+      <button class="radio-open menu-radio" data-radio>
+        家乡电台 · 导入音乐
+      </button>
+      <div class="panel">
+        <div class="mast">
+          <div class="seal">西<br />安</div>
+          <div class="tag">
+            一城烟火 · 一路长安<small>西安美食街头竞速</small>
+          </div>
+        </div>
+        <h1 class="title">长安夜食</h1>
+        <div class="title-mark">一路烟火，咥遍三秦</div>
+        <p class="desc">
+          雨落南门，咥碗热的。<br />215、616
+          从身边开过，街角的蒸笼又冒起热气。<br />开过三圈烟火，把惦记了一天的好味送到家。
+        </p>
+        <div class="route-label">
+          今晚吃哪一味？<span>约 1.84 km · 三圈</span>
+        </div>
+        <div class="choices">
+          <button class="choice active" data-d="0" aria-pressed="true">
+            <svg viewBox="0 0 48 34" aria-hidden="true">
+              <path
+                d="M5 16C6 2 42 2 43 16Z M5 24C8 32 40 32 43 24Z M5 20Q10 16 14 20T23 20T32 20T43 20 M15 9l2-1m7 0h2m7 1l2 1"
+              /></svg
+            ><b>肉夹馍街</b><small>微辣 · 从容开咥</small
+            ><em>平缓入门</em></button
+          ><button class="choice" data-d="1" aria-pressed="false">
+            <svg viewBox="0 0 48 34" aria-hidden="true">
+              <path
+                d="M4 18Q24 28 44 18L37 30H11Z M8 13Q14 5 21 12T40 11 M10 17Q16 9 24 16T39 14 M30 2L21 17 M36 3L28 18"
+              /></svg
+            ><b>凉皮高架</b><small>中辣 · 酸香上头</small
+            ><em>起伏进阶</em></button
+          ><button class="choice" data-d="2" aria-pressed="false">
+            <svg viewBox="0 0 48 34" aria-hidden="true">
+              <path
+                d="M4 18Q24 28 44 18L37 30H11Z M11 14q3-8 7 0m1 0q3-8 7 0m1 0q3-8 7 0 M17 1q-4 4 0 7m8-7q-4 4 0 7m8-7q-4 4 0 7"
+              /></svg
+            ><b>油泼面环线</b><small>特辣 · 嘹咋咧</small><em>高差挑战</em>
+          </button>
+        </div>
+        <button class="start" id="start">走，咥一圈<span>启 程 ↗</span></button>
+        <div class="record" id="best"></div>
+      </div>
+      <div class="postmark">
+        <small>南门灯火照归途</small><strong>雨落长安<br />咥碗热的</strong>
+      </div>
+      <button class="music-btn menu-music" data-music>
+        ♫ 试听《长安夜行》<span>国风电子</span>
+      </button>
+      <div class="showcase-label">
+        <strong>赤金 · 长安特别版</strong
+        ><small>ROROSTER / 四点喷气 · 双火箭驱动</small>
+      </div>
+      <div class="menu-bottom">
+        <span>WASD 驾驶 / Shift 火箭 / F 二段翻滚</span
+        ><span>三秦夜游 · 原创国风电子</span>
+      </div>
+    </div>
+    <div id="result">
+      <div class="panel">
+        <div class="mast">
+          <div class="seal">送<br />达</div>
+          <div class="tag">三圈入席 · 趁热开吃</div>
+        </div>
+        <h1 class="title">嘹咋咧！</h1>
+        <div class="resultTime" id="finalTime"></div>
+        <p class="desc" id="summary"></p>
+        <button class="start" id="again">再咥一碗<span>重新发车 ↗</span></button
+        ><button class="choice" id="back">更换辣度</button>
+      </div>
+    </div>
+    <dialog id="radioDialog" aria-labelledby="radioTitle">
+      <div class="radio-top">
+        <span class="radio-seal">秦</span>
+        <div>
+          <small>雨夜长安 · 家乡电台</small>
+          <h2 id="radioTitle">让熟悉的歌陪你回家</h2>
+        </div>
+        <button id="radioClose" aria-label="关闭电台">×</button>
+      </div>
+      <p class="radio-intro">
+        想听《西安人的歌》？导入你拥有的音频，就能在街头循环播放。
+      </p>
+      <div class="radio-track">
+        <span>正在收听</span
+        ><strong id="radioCurrent">长安夜行 · 原创国风电子</strong
+        ><button id="radioPreview">试听 / 继续播放</button>
+      </div>
+      <div class="radio-actions">
+        <label class="radio-import" for="trackImport"
+          >导入《西安人的歌》<input
+            id="trackImport"
+            type="file"
+            accept="audio/*,.mp3,.m4a,.ogg,.wav,.flac" /></label
+        ><button id="radioLocal">播放导入的歌</button
+        ><button id="radioOriginal">听原创配乐</button>
+      </div>
+      <label class="radio-volume"
+        >音乐音量<input
+          id="radioVolume"
+          type="range"
+          min="0"
+          max="100"
+          value="62"
+        /><output id="radioVolumeValue">62%</output></label
+      >
+      <p id="radioMessage" role="status"></p>
+      <div class="radio-foot">
+        <span>只保存在这台设备，不会上传。</span
+        ><button id="radioRemove">移除本地音乐</button>
+      </div>
+    </dialog>
+    <div id="touchControls" aria-label="触屏驾驶">
+      <div class="touch-steer">
+        <button data-hold="KeyA" aria-label="左转">◀</button
+        ><button data-hold="KeyD" aria-label="右转">▶</button>
+      </div>
+      <div class="touch-drive">
+        <button data-hold="KeyS">刹车</button
+        ><button data-hold="KeyW">油门</button
+        ><button data-hold="ShiftLeft">火箭</button
+        ><button data-jump>喷气翻滚</button>
+      </div>
+    </div>
+    <span id="qualityStatus" title="按 Q 切换画质">自动适配</span>
+    <div id="loading">正在点亮长安夜色…</div>
+    <script type="module">
+      /* INLINE_GAME */
+    </script>
+  </body>
+</html>

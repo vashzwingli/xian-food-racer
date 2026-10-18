@@ -1,0 +1,261 @@
+{
+  "errors": [],
+  "initial": {
+    "state": "race",
+    "lap": 1,
+    "nextGate": 1,
+    "checkpoint": 0,
+    "laps": [],
+    "elapsed": 0.016666666666666666,
+    "length": 1834.5985992526314,
+    "speed": 0,
+    "fuel": 100,
+    "jumps": 0,
+    "view": 0,
+    "quality": true,
+    "muted": false,
+    "position": [
+      0,
+      0.145,
+      248
+    ],
+    "airHeight": 0,
+    "jetVisible": false,
+    "jetParticles": 0,
+    "musicEnabled": true,
+    "musicReady": "ready",
+    "musicPeak": 0.76,
+    "musicGain": 0.3199785351753235,
+    "masterGain": 0.6499999761581421,
+    "rolls": 0,
+    "rollTime": 0,
+    "rollAngle": 0,
+    "trafficHits": 0,
+    "trafficCount": 24,
+    "trafficTypes": [
+      "taxi",
+      "bus",
+      "truck"
+    ],
+    "picked": 0,
+    "nightScore": 0,
+    "chiliTime": 0,
+    "wallVisits": 0,
+    "wallOn": false,
+    "physicsContacts": 0,
+    "solidCount": 631,
+    "buildingCount": 245,
+    "pedestrians": 64,
+    "busRoutes": [
+      "215",
+      "616"
+    ],
+    "roadWidth": 26,
+    "roadGround": 0.12,
+    "camera": [
+      -9.91244877199386,
+      4.345,
+      246.6796366626578
+    ],
+    "worldMeshes": 1693,
+    "rendering": {
+      "mode": "auto",
+      "level": 2,
+      "label": "自动适配",
+      "dpr": 1,
+      "bloom": true,
+      "rain": 700,
+      "detailDistance": 95,
+      "effects": true,
+      "frameMs": 8.335170419731382,
+      "geometries": 618,
+      "textures": 55
+    },
+    "localTrack": {
+      "name": "",
+      "selected": false,
+      "hasFile": false,
+      "paused": true,
+      "loop": true,
+      "currentTime": 0,
+      "volume": 0.62,
+      "gain": 0,
+      "message": "导入你的《西安人的歌》，让熟悉的声音陪你回家。"
+    },
+    "drawCalls": 703,
+    "vertices": 442502
+  },
+  "audit": {
+    "siteOverlaps": 0,
+    "roadIntrusions": 0,
+    "maxGroundGap": 0,
+    "npcOverlaps": 0,
+    "siteCount": 245,
+    "solidCount": 631,
+    "pedestrians": 64,
+    "busRoutes": [
+      "215",
+      "616"
+    ],
+    "roadWidth": 26,
+    "wall": {
+      "start": 112,
+      "top": 160,
+      "end": 203,
+      "height": 11.719999999999999
+    },
+    "pickups": 37
+  },
+  "roadMesh": {
+    "samples": 960,
+    "misses": 0,
+    "maxError": 0.009430842045320631
+  },
+  "pickups": [
+    {
+      "before": {
+        "picked": 0,
+        "nightScore": 0,
+        "fuel": 40,
+        "chiliTime": 0
+      },
+      "after": {
+        "picked": 1,
+        "nightScore": 100,
+        "fuel": 40,
+        "chiliTime": 0
+      },
+      "itemIndex": 8
+    },
+    {
+      "before": {
+        "picked": 0,
+        "nightScore": 0,
+        "fuel": 40,
+        "chiliTime": 0
+      },
+      "after": {
+        "picked": 1,
+        "nightScore": 50,
+        "fuel": 62,
+        "chiliTime": 0
+      },
+      "itemIndex": 16
+    },
+    {
+      "before": {
+        "picked": 0,
+        "nightScore": 0,
+        "fuel": 40,
+        "chiliTime": 0
+      },
+      "after": {
+        "picked": 1,
+        "nightScore": 50,
+        "fuel": 40,
+        "chiliTime": 8
+      },
+      "itemIndex": 24
+    }
+  ],
+  "solid": {
+    "before": true,
+    "after": false,
+    "contacts": 1,
+    "speed": 15.75
+  },
+  "camera": {
+    "originalHit": 0.1775,
+    "safeHit": null,
+    "safe": [
+      -121.2,
+      2,
+      -164
+    ]
+  },
+  "wall": {
+    "state": "race",
+    "lap": 1,
+    "nextGate": 1,
+    "checkpoint": 0,
+    "laps": [],
+    "elapsed": 1.1500000000000008,
+    "length": 1834.595025862339,
+    "speed": 0,
+    "fuel": 100,
+    "jumps": 0,
+    "view": 0,
+    "quality": true,
+    "muted": false,
+    "position": [
+      58.213581074098464,
+      11.745,
+      -233.8514926020545
+    ],
+    "airHeight": 3.5388358909926865e-16,
+    "jetVisible": false,
+    "jetParticles": 0,
+    "musicEnabled": true,
+    "musicReady": "ready",
+    "musicPeak": 0.76,
+    "musicGain": 0.47999998927116394,
+    "masterGain": 0.6499999761581421,
+    "rolls": 0,
+    "rollTime": 0,
+    "rollAngle": 0,
+    "trafficHits": 0,
+    "trafficCount": 24,
+    "trafficTypes": [
+      "taxi",
+      "bus",
+      "truck"
+    ],
+    "picked": 0,
+    "nightScore": 0,
+    "chiliTime": 0,
+    "wallVisits": 1,
+    "wallOn": true,
+    "physicsContacts": 0,
+    "solidCount": 631,
+    "buildingCount": 245,
+    "pedestrians": 64,
+    "busRoutes": [
+      "215",
+      "616"
+    ],
+    "roadWidth": 26,
+    "roadGround": 11.719999999999999,
+    "camera": [
+      67.79707393840826,
+      15.945,
+      -230.995505116136
+    ],
+    "worldMeshes": 1693,
+    "rendering": {
+      "mode": "auto",
+      "level": 2,
+      "label": "自动适配",
+      "dpr": 1,
+      "bloom": true,
+      "rain": 700,
+      "detailDistance": 95,
+      "effects": true,
+      "frameMs": 8.338067926789453,
+      "geometries": 484,
+      "textures": 63
+    },
+    "localTrack": {
+      "name": "",
+      "selected": false,
+      "hasFile": false,
+      "paused": true,
+      "loop": true,
+      "currentTime": 0,
+      "volume": 0.62,
+      "gain": 0,
+      "message": "导入你的《西安人的歌》，让熟悉的声音陪你回家。"
+    },
+    "drawCalls": 580,
+    "vertices": 289194
+  }
+}

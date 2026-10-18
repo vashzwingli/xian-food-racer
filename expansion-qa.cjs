@@ -1,0 +1,119 @@
+const { chromium } = require("playwright");
+const fs = require("fs"),
+  http = require("http"),
+  path = require("path"),
+  assert = require("assert");
+const server = http
+  .createServer((q, s) => {
+    s.setHeader("Content-Type", "text/html;charset=utf-8");
+    s.end(
+      fs.readFileSync(
+        path.join(
+          __dirname,
+          process.env.FOOD_RACER_GAME || "index.offline.html",
+        ),
+      ),
+    );
+  })
+  .listen(8760, "127.0.0.1");
+(async () => {
+  const browser = await chromium.launch({
+    headless: true,
+    channel:
+      process.env.FOOD_RACER_BROWSER ||
+      (process.platform === "win32" ? "msedge" : undefined),
+  });
+  try {
+    const page = await browser.newPage({
+        viewport: { width: 1024, height: 640 },
+      }),
+      errors = [];
+    page.on("pageerror", (e) => errors.push(e.message || String(e)));
+    page.on("console", (m) => {
+      if (m.type() === "error") errors.push(m.text());
+    });
+    await page.goto("http://127.0.0.1:8760");
+    await page.waitForFunction(() => window.raceTest, { timeout: 60000 });
+    await page.locator("#menu [data-music]").click();
+    await page.waitForFunction(
+      () => raceTest.snapshot().musicReady === "ready",
+      { timeout: 60000 },
+    );
+    await page.waitForTimeout(700);
+    const audio = await page.evaluate(() => raceTest.audioStats());
+    assert(audio.context === "running");
+    assert(audio.rms > 0.001, JSON.stringify(audio));
+    assert(audio.peak <= 0.8);
+    await page.screenshot({ path: path.join(__dirname, "menu.png") });
+    await page.keyboard.press("b");
+    await page.waitForTimeout(500);
+    assert((await page.evaluate(() => raceTest.snapshot())).musicGain < 0.01);
+    await page.keyboard.press("b");
+    await page.keyboard.press("m");
+    await page.waitForTimeout(350);
+    assert((await page.evaluate(() => raceTest.snapshot())).masterGain < 0.01);
+    await page.keyboard.press("m");
+    const routes = [];
+    for (let d = 0; d < (process.env.FOOD_RACER_VISUAL_ONLY ? 0 : 3); d++) {
+      await page.evaluate((d) => raceTest.choose(d), d);
+      const result = await page.evaluate(() => raceTest.autoDrive(14000));
+      console.log("Physics route", d, result);
+      routes.push({ difficulty: d, ...result });
+      assert.equal(result.state, "result", "autodrive failed " + d);
+      assert.equal(result.laps.length, 3);
+      assert.equal(result.resets, 0);
+      assert.equal((await page.evaluate(() => raceTest.snapshot())).jumps, 0);
+    }
+    await page.evaluate(() => {
+      raceTest.choose(2);
+      for (let i = 0; i <= 90; i++) raceTest.driveStep(i);
+    });
+    await page.waitForTimeout(500);
+    await page.keyboard.down("f");
+    await page.waitForTimeout(700);
+    const flying = await page.evaluate(() => raceTest.snapshot());
+    assert(flying.jetVisible);
+    assert(flying.airHeight > 2);
+    assert(flying.jetParticles > 20);
+    assert(flying.fuel < 100);
+    await page.screenshot({ path: path.join(__dirname, "flight.png") });
+    await page.keyboard.up("f");
+    await page.keyboard.press("f");
+    await page.waitForTimeout(300);
+    assert.equal((await page.evaluate(() => raceTest.snapshot())).jumps, 2);
+    await page.waitForFunction(() => raceTest.snapshot().jumps === 0, {
+      timeout: 10000,
+    });
+    assert.equal(
+      (await page.evaluate(() => raceTest.snapshot())).jetVisible,
+      false,
+    );
+    await page.waitForTimeout(600);
+    await page.screenshot({ path: path.join(__dirname, "expanded-city.png") });
+    assert.deepEqual(errors, []);
+    const report = {
+      errors,
+      audio,
+      musicControls: "B and M passed",
+      flight: flying,
+      routes,
+    };
+    if (!process.env.FOOD_RACER_VISUAL_ONLY)
+      fs.writeFileSync(
+        path.join(__dirname, "expansion-verification.json"),
+        JSON.stringify(report, null, 2),
+      );
+    console.log(
+      process.env.FOOD_RACER_VISUAL_ONLY
+        ? "Music, four jets, landing and visual checks passed"
+        : "Music, four jets, landing and all routes passed",
+    );
+  } finally {
+    await browser.close();
+    server.close();
+  }
+})().catch((e) => {
+  console.error(e);
+  process.exitCode = 1;
+  server.close();
+});
