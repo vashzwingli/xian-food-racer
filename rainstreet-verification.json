@@ -23,9 +23,9 @@
     "jetVisible": false,
     "jetParticles": 0,
     "musicEnabled": true,
-    "musicReady": "ready",
-    "musicPeak": 0.76,
-    "musicGain": 0.3199785351753235,
+    "musicReady": "rendering",
+    "musicPeak": 0,
+    "musicGain": 0.33356332778930664,
     "masterGain": 0.6499999761581421,
     "rolls": 0,
     "rollTime": 0,
@@ -67,7 +67,7 @@
       "rain": 700,
       "detailDistance": 95,
       "effects": true,
-      "frameMs": 8.335170419731382,
+      "frameMs": 8.33291847389429,
       "geometries": 618,
       "textures": 55
     },
@@ -82,8 +82,8 @@
       "gain": 0,
       "message": "导入你的《西安人的歌》，让熟悉的声音陪你回家。"
     },
-    "drawCalls": 703,
-    "vertices": 442502
+    "drawCalls": 699,
+    "vertices": 442310
   },
   "audit": {
     "siteOverlaps": 0,
@@ -233,15 +233,15 @@
     "worldMeshes": 1693,
     "rendering": {
       "mode": "auto",
-      "level": 2,
+      "level": 1,
       "label": "自动适配",
       "dpr": 1,
       "bloom": true,
-      "rain": 700,
-      "detailDistance": 95,
+      "rain": 430,
+      "detailDistance": 80,
       "effects": true,
-      "frameMs": 8.338067926789453,
-      "geometries": 484,
+      "frameMs": 8.373829278806493,
+      "geometries": 477,
       "textures": 63
     },
     "localTrack": {
@@ -255,7 +255,7 @@
       "gain": 0,
       "message": "导入你的《西安人的歌》，让熟悉的声音陪你回家。"
     },
-    "drawCalls": 580,
-    "vertices": 289194
+    "drawCalls": 571,
+    "vertices": 287142
   }
 }

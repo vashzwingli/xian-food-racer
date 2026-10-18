@@ -65,7 +65,10 @@ const server = http
     });
     await page.waitForTimeout(500);
     await page.keyboard.down("f");
-    await page.waitForTimeout(700);
+    await page.waitForFunction(
+      () => raceTest.snapshot().jetVisible && raceTest.snapshot().airHeight > 2,
+      { timeout: 20000 },
+    );
     const flying = await page.evaluate(() => raceTest.snapshot());
     assert(flying.jetVisible);
     assert(flying.airHeight > 2);

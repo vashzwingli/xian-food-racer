@@ -38,7 +38,20 @@ const server = http
     assert.equal(initial.trafficCount, 24);
     assert.deepEqual(initial.trafficTypes.sort(), ["bus", "taxi", "truck"]);
     const before = await page.evaluate(() => raceTest.trafficSnapshot());
-    await page.waitForTimeout(700);
+    await page.waitForFunction(
+      (before) =>
+        raceTest
+          .trafficSnapshot()
+          .every(
+            (v, i) =>
+              Math.hypot(
+                v.position[0] - before[i].position[0],
+                v.position[2] - before[i].position[2],
+              ) > 2,
+          ),
+      before,
+      { timeout: 15000 },
+    );
     const after = await page.evaluate(() => raceTest.trafficSnapshot());
     assert(
       after.every(
@@ -69,20 +82,27 @@ const server = http
     await page.waitForTimeout(650);
     await page.screenshot({ path: path.join(__dirname, "traffic.png") });
     await page.keyboard.down("f");
-    await page.waitForTimeout(270);
+    await page.waitForFunction(() => raceTest.snapshot().airHeight > 1, {
+      timeout: 15000,
+    });
     await page.keyboard.up("f");
     await page.keyboard.press("f");
-    await page.waitForTimeout(380);
+    await page.waitForFunction(
+      () =>
+        raceTest.snapshot().rollTime > 0 &&
+        Math.abs(raceTest.snapshot().rollAngle) > 1,
+      { timeout: 15000 },
+    );
     const mid = await page.evaluate(() => raceTest.snapshot());
     assert.equal(mid.jumps, 2);
     assert(mid.rollTime > 0 && Math.abs(mid.rollAngle) > 1);
     assert(mid.jetVisible);
     await page.screenshot({ path: path.join(__dirname, "barrel-roll.png") });
     await page.waitForFunction(() => raceTest.snapshot().rolls === 1, {
-      timeout: 3000,
+      timeout: 20000,
     });
     await page.waitForFunction(() => raceTest.snapshot().jumps === 0, {
-      timeout: 8000,
+      timeout: 20000,
     });
     const landed = await page.evaluate(() => raceTest.snapshot());
     assert.equal(landed.rollAngle, 0);

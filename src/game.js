@@ -2545,6 +2545,8 @@ let keys = {},
   lastIndex = 0,
   checkpoint = 0,
   countdown = 0,
+  countdownDeadline = 0,
+  countdownTimer = null,
   view = 0,
   muted = false,
   quality = true,
@@ -2753,6 +2755,18 @@ function sound() {
   updateMusicUI();
 }
 function updateMusicUI() {
+  if (audio) {
+    master.gain.setTargetAtTime(muted ? 0 : 0.65, audio.currentTime, 0.04);
+    musicGain.gain.setTargetAtTime(
+      musicEnabled && !localTrack.selected
+        ? (state === "race" ? 0.48 : state === "paused" ? 0.12 : 0.32) *
+            (localTrack.volume / 0.62)
+        : 0,
+      audio.currentTime,
+      0.12,
+    );
+    localTrack.sync(musicEnabled && !muted, state, document.hidden);
+  }
   document.querySelectorAll("[data-music]").forEach((b) => {
     b.textContent = "♫ " + (localTrack.selected ? localTrack.name : "长安夜行");
     const label = document.createElement("span");
@@ -2922,7 +2936,15 @@ function start() {
   nextGate = 1;
   lastIndex = 0;
   fuel = 100;
-  countdown = 3.5;
+  countdown = 3;
+  countdownDeadline = performance.now() + 3000;
+  clearTimeout(countdownTimer);
+  countdownTimer = setTimeout(() => {
+    if (state === "countdown") {
+      state = "race";
+      $("count").textContent = "";
+    }
+  }, 3650);
   state = "countdown";
   $("menu").style.display = "none";
   $("result").style.display = "none";
@@ -3201,7 +3223,7 @@ function update(dt) {
   let boosting = false,
     hovering = false;
   if (state === "countdown") {
-    countdown -= dt;
+    countdown = (countdownDeadline - performance.now()) / 1000;
     $("count").textContent = countdown > 0 ? Math.ceil(countdown) : "开咥！";
     if (countdown < -0.65) {
       state = "race";

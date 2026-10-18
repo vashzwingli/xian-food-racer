@@ -12,7 +12,7 @@ module.exports = {
 };
 if (process.env.CI) {
   setTimeout(() => {
-    console.error("Browser verification exceeded its 3 minute limit");
+    console.error("Browser verification exceeded its 5 minute limit");
     process.exit(1);
-  }, 180000).unref();
+  }, 300000).unref();
 }

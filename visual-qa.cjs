@@ -80,7 +80,10 @@ const server = http
   await page.waitForFunction(() => raceTest.snapshot().state === "race");
   await page.keyboard.down("w");
   await page.keyboard.down("Shift");
-  await page.waitForTimeout(750);
+  await page.waitForFunction(
+    () => raceTest.snapshot().speed > 6 && raceTest.snapshot().fuel < 100,
+    { timeout: 15000 },
+  );
   let boosted = await page.evaluate(() => raceTest.snapshot());
   assert(boosted.speed > 5);
   assert(boosted.fuel < 100);

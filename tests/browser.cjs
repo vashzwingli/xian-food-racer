@@ -265,7 +265,9 @@ const server = http
       throttle.y + throttle.height / 2,
     );
     await mobile.mouse.down();
-    await mobile.waitForTimeout(550);
+    await mobile.waitForFunction(() => raceTest.snapshot().speed > 5, {
+      timeout: 15000,
+    });
     const touchSpeed = (await mobile.evaluate(() => raceTest.snapshot())).speed;
     await mobile.mouse.up();
     assert(touchSpeed > 3);
