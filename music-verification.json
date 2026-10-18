@@ -4,18 +4,19 @@
       "name": "西安人的歌 · 程渤智（现场版）",
       "selected": true,
       "hasFile": false,
+      "saving": false,
       "source": "home",
       "duration": 188.878367,
       "readyState": 4,
       "paused": false,
       "loop": true,
-      "currentTime": 0.830113,
+      "currentTime": 0.851299,
       "volume": 0.62,
-      "gain": 0.3994264602661133,
+      "gain": 0.3998257517814636,
       "message": "已内置《西安人的歌》现场版。点击发车或试听，让乡音陪你回家。"
     },
     "signal": {
-      "rms": 0.021443516623275122,
+      "rms": 0.025474057002618084,
       "context": "running",
       "peak": 0
     }

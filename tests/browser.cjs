@@ -119,6 +119,10 @@ const server = http
     assert.equal(homeSong.source, "home");
     assert(homeSong.duration > 188 && homeSong.duration < 190);
     assert(homeSong.loop);
+    assert.equal(
+      await page.locator("#menu [data-music] span").textContent(),
+      "B 音乐开",
+    );
     await page.waitForFunction(() => raceTest.audioStats()?.rms > 0.001);
     assert((await page.evaluate(() => raceTest.localAudio())).currentTime > 0);
     console.log("Browser suite: embedded live recording decoded and audible");

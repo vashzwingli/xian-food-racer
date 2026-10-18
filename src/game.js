@@ -2785,7 +2785,7 @@ function updateMusicUI() {
     const label = document.createElement("span");
     label.textContent = muted
       ? "M 已静音"
-      : musicReady === "rendering"
+      : !localTrack.selected && musicReady === "rendering"
         ? "正在起奏"
         : musicEnabled
           ? "B 音乐开"
