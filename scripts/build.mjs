@@ -33,8 +33,8 @@ if (offline) {
     "utf8",
   );
   html = html.replace(
-    "<head>",
-    () => "<!-- Three.js 0.170.0\n" + license + "\n-->\n<head>",
+    "</body>",
+    () => "<!-- Three.js 0.170.0\n" + license + "\n-->\n</body>",
   );
 }
 const name = offline ? "index.offline.html" : "index.html";
