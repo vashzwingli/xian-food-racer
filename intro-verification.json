@@ -43,7 +43,12 @@
           "bottom": 600
         }
       ],
-      "overflow": false
+      "overflow": false,
+      "resources": {
+        "geometries": 2230,
+        "materials": 254,
+        "textures": 75
+      }
     },
     {
       "size": {
@@ -81,7 +86,12 @@
           "bottom": 860
         }
       ],
-      "overflow": false
+      "overflow": false,
+      "resources": {
+        "geometries": 2230,
+        "materials": 254,
+        "textures": 75
+      }
     },
     {
       "size": {
@@ -119,7 +129,12 @@
           "bottom": 794
         }
       ],
-      "overflow": false
+      "overflow": false,
+      "resources": {
+        "geometries": 2230,
+        "materials": 254,
+        "textures": 75
+      }
     },
     {
       "size": {
@@ -157,7 +172,12 @@
           "bottom": 356
         }
       ],
-      "overflow": false
+      "overflow": false,
+      "resources": {
+        "geometries": 2230,
+        "materials": 254,
+        "textures": 75
+      }
     }
   ],
   "reducedMotion": true,

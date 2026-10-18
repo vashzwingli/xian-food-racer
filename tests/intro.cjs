@@ -97,6 +97,7 @@ const server = http
           state: s.state,
           worldMeshes: s.worldMeshes,
           rendering: s.rendering,
+          assets: raceTest.resourceInventory(),
         };
       });
       await page.locator("#introReplay").click();
@@ -131,7 +132,6 @@ const server = http
             r.bottom <= size.height + 1,
           JSON.stringify({ size, r }),
         );
-      layouts.push({ size, ...layout });
       if (size.width === 1024)
         await page.screenshot({ path: path.join(root, "intro-loading.png") });
       if (size.width === 390)
@@ -158,6 +158,7 @@ const server = http
           state: s.state,
           worldMeshes: s.worldMeshes,
           rendering: s.rendering,
+          assets: raceTest.resourceInventory(),
         };
       });
       assert.equal(after.state, before.state);
@@ -166,8 +167,26 @@ const server = http
         before.worldMeshes,
         "replay must not rebuild the city",
       );
-      assert(after.rendering.geometries <= before.rendering.geometries + 2);
-      assert(after.rendering.textures <= before.rendering.textures + 2);
+      // Renderer memory counts change when a resized view first uploads visible
+      // meshes. Compare actual scene resource identities to detect rebuilding.
+      assert.deepEqual(
+        after.assets,
+        before.assets,
+        "replay must reuse every scene geometry, material and texture",
+      );
+      layout.resources = Object.fromEntries(
+        Object.entries(after.assets).map(([key, values]) => [
+          key,
+          values.length,
+        ]),
+      );
+      console.log("Intro replay resources", {
+        size,
+        scene: layout.resources,
+        gpuBefore: before.rendering.geometries,
+        gpuAfter: after.rendering.geometries,
+      });
+      layouts.push({ size, ...layout });
       assert.equal(
         await page.evaluate(() => document.activeElement.id),
         "start",

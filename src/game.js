@@ -3965,6 +3965,29 @@ const raceTestApi = {
   roadQuery(p) {
     return nearest(p);
   },
+  resourceInventory() {
+    const geometries = new Set(),
+      materials = new Set(),
+      textures = new Set();
+    scene.traverse((object) => {
+      if (object.geometry) geometries.add(object.geometry.uuid);
+      const list = Array.isArray(object.material)
+        ? object.material
+        : [object.material];
+      for (const material of list) {
+        if (!material) continue;
+        materials.add(material.uuid);
+        for (const value of Object.values(material))
+          if (value?.isTexture) textures.add(value.uuid);
+      }
+    });
+    if (scene.environment?.isTexture) textures.add(scene.environment.uuid);
+    return {
+      geometries: [...geometries].sort(),
+      materials: [...materials].sort(),
+      textures: [...textures].sort(),
+    };
+  },
   performanceProfile() {
     return qualityManager.profile();
   },
