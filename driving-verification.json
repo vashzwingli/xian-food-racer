@@ -1,0 +1,55 @@
+{
+  "errors": [],
+  "cockpit": {
+    "view": 2,
+    "name": "车内驾驶",
+    "exteriorVisible": false
+  },
+  "pixels": {
+    "edge": 2.082429542142208,
+    "center": 0.0009228497600590623,
+    "dashboard": 0.0030226934523809395
+  },
+  "audit": {
+    "siteOverlaps": 0,
+    "visualOverlaps": 0,
+    "visualEscapes": 0,
+    "visualStructureCount": 239,
+    "eaveColliders": 239,
+    "awningColliders": 79,
+    "roadIntrusions": 0,
+    "maxGroundGap": 0,
+    "npcOverlaps": 0,
+    "siteCount": 298,
+    "solidCount": 1382,
+    "pedestrians": 64,
+    "busRoutes": [
+      "215",
+      "616"
+    ],
+    "roadWidth": 26,
+    "wall": {
+      "start": 112,
+      "top": 160,
+      "end": 203,
+      "height": 11.719999999999999
+    },
+    "pickups": 37
+  },
+  "layouts": [
+    {
+      "width": 1024,
+      "height": 640
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 667,
+      "height": 375
+    }
+  ],
+  "reducedMotion": "default off",
+  "controls": "C cycles all three views; V and reset disable blur; touch buttons work"
+}

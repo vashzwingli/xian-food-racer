@@ -1,6 +1,9 @@
 import * as THREE from "three";
 import { createGeometryKit } from "./models/procedural.js";
 import { createPlayerVehicle } from "./models/player-car.js";
+import { createCockpit } from "./models/cockpit.js";
+import { ArcadeHandling } from "./engine/handling.js";
+import { createSpeedBlur } from "./engine/speed-blur.js";
 import { WheelInstances } from "./engine/wheel-instances.js";
 import { RoadIndex } from "./engine/road-index.js";
 import {
@@ -55,7 +58,12 @@ const bloom = new UnrealBloomPass(
   1.8,
 );
 composer.addPass(bloom);
+const speedBlur = createSpeedBlur();
+composer.addPass(speedBlur);
 composer.addPass(new OutputPass());
+scene.add(camera);
+camera.layers.enable(1);
+camera.layers.enable(2);
 scene.add(new THREE.HemisphereLight(0xc0d5ec, 0x63503e, 0.62));
 const moon = new THREE.DirectionalLight(0xbcd1ea, 0.9);
 moon.position.set(60, 120, 45);
@@ -903,6 +911,7 @@ function updateTraffic(dt) {
 }
 let solids = [],
   sites = [],
+  visualStructures = [],
   pedestrians = [],
   steamVents = [],
   collectibles = [],
@@ -989,24 +998,36 @@ function overlap2D(a, b, pad = 0) {
   }
   return true;
 }
-function reserveSite(x, z, w, d, angle) {
-  const site = { x, z, w: w + 1.8, d: d + 1.8, angle };
+function reserveSite(
+  x,
+  z,
+  w,
+  d,
+  angle,
+  offset = 0,
+  kind = "building",
+  checkRoad = true,
+) {
+  x += Math.sin(angle) * offset;
+  z += Math.cos(angle) * offset;
+  const site = { x, z, w: w + 0.7, d: d + 0.7, angle, kind };
   if (
     sites.some(
       (b) =>
-        Math.abs(b.x - x) < 50 &&
-        Math.abs(b.z - z) < 50 &&
-        overlap2D(site, b, 0.3),
+        Math.hypot(b.x - x, b.z - z) <
+          (Math.hypot(b.w, b.d) + Math.hypot(site.w, site.d)) / 2 + 0.6 &&
+        overlap2D(site, b, 0.2),
     )
   )
     return false;
-  for (const xx of [-w / 2, w / 2])
-    for (const zz of [-d / 2, d / 2]) {
-      const vx = x + xx * Math.cos(angle) + zz * Math.sin(angle),
-        vz = z - xx * Math.sin(angle) + zz * Math.cos(angle),
-        n = nearest(new THREE.Vector3(vx, 0, vz));
-      if (n.dist < width / 2 + 2.4) return false;
-    }
+  if (checkRoad)
+    for (const xx of [-site.w / 2, 0, site.w / 2])
+      for (const zz of [-site.d / 2, 0, site.d / 2]) {
+        const vx = x + xx * Math.cos(angle) + zz * Math.sin(angle),
+          vz = z - xx * Math.sin(angle) + zz * Math.cos(angle),
+          n = nearest(new THREE.Vector3(vx, 0, vz));
+        if (n.dist < width / 2 + 1.5) return false;
+      }
   sites.push(site);
   return true;
 }
@@ -1030,6 +1051,31 @@ function brickBox(w, h, d, x, y, z, parent = world) {
   m.position.set(x, y, z);
   parent.add(m);
   return m;
+}
+function recordStructure(group, site) {
+  group.updateMatrixWorld(true);
+  const local = new THREE.Box3(),
+    inverse = group.matrixWorld.clone().invert();
+  group.traverse((o) => {
+    if (!o.isMesh) return;
+    if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
+    local.union(
+      o.geometry.boundingBox
+        .clone()
+        .applyMatrix4(inverse.clone().multiply(o.matrixWorld)),
+    );
+  });
+  const center = local.getCenter(new THREE.Vector3()),
+    size = local.getSize(new THREE.Vector3());
+  const worldCenter = group.localToWorld(center);
+  visualStructures.push({
+    x: worldCenter.x,
+    z: worldCenter.z,
+    w: size.x,
+    d: size.z,
+    angle: group.rotation.y,
+    site,
+  });
 }
 function shopSign(text, x, y, z, size, parent) {
   if (!signCache.has(text)) {
@@ -1197,8 +1243,8 @@ function makeArch(p, a, index) {
     cylinder(0.45, 0.45, 0.16, side * 20.8, 13.7, 0, gold, g);
     lantern(side * 20.2, 7.4, 0, 0.95, g);
     solidBox(
-      p.x + Math.cos(a) * 14.6 * side,
-      p.z - Math.sin(a) * 14.6 * side,
+      p.x + Math.cos(a) * 20.8 * side,
+      p.z - Math.sin(a) * 20.8 * side,
       1.35,
       1.35,
       a,
@@ -1242,7 +1288,17 @@ function makeMarketBlock(
   depth = 10,
   background = false,
 ) {
-  if (!reserveSite(x, z, w + 2, depth + 3, angle)) return false;
+  if (
+    !reserveSite(
+      x,
+      z,
+      w + 2.8,
+      depth + (background ? 2.2 : 4.8),
+      angle,
+      background ? 0 : 1.15,
+    )
+  )
+    return false;
   const g = new THREE.Group();
   g.position.set(x, 0, z);
   g.rotation.y = angle;
@@ -1497,7 +1553,55 @@ function makeMarketBlock(
       makePerson(g, 1.0, 0.32, front + 2.8, index + 2, false, false, Math.PI);
     }
   }
+  recordStructure(g, sites.at(-1));
   solidBox(x, z, w, depth, angle, 0, h + 0.2, "building");
+  solidBox(
+    x,
+    z,
+    w + (index % 3 === 0 ? 1.9 : 0.5),
+    depth + (index % 3 === 0 ? 2.0 : 0.6),
+    angle,
+    h - 0.05,
+    h + (index % 3 === 0 ? 2.8 : 0.8),
+    "eaves",
+  );
+  // Exterior AC units and ledges must also stop a near-wall camera.
+  solidBox(
+    x + Math.sin(angle) * (front + 0.36),
+    z + Math.cos(angle) * (front + 0.36),
+    w + 0.2,
+    0.8,
+    angle,
+    3.45,
+    h + 0.1,
+    "facade",
+  );
+  if (!background) {
+    solidBox(
+      x + Math.sin(angle) * (front + 1.1),
+      z + Math.cos(angle) * (front + 1.1),
+      w,
+      2.5,
+      angle,
+      3.02,
+      3.5,
+      "awning",
+    );
+    for (const side of [-1, 1]) {
+      const xx = side * (w / 2 - 0.65),
+        zz = front + 2.15;
+      solidBox(
+        x + xx * Math.cos(angle) + zz * Math.sin(angle),
+        z - xx * Math.sin(angle) + zz * Math.cos(angle),
+        0.18,
+        0.18,
+        angle,
+        0.2,
+        3.3,
+        "post",
+      );
+    }
+  }
   if (!background)
     solidBox(
       x + Math.sin(angle) * (front + 1.15),
@@ -1754,6 +1858,32 @@ function streetDetails() {
 }
 function groundCity() {
   box(1500, 1, 1500, 0, -0.5, 0, mat("#29363d", 0.14, 0.82));
+  reserveSite(0, 0, 66, 50, 0, 0, "landmark", false);
+  reserveSite(-104, -42, 36, 48, 0, 4, "landmark", false);
+  reserveSite(-168, 68, 22, 22, 0, 0, "landmark", false);
+  solidBox(0, 0, 36, 31, 0, 0, 36, "landmark");
+  solidBox(-104, -42, 29, 29, 0, 0, 50, "landmark");
+  for (let j = 0; j < 8; j++) {
+    const p = points[j * 40],
+      n = points[(j * 40 + 1) % N],
+      a = Math.atan2(n.x - p.x, n.z - p.z);
+    reserveSite(p.x, p.z, 46, 5, a, 0, "arch", false);
+  }
+  for (const i of [143, 174]) {
+    const p = points[i],
+      n = points[i + 1],
+      a = Math.atan2(n.x - p.x, n.z - p.z);
+    reserveSite(
+      p.x - Math.cos(a) * 27,
+      p.z + Math.sin(a) * 27,
+      23,
+      20,
+      a,
+      0,
+      "tower",
+      false,
+    );
+  }
   clockTower();
   pagoda();
   noodleSculpture(-168, 68);
@@ -1786,7 +1916,9 @@ function groundCity() {
       x = Math.sin(a) * r,
       z = Math.cos(a) * r * 0.85,
       h = 17 + rand() * 30;
+    if (!reserveSite(x, z, 16.6, 14.6, 0, 0, "skyline")) continue;
     box(16, h, 14, x, h / 2, z, facadeMats[k % 6]);
+    solidBox(x, z, 16.3, 14.3, 0, 0, h + 0.2, "skyline");
     for (let yy = 5; yy < h - 1; yy += 4)
       for (let xx = -5; xx <= 5; xx += 3)
         if (rand() > 0.5)
@@ -1868,6 +2000,7 @@ function build() {
   seed = 71;
   solids = [];
   sites = [];
+  visualStructures = [];
   pedestrians = [];
   steamVents = [];
   collectibles = [];
@@ -2039,6 +2172,7 @@ function updatePedestrians(dt) {
 const {
   car,
   wheels,
+  frontWheels,
   flame,
   contactShadow,
   liftJets,
@@ -2060,6 +2194,11 @@ const {
   gold,
   white,
 });
+car.traverse((o) => {
+  if (o.isMesh || o.isLine) o.layers.set(2);
+});
+const cockpit = createCockpit(camera);
+const handling = new ArcadeHandling();
 const particleCount = 400,
   jetPositions = new Float32Array(particleCount * 3),
   jetAlphas = new Float32Array(particleCount),
@@ -2577,6 +2716,41 @@ let audio,
   musicReady = "idle",
   musicEnabled = true,
   musicPeak = 0;
+let motionEnabled = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+try {
+  const saved = localStorage.getItem("changan-motion-blur");
+  if (saved !== null) motionEnabled = saved === "on";
+} catch {}
+const viewNames = ["低位追车", "高位巡游", "车内驾驶"];
+function updateDriveOptions() {
+  document.querySelectorAll("[data-view]").forEach((b) => {
+    b.textContent = "C · " + viewNames[view];
+  });
+  document.querySelectorAll("[data-motion]").forEach((b) => {
+    b.textContent = "V · 动态模糊" + (motionEnabled ? "开" : "关");
+    b.setAttribute("aria-pressed", String(motionEnabled));
+  });
+}
+function cycleView() {
+  view = (view + 1) % 3;
+  snapCamera();
+  updateDriveOptions();
+  toast(viewNames[view] + (view === 2 ? " · 雨夜慢行，稳握方向" : ""));
+}
+function toggleMotion() {
+  motionEnabled = !motionEnabled;
+  try {
+    localStorage.setItem("changan-motion-blur", motionEnabled ? "on" : "off");
+  } catch {}
+  updateDriveOptions();
+}
+document
+  .querySelectorAll("[data-view]")
+  .forEach((b) => (b.onclick = cycleView));
+document
+  .querySelectorAll("[data-motion]")
+  .forEach((b) => (b.onclick = toggleMotion));
+updateDriveOptions();
 let activeRainCount = rainCount,
   activeProfile;
 function applyQuality(profile) {
@@ -2855,20 +3029,49 @@ function takeoff() {
   jumpSound();
 }
 function snapCamera() {
-  const forward = new THREE.Vector3(Math.sin(heading), 0, Math.cos(heading)),
-    target = pos
+  updateCamera(1 / 60, true);
+  speedBlur.enabled = false;
+}
+function updateCamera(dt, snap = false) {
+  const forward = new THREE.Vector3(Math.sin(heading), 0, Math.cos(heading));
+  const right = new THREE.Vector3(Math.cos(heading), 0, -Math.sin(heading));
+  const driver = view === 2 && state !== "menu";
+  cockpit.root.visible = driver;
+  const cameraMode = driver ? "driver" : "exterior";
+  if (document.body.dataset.camera !== cameraMode)
+    document.body.dataset.camera = cameraMode;
+  driver ? camera.layers.disable(2) : camera.layers.enable(2);
+  const anchor = pos.clone().add(new THREE.Vector3(0, 1.25, 0));
+  let desired;
+  if (driver) {
+    desired = anchor
       .clone()
-      .addScaledVector(forward, 3)
-      .add(new THREE.Vector3(0, 1.3, 0)),
-    desired = pos.clone().addScaledVector(forward, view === 1 ? -18 : -10);
-  desired.y += view === 1 ? 11 : 4.2;
-  camera.position.copy(safeCamera(target, desired));
-  camera.lookAt(
-    pos
-      .clone()
-      .addScaledVector(forward, 10)
-      .add(new THREE.Vector3(0, 1.1, 0)),
-  );
+      .addScaledVector(right, 0.32)
+      .addScaledVector(forward, -0.08);
+    desired.y +=
+      Math.sin(elapsed * 15) * Math.min(0.007, Math.abs(speed) * 0.0002);
+  } else {
+    desired = pos.clone().addScaledVector(forward, view === 1 ? -18 : -10.5);
+    desired.y += view === 1 ? 10.5 : 3.6;
+    desired = safeCamera(anchor, desired);
+  }
+  if (snap || driver) camera.position.copy(desired);
+  else camera.position.lerp(desired, 1 - Math.exp(-dt * 7.5));
+  if (!driver) camera.position.copy(safeCamera(anchor, camera.position));
+  const look = pos.clone().addScaledVector(forward, driver ? 24 : 12);
+  look.y = (jumps ? pos.y : nearest(look).ground) + (driver ? 1.22 : 1.15);
+  if (driver) look.addScaledVector(right, 0.32);
+  camera.up.set(0, 1, 0);
+  camera.lookAt(look);
+  // The cockpit stays level through a barrel roll, keeping the road readable.
+  if (driver)
+    cockpit.update(
+      speed,
+      fuel,
+      handling.steering,
+      elapsed,
+      snap || hudAccumulator < dt,
+    );
 }
 function resetRoll() {
   rollTime = 0;
@@ -2918,6 +3121,7 @@ function reset() {
   pos.y += 0.025;
   heading = Math.atan2(n.x - p.x, n.z - p.z);
   speed = 0;
+  handling.reset();
   vy = 0;
   jumps = 0;
   jetPulse = 0;
@@ -3054,6 +3258,7 @@ function solveSolids() {
       pos.z += contact.nz * (contact.depth + 0.015);
       if (iteration === 0) {
         speed *= 0.45;
+        handling.impact();
         touches++;
         if (elapsed - lastSolidHit > 0.8) {
           lastSolidHit = elapsed;
@@ -3082,7 +3287,9 @@ function clampRoad() {
       diff = n.lateral - clipped;
     pos.x -= n.rx * diff;
     pos.z -= n.rz * diff;
-    speed *= 0.8;
+    const into = Math.abs(Math.sin(heading) * n.rx + Math.cos(heading) * n.rz);
+    speed *= 1 - into * 0.12;
+    handling.lateral *= 0.3;
   }
   return nearest(pos);
 }
@@ -3110,6 +3317,7 @@ function collideTraffic() {
     pos.x += c.nx * (c.depth + 0.025);
     pos.z += c.nz * (c.depth + 0.025);
     speed *= 0.68;
+    handling.impact(0.5);
     touched++;
     if (elapsed - v.lastHit > 0.8) {
       v.lastHit = elapsed;
@@ -3155,12 +3363,11 @@ function rayBox(a, b, box, margin = 0.45) {
   return near >= 0 && near < 1 ? near : null;
 }
 function safeCamera(target, desired) {
-  const mid = target.clone().lerp(desired, 0.5),
-    candidates = new Set([
-      ...nearSolids(target),
-      ...nearSolids(mid),
-      ...nearSolids(desired),
-    ]);
+  const candidates = new Set();
+  const samples = Math.max(1, Math.ceil(target.distanceTo(desired) / 12));
+  for (let i = 0; i <= samples; i++)
+    for (const b of nearSolids(target.clone().lerp(desired, i / samples)))
+      candidates.add(b);
   let earliest = 1;
   for (const box of candidates) {
     const t = rayBox(target, desired, box);
@@ -3174,6 +3381,32 @@ function safeCamera(target, desired) {
   }
   const n = nearest(desired);
   if (n.dist < 18) desired.y = Math.max(desired.y, n.ground + 0.7);
+  // Resolve a camera already inside an eave after a turn or view change.
+  for (let iteration = 0; iteration < 3; iteration++)
+    for (const b of nearSolids(desired)) {
+      const c = Math.cos(b.angle),
+        s = Math.sin(b.angle);
+      const x = (desired.x - b.x) * c - (desired.z - b.z) * s,
+        z = (desired.x - b.x) * s + (desired.z - b.z) * c;
+      if (
+        Math.abs(x) >= b.w / 2 + 0.3 ||
+        Math.abs(z) >= b.d / 2 + 0.3 ||
+        desired.y <= b.minY - 0.3 ||
+        desired.y >= b.maxY + 0.3
+      )
+        continue;
+      const dx = b.w / 2 + 0.35 - Math.abs(x),
+        dz = b.d / 2 + 0.35 - Math.abs(z);
+      const dy = b.maxY + 0.35 - desired.y;
+      if (dy < dx && dy < dz) desired.y += dy;
+      else if (dx < dz) {
+        desired.x += Math.sign(x || 1) * dx * c;
+        desired.z -= Math.sign(x || 1) * dx * s;
+      } else {
+        desired.x += Math.sign(z || 1) * dz * s;
+        desired.z += Math.sign(z || 1) * dz * c;
+      }
+    }
   return desired;
 }
 function progress(index) {
@@ -3251,23 +3484,29 @@ function update(dt) {
       (keys.KeyS || keys.ArrowDown ? 1 : 0);
     boosting =
       !!(keys.ShiftLeft || keys.ShiftRight) && fuel > 0 && throttle > 0;
-    const max = boosting ? 61 : chiliTime > 0 ? 44 : 38;
-    speed += throttle * (boosting ? 31 : chiliTime > 0 ? 22 : 18) * dt;
-    speed *= Math.pow(keys.Space ? 0.3 : 0.995, dt * 60);
-    speed = THREE.MathUtils.clamp(speed, -12, max);
     const turn =
       (keys.KeyA || keys.ArrowLeft ? 1 : 0) -
       (keys.KeyD || keys.ArrowRight ? 1 : 0);
-    heading +=
-      turn *
-      dt *
-      (keys.Space ? 2.8 : 1.55) *
-      Math.min(1, Math.abs(speed) / 8) *
-      Math.sign(speed || 1);
+    const drive = handling.step(speed, dt, {
+      throttle,
+      turn,
+      handbrake: !!keys.Space,
+      airborne: jumps > 0,
+      boosting,
+      chili: chiliTime > 0,
+    });
+    speed = drive.speed;
+    heading += drive.headingDelta;
     const steps = Math.max(1, Math.ceil((Math.abs(speed) * dt) / 0.38));
     for (let step = 0; step < steps; step++) {
-      pos.x += (Math.sin(heading) * speed * dt) / steps;
-      pos.z += (Math.cos(heading) * speed * dt) / steps;
+      pos.x +=
+        ((Math.sin(heading) * speed + Math.cos(heading) * handling.lateral) *
+          dt) /
+        steps;
+      pos.z +=
+        ((Math.cos(heading) * speed - Math.sin(heading) * handling.lateral) *
+          dt) /
+        steps;
       let n = clampRoad();
       if (jumps === 0 && vy <= 0) pos.y = n.ground + 0.025;
       physicsContacts += solveSolids();
@@ -3357,17 +3596,19 @@ function update(dt) {
     car.rotation.x,
     jumps
       ? -0.055
-      : -Math.atan2(n1.y - n0.y, Math.hypot(n1.x - n0.x, n1.z - n0.z)),
+      : -Math.atan2(n1.y - n0.y, Math.hypot(n1.x - n0.x, n1.z - n0.z)) -
+          THREE.MathUtils.clamp(handling.acceleration * 0.0009, -0.025, 0.025),
     0.1,
   );
   updateRoll(dt);
   carLean = THREE.MathUtils.lerp(
     carLean,
-    ((keys.KeyA ? 1 : 0) - (keys.KeyD ? 1 : 0)) * speed * 0.0015,
+    handling.steering * speed * 0.0012,
     0.1,
   );
   car.rotation.z = carLean + rollAngle;
   wheels.forEach((w) => w.rotateY(speed * dt * 2));
+  frontWheels.forEach((w) => (w.rotation.y = handling.wheelAngle));
   flame.visible = boosting;
   flame.scale.z = 0.85 + Math.random() * 0.3;
   if (boosting)
@@ -3424,22 +3665,7 @@ function update(dt) {
     );
   }
   localTrack.sync(musicEnabled && !muted, state, document.hidden);
-  const forward = new THREE.Vector3(Math.sin(heading), 0, Math.cos(heading)),
-    target = pos
-      .clone()
-      .addScaledVector(forward, 2.5)
-      .add(new THREE.Vector3(0, 1.3, 0));
-  let desired = pos.clone().addScaledVector(forward, view === 1 ? -18 : -10);
-  desired.y += view === 1 ? 11 : 4.2;
-  desired = safeCamera(target, desired);
-  camera.position.lerp(desired, 1 - Math.exp(-dt * 7));
-  camera.position.copy(safeCamera(target, camera.position));
-  camera.lookAt(
-    pos
-      .clone()
-      .addScaledVector(forward, 10)
-      .add(new THREE.Vector3(0, 1.1, 0)),
-  );
+  updateCamera(dt);
   if (state === "menu") {
     car.position.set(37, 0.03, 23);
     car.rotation.set(0, -0.65, 0);
@@ -3571,7 +3797,8 @@ addEventListener("keydown", (e) => {
     reset();
     toast("已返回最近检查点");
   }
-  if (e.code === "KeyC") view = (view + 1) % 2;
+  if (e.code === "KeyC") cycleView();
+  if (e.code === "KeyV") toggleMotion();
   if (e.code === "KeyM") {
     muted = !muted;
     toast(muted ? "声音已关闭" : "声音已开启");
@@ -3670,7 +3897,21 @@ function frame(now) {
     fixedClock.advance(frameMs / 1000, update);
     wheelInstances?.update();
     renderer.info.reset();
-    if (bloom.enabled) composer.render();
+    const blurAmount =
+      THREE.MathUtils.smoothstep(Math.abs(speed), 12, 61) * 0.035;
+    speedBlur.enabled =
+      motionEnabled &&
+      state === "race" &&
+      activeProfile.level >= 1 &&
+      blurAmount > 0.0001;
+    speedBlur.uniforms.amount.value = blurAmount;
+    speedBlur.uniforms.turn.value =
+      (THREE.MathUtils.clamp(handling.yawRate * 0.002, -0.0035, 0.0035) *
+        blurAmount) /
+      0.035;
+    speedBlur.uniforms.aspect.value = camera.aspect;
+    speedBlur.uniforms.cockpit.value = view === 2 ? 1 : 0;
+    if (bloom.enabled || speedBlur.enabled) composer.render();
     else renderer.render(scene, camera);
     renderFrame++;
     if (now >= warmUntil) qualityManager.sample(frameMs);
@@ -3702,6 +3943,19 @@ renderer.domElement.addEventListener("webglcontextrestored", () => {
 });
 // 可重复的路线验收入口：沿道路中心逐帧推进，使用与驾驶相同的检查点/计圈逻辑。
 window.raceTest = {
+  motionComparison() {
+    if (state !== "race" || Math.abs(speed) < 12 || activeProfile.level < 1)
+      throw new Error("Drive above 12 m/s with effects enabled first");
+    const previous = speedBlur.enabled;
+    speedBlur.enabled = true;
+    composer.render(0);
+    const on = renderer.domElement.toDataURL("image/png");
+    speedBlur.enabled = false;
+    composer.render(0);
+    const off = renderer.domElement.toDataURL("image/png");
+    speedBlur.enabled = previous;
+    return { on, off };
+  },
   roadQuery(p) {
     return nearest(p);
   },
@@ -3791,8 +4045,37 @@ window.raceTest = {
         )
           npcOverlaps++;
       }
+    let visualOverlaps = 0,
+      visualEscapes = 0;
+    for (let i = 0; i < visualStructures.length; i++) {
+      const a = visualStructures[i],
+        s = a.site;
+      for (let j = i + 1; j < visualStructures.length; j++)
+        if (overlap2D(a, visualStructures[j], -0.03)) visualOverlaps++;
+      for (const xx of [-a.w / 2, a.w / 2])
+        for (const zz of [-a.d / 2, a.d / 2]) {
+          const x = a.x + xx * Math.cos(a.angle) + zz * Math.sin(a.angle),
+            z = a.z - xx * Math.sin(a.angle) + zz * Math.cos(a.angle);
+          if (
+            Math.abs(
+              (x - s.x) * Math.cos(s.angle) - (z - s.z) * Math.sin(s.angle),
+            ) >
+              s.w / 2 + 0.03 ||
+            Math.abs(
+              (x - s.x) * Math.sin(s.angle) + (z - s.z) * Math.cos(s.angle),
+            ) >
+              s.d / 2 + 0.03
+          )
+            visualEscapes++;
+        }
+    }
     return {
       siteOverlaps,
+      visualOverlaps,
+      visualEscapes,
+      visualStructureCount: visualStructures.length,
+      eaveColliders: solids.filter((b) => b.kind === "eaves").length,
+      awningColliders: solids.filter((b) => b.kind === "awning").length,
       roadIntrusions,
       maxGroundGap,
       npcOverlaps,
@@ -3976,6 +4259,17 @@ window.raceTest = {
       fuel,
       jumps,
       view,
+      viewName: viewNames[view],
+      cockpitVisible: cockpit.root.visible,
+      exteriorVisible: camera.layers.isEnabled(2),
+      steering: handling.steering,
+      yawRate: handling.yawRate,
+      lateralSpeed: handling.lateral,
+      motionBlur: {
+        selected: motionEnabled,
+        active: speedBlur.enabled,
+        amount: speedBlur.uniforms.amount.value,
+      },
       quality,
       muted,
       position: pos.toArray(),
@@ -4000,7 +4294,7 @@ window.raceTest = {
       wallOn,
       physicsContacts,
       solidCount: solids.length,
-      buildingCount: sites.length,
+      buildingCount: visualStructures.length,
       pedestrians: pedestrians.length,
       busRoutes: [
         ...new Set(traffic.filter((v) => v.type === "bus").map((v) => v.route)),

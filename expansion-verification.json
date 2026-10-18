@@ -1,7 +1,7 @@
 {
   "errors": [],
   "audio": {
-    "rms": 0.03158687099721472,
+    "rms": 0.021405434416838984,
     "context": "running",
     "duration": 34.285714285714285,
     "peak": 0.76
@@ -19,6 +19,17 @@
     "fuel": 89.80000000000001,
     "jumps": 1,
     "view": 0,
+    "viewName": "低位追车",
+    "cockpitVisible": false,
+    "exteriorVisible": true,
+    "steering": 0,
+    "yawRate": 0,
+    "lateralSpeed": 0,
+    "motionBlur": {
+      "selected": true,
+      "active": false,
+      "amount": 0
+    },
     "quality": true,
     "muted": false,
     "position": [
@@ -50,8 +61,8 @@
     "wallVisits": 0,
     "wallOn": false,
     "physicsContacts": 0,
-    "solidCount": 631,
-    "buildingCount": 245,
+    "solidCount": 1382,
+    "buildingCount": 239,
     "pedestrians": 64,
     "busRoutes": [
       "215",
@@ -60,11 +71,11 @@
     "roadWidth": 26,
     "roadGround": 0.21678784026555634,
     "camera": [
-      335.91380570706616,
-      5.516076752459889,
-      -36.5198204531303
+      335.8999030150257,
+      4.961856863370461,
+      -36.02001377534975
     ],
-    "worldMeshes": 1693,
+    "worldMeshes": 1692,
     "rendering": {
       "mode": "auto",
       "level": 2,
@@ -74,84 +85,85 @@
       "rain": 700,
       "detailDistance": 95,
       "effects": true,
-      "frameMs": 9.383122788611713,
-      "geometries": 309,
-      "textures": 67
+      "frameMs": 9.29629483334807,
+      "geometries": 323,
+      "textures": 64
     },
     "localTrack": {
       "name": "西安人的歌 · 程渤智（现场版）",
       "selected": true,
       "hasFile": false,
+      "saving": false,
       "source": "home",
       "duration": 188.878367,
       "readyState": 4,
       "paused": false,
       "loop": true,
-      "currentTime": 18.938776,
+      "currentTime": 19.820161,
       "volume": 0.62,
-      "gain": 0.4941931962966919,
+      "gain": 0.49419552087783813,
       "message": "已内置《西安人的歌》现场版。点击发车或试听，让乡音陪你回家。"
     },
-    "drawCalls": 420,
-    "renderFrame": 1083,
-    "vertices": 156336
+    "drawCalls": 402,
+    "renderFrame": 1157,
+    "vertices": 154318
   },
   "routes": [
     {
       "difficulty": 0,
-      "frames": 8606,
+      "frames": 9186,
       "state": "result",
       "lap": 3,
       "nextGate": 8,
-      "elapsed": 143.4500000000063,
+      "elapsed": 153.11666666668066,
       "laps": [
-        46.066666666665334,
-        45.399999999997426,
-        51.98333333334354
+        53.19999999999826,
+        47.99999999999728,
+        51.91666666668512
       ],
       "resets": 0,
       "position": [
-        0.24889901464771125,
+        0.06426777897153846,
         0.145,
-        247.56226896236112
+        247.5462347460882
       ]
     },
     {
       "difficulty": 1,
-      "frames": 8607,
+      "frames": 9035,
       "state": "result",
       "lap": 3,
       "nextGate": 8,
-      "elapsed": 143.46666666667298,
+      "elapsed": 150.600000000012,
       "laps": [
-        46.066666666665334,
-        45.399999999997426,
-        52.00000000001022
+        51.899999999998336,
+        48.749999999997236,
+        49.950000000016416
       ],
       "resets": 0,
       "position": [
-        0.37439968719015654,
-        0.1450108340939958,
-        247.58048360678148
+        0.3514355817904304,
+        0.1450129856043319,
+        248.22775242105948
       ]
     },
     {
       "difficulty": 2,
-      "frames": 8603,
+      "frames": 9236,
       "state": "result",
       "lap": 3,
       "nextGate": 8,
-      "elapsed": 143.40000000000626,
+      "elapsed": 153.95000000001465,
       "laps": [
-        46.066666666665334,
-        45.399999999997426,
-        51.9333333333435
+        51.71666666666501,
+        49.96666666666383,
+        52.26666666668581
       ],
       "resets": 0,
       "position": [
-        0.5147012175599162,
-        0.1450313553179061,
-        247.59623250334246
+        0.1676614024687318,
+        0.14500796313830266,
+        247.62009364153766
       ]
     }
   ]

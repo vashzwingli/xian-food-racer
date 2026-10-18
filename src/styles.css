@@ -1403,3 +1403,61 @@ body[data-state="paused"] #count {
     font-size: 65px;
   }
 }
+.drive-options {
+  position: absolute;
+  right: 30px;
+  top: 188px;
+  display: flex;
+  gap: 6px;
+  pointer-events: auto;
+}
+.drive-options button {
+  padding: 7px 9px;
+  color: #e0c89d;
+  border: 1px solid #c6a57155;
+  background: #15212bd9;
+  font:
+    10px "Microsoft YaHei",
+    sans-serif;
+}
+.drive-options button[aria-pressed="false"] {
+  color: #a7b0ad;
+}
+.drive-options button:focus-visible {
+  outline: 2px solid #dabb80;
+  outline-offset: 2px;
+}
+body[data-camera="driver"] .controls {
+  visibility: hidden;
+}
+@media (max-width: 700px) and (min-height: 501px) {
+  .drive-options {
+    right: 16px;
+    top: 245px;
+  }
+  .drive-options button {
+    font-size: 9px;
+    padding: 7px;
+  }
+  .flight-meter {
+    top: 286px;
+  }
+}
+@media (max-height: 500px) {
+  .drive-options {
+    left: 50%;
+    right: auto;
+    top: auto;
+    bottom: 72px;
+    transform: translateX(-50%);
+  }
+  .drive-options button {
+    font-size: 8px;
+    padding: 6px;
+  }
+}
+@media (min-width: 701px) and (min-height: 501px) {
+  .flight-meter {
+    top: 232px;
+  }
+}

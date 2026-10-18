@@ -107,13 +107,18 @@ export function createPlayerVehicle({
     box(0.06, 0.4, 0.11, x, 0.98, -1.88, carbon, car);
   box(2.25, 0.1, 0.46, 0, 1.2, -1.9, paint, car);
   box(2.22, 0.025, 0.1, 0, 1.27, -2.04, gold, car);
-  const wheels = [];
+  const wheels = [],
+    frontWheels = [];
   for (let x of [-1.04, 1.04])
     for (let z of [-1.38, 1.38]) {
       const w = new THREE.Group();
-      w.position.set(x, 0.48, z);
+      const steeringPivot = new THREE.Group();
+      steeringPivot.position.set(x, 0.48, z);
+      steeringPivot.userData.animated = true;
+      car.add(steeringPivot);
+      if (z > 0) frontWheels.push(steeringPivot);
       w.rotation.z = Math.PI / 2;
-      car.add(w);
+      steeringPivot.add(w);
       const tire = new THREE.Mesh(
         new THREE.TorusGeometry(0.34, 0.14, 10, 24),
         rubber,
@@ -391,6 +396,7 @@ export function createPlayerVehicle({
   return {
     car,
     wheels,
+    frontWheels,
     flame,
     contactShadow,
     liftJets,

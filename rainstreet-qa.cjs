@@ -51,6 +51,8 @@ const server = http
     assert.equal(audit.roadWidth, 26);
     assert(audit.siteCount > 120);
     assert.equal(audit.siteOverlaps, 0);
+    assert.equal(audit.visualOverlaps, 0);
+    assert.equal(audit.visualEscapes, 0);
     assert.equal(audit.roadIntrusions, 0);
     assert(audit.maxGroundGap < 0.08);
     assert.deepEqual(audit.busRoutes.sort(), ["215", "616"]);

@@ -4,6 +4,7 @@ for (const script of [
   "expansion-qa.cjs",
   "sanqin-qa.cjs",
   "visual-qa.cjs",
+  "tests/driving.cjs",
 ]) {
   const result = spawnSync(process.execPath, [script], {
     stdio: "inherit",

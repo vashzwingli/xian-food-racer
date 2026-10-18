@@ -12,6 +12,17 @@
     "fuel": 100,
     "jumps": 0,
     "view": 0,
+    "viewName": "低位追车",
+    "cockpitVisible": false,
+    "exteriorVisible": true,
+    "steering": 0,
+    "yawRate": 0,
+    "lateralSpeed": 0,
+    "motionBlur": {
+      "selected": true,
+      "active": false,
+      "amount": 0
+    },
     "quality": true,
     "muted": false,
     "position": [
@@ -43,8 +54,8 @@
     "wallVisits": 0,
     "wallOn": false,
     "physicsContacts": 0,
-    "solidCount": 631,
-    "buildingCount": 245,
+    "solidCount": 1382,
+    "buildingCount": 239,
     "pedestrians": 64,
     "busRoutes": [
       "215",
@@ -53,11 +64,11 @@
     "roadWidth": 26,
     "roadGround": 0.12,
     "camera": [
-      -9.91244877199386,
-      4.345,
-      246.6796366626578
+      -10.408071210593553,
+      3.745,
+      246.6136184957907
     ],
-    "worldMeshes": 1693,
+    "worldMeshes": 1692,
     "rendering": {
       "mode": "auto",
       "level": 2,
@@ -67,35 +78,41 @@
       "rain": 700,
       "detailDistance": 95,
       "effects": true,
-      "frameMs": 10.027847570441747,
-      "geometries": 618,
-      "textures": 55
+      "frameMs": 8.334430971980396,
+      "geometries": 595,
+      "textures": 54
     },
     "localTrack": {
       "name": "西安人的歌 · 程渤智（现场版）",
       "selected": true,
       "hasFile": false,
+      "saving": false,
       "source": "home",
       "duration": 188.878367,
       "readyState": 4,
       "paused": false,
       "loop": true,
-      "currentTime": 3.346587,
+      "currentTime": 3.422041,
       "volume": 0.62,
-      "gain": 0.4121226370334625,
+      "gain": 0.40296781063079834,
       "message": "已内置《西安人的歌》现场版。点击发车或试听，让乡音陪你回家。"
     },
-    "drawCalls": 689,
-    "renderFrame": 410,
-    "vertices": 441830
+    "drawCalls": 688,
+    "renderFrame": 436,
+    "vertices": 424530
   },
   "audit": {
     "siteOverlaps": 0,
+    "visualOverlaps": 0,
+    "visualEscapes": 0,
+    "visualStructureCount": 239,
+    "eaveColliders": 239,
+    "awningColliders": 79,
     "roadIntrusions": 0,
     "maxGroundGap": 0,
     "npcOverlaps": 0,
-    "siteCount": 245,
-    "solidCount": 631,
+    "siteCount": 298,
+    "solidCount": 1382,
     "pedestrians": 64,
     "busRoutes": [
       "215",
@@ -189,6 +206,17 @@
     "fuel": 100,
     "jumps": 0,
     "view": 0,
+    "viewName": "低位追车",
+    "cockpitVisible": false,
+    "exteriorVisible": true,
+    "steering": 0,
+    "yawRate": 0,
+    "lateralSpeed": 0,
+    "motionBlur": {
+      "selected": true,
+      "active": false,
+      "amount": 0
+    },
     "quality": true,
     "muted": false,
     "position": [
@@ -220,8 +248,8 @@
     "wallVisits": 1,
     "wallOn": true,
     "physicsContacts": 0,
-    "solidCount": 631,
-    "buildingCount": 245,
+    "solidCount": 1382,
+    "buildingCount": 239,
     "pedestrians": 64,
     "busRoutes": [
       "215",
@@ -230,40 +258,41 @@
     "roadWidth": 26,
     "roadGround": 11.719999999999999,
     "camera": [
-      67.79707393840826,
-      15.945,
-      -230.995505116136
+      68.27624858162376,
+      15.344999999999999,
+      -230.85270574184005
     ],
-    "worldMeshes": 1693,
+    "worldMeshes": 1692,
     "rendering": {
       "mode": "auto",
-      "level": 2,
+      "level": 1,
       "label": "自动适配",
       "dpr": 1,
       "bloom": true,
-      "rain": 700,
-      "detailDistance": 95,
+      "rain": 430,
+      "detailDistance": 80,
       "effects": true,
-      "frameMs": 8.423958630140389,
-      "geometries": 526,
+      "frameMs": 8.939564081199569,
+      "geometries": 518,
       "textures": 63
     },
     "localTrack": {
       "name": "西安人的歌 · 程渤智（现场版）",
       "selected": true,
       "hasFile": false,
+      "saving": false,
       "source": "home",
       "duration": 188.878367,
       "readyState": 4,
       "paused": false,
       "loop": true,
-      "currentTime": 14.381859,
+      "currentTime": 12.712925,
       "volume": 0.62,
       "gain": 0.4959678053855896,
       "message": "已内置《西安人的歌》现场版。点击发车或试听，让乡音陪你回家。"
     },
-    "drawCalls": 572,
-    "renderFrame": 693,
-    "vertices": 288810
+    "drawCalls": 574,
+    "renderFrame": 717,
+    "vertices": 250082
   }
 }
