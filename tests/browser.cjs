@@ -43,12 +43,7 @@ const server = http
   })
   .listen(0, "127.0.0.1");
 (async () => {
-  const browser = await chromium.launch({
-    headless: true,
-    channel:
-      process.env.FOOD_RACER_BROWSER ||
-      (process.platform === "win32" ? "msedge" : undefined),
-  });
+  const browser = await chromium.launch(require("./browser-options.cjs"));
   try {
     const base = "http://127.0.0.1:" + server.address().port;
     const page = await browser.newPage({
@@ -56,7 +51,10 @@ const server = http
       }),
       errors = [],
       external = [];
-    page.on("pageerror", (e) => errors.push(e.message));
+    page.on("pageerror", (e) => {
+      errors.push(e.message);
+      console.error(e.message);
+    });
     page.on("console", (m) => {
       if (m.type() === "error") errors.push(m.text());
     });
@@ -66,7 +64,10 @@ const server = http
     });
     await page.goto(base);
     await page.waitForFunction(() => window.raceTest);
-    console.log("Browser suite: loaded offline build");
+    console.log(
+      "Browser suite: loaded offline build",
+      await page.evaluate(() => raceTest.performanceProfile()),
+    );
     assert.deepEqual(external, [], "offline build must not request a CDN");
     const layouts = [];
     for (const size of [

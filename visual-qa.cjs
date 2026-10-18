@@ -17,12 +17,7 @@ const server = http
   })
   .listen(8757, "127.0.0.1");
 (async () => {
-  const browser = await chromium.launch({
-    channel:
-      process.env.FOOD_RACER_BROWSER ||
-      (process.platform === "win32" ? "msedge" : undefined),
-    headless: true,
-  });
+  const browser = await chromium.launch(require("./tests/browser-options.cjs"));
   const page = await browser.newPage({
       viewport: { width: 1024, height: 640 },
     }),
